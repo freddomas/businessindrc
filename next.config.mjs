@@ -6,7 +6,7 @@ const nextConfig = {
     const scriptSrc =
       process.env.NODE_ENV === "development"
         ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-        : "script-src 'self'";
+        : "script-src 'self' 'unsafe-inline'";
     const styleSrc =
       process.env.NODE_ENV === "development"
         ? "style-src 'self' 'unsafe-inline'"
