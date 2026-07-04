@@ -6,16 +6,20 @@ const nextConfig = {
     const scriptSrc =
       process.env.NODE_ENV === "development"
         ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-        : "script-src 'self' 'unsafe-inline'";
+        : "script-src 'self'";
+    const styleSrc =
+      process.env.NODE_ENV === "development"
+        ? "style-src 'self' 'unsafe-inline'"
+        : "style-src 'self'";
     const csp = [
-      "default-src 'self'",
+      "default-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
       "frame-ancestors 'none'",
       "object-src 'none'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
-      "style-src 'self' 'unsafe-inline'",
+      styleSrc,
       scriptSrc,
       "connect-src 'self'",
       "upgrade-insecure-requests"
