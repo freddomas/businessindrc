@@ -86,7 +86,10 @@ test("supplier directory and profile routes work", async ({ page }) => {
   const guards = await installGuards(page);
   await page.goto("/fournisseurs?ville=Kolwezi&secteur=Mines%20et%20support");
   await expect(page.getByRole("heading", { name: "Fournisseurs industriels" })).toBeVisible();
-  await page.getByRole("link", { name: "Voir dossier" }).first().click();
+  await Promise.all([
+    page.waitForURL(/\/fournisseurs\/[^/?#]+$/),
+    page.getByRole("link", { name: "Voir dossier" }).first().click()
+  ]);
   await expect(page.getByRole("link", { name: /Retour annuaire/ })).toBeVisible();
   await auditVisibleText(page);
   await auditLayout(page);

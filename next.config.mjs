@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   outputFileTracingRoot: process.cwd(),
   allowedDevOrigins: ["127.0.0.1"],
   async headers() {
