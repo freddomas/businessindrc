@@ -10,7 +10,7 @@ const nextConfig = {
     const styleSrc =
       process.env.NODE_ENV === "development"
         ? "style-src 'self' 'unsafe-inline'"
-        : "style-src 'self'";
+        : "style-src 'self' 'unsafe-inline'";
     const csp = [
       "default-src 'none'",
       "base-uri 'self'",
