@@ -1,7 +1,15 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, SlidersHorizontal } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  FileSearch,
+  Layers3,
+  ShieldCheck,
+  SlidersHorizontal
+} from "lucide-react";
 import { CorridorMap } from "../components/CorridorMap";
 import { MetricCard } from "../components/MetricCard";
+import { OperationsVisual } from "../components/OperationsVisual";
 import { RfqForm } from "../components/RfqForm";
 import { SupplierCard } from "../components/SupplierCard";
 import { TopNav } from "../components/TopNav";
@@ -20,16 +28,16 @@ export default async function Home() {
     <>
       <TopNav />
       <main className="app-shell">
-        <section className="operations-grid" aria-labelledby="home-title">
-          <div className="command-panel">
+        <section className="hero-stage" aria-labelledby="home-title">
+          <div className="hero-copy">
             <div className="kicker">
               <ShieldCheck aria-hidden="true" size={18} />
               Sourcing industriel vérifiable
             </div>
             <h1 id="home-title">Coordonner fournisseurs, RFQ et capacités terrain au Grand Katanga</h1>
             <p>
-              Une plateforme B2B pour structurer la qualification fournisseur, les demandes de cotation,
-              les shortlists et la couverture opérationnelle des zones économiques fortes de RDC.
+              Une plateforme B2B pour qualifier les fournisseurs, structurer les demandes de cotation
+              et piloter les shortlists sur les zones économiques fortes de RDC.
             </p>
             <div className="action-row">
               <Link className="primary-action" href="/fournisseurs">
@@ -41,23 +49,73 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-          <div className="ops-board" aria-label="Indicateurs opérationnels">
-            <MetricCard label="Fournisseurs" value={stats.suppliers} detail="Répartis par ville et secteur" />
-            <MetricCard label="RFQ" value={stats.rfqs} detail="Statuts de qualification actifs" />
-            <MetricCard label="Opportunités" value={stats.opportunities} detail="Besoins à suivre" />
-            <MetricCard label="Médias validés" value={stats.approvedMedia} detail="Usage public autorisé" />
+          <OperationsVisual />
+        </section>
+
+        <section className="metrics-ribbon" aria-label="Indicateurs opérationnels">
+          <MetricCard
+            tone="teal"
+            label="Fournisseurs"
+            value={stats.suppliers}
+            detail="Répartis par ville et secteur"
+          />
+          <MetricCard tone="copper" label="RFQ" value={stats.rfqs} detail="Statuts de qualification actifs" />
+          <MetricCard
+            tone="gold"
+            label="Opportunités"
+            value={stats.opportunities}
+            detail="Besoins en suivi"
+          />
+          <MetricCard
+            tone="steel"
+            label="Médias validés"
+            value={stats.approvedMedia}
+            detail="Usage public autorisé"
+          />
+        </section>
+
+        <section className="process-band" aria-labelledby="process-title">
+          <div className="section-heading">
+            <p>Flux opéré</p>
+            <h2 id="process-title">Du besoin terrain à la shortlist</h2>
+          </div>
+          <div className="process-steps">
+            <article>
+              <FileSearch aria-hidden="true" size={22} />
+              <span>01</span>
+              <h3>Qualifier</h3>
+              <p>Besoin, ville, secteur, urgence et contraintes documentaires.</p>
+            </article>
+            <article>
+              <BadgeCheck aria-hidden="true" size={22} />
+              <span>02</span>
+              <h3>Vérifier</h3>
+              <p>Documents, références, capacité de mobilisation et disponibilité.</p>
+            </article>
+            <article>
+              <Layers3 aria-hidden="true" size={22} />
+              <span>03</span>
+              <h3>Shortlister</h3>
+              <p>Comparaison claire, statuts suivis, trace de décision.</p>
+            </article>
           </div>
         </section>
 
-        <section className="split-section">
+        <section className="split-section split-section--feature">
           <CorridorMap />
           <RfqForm />
         </section>
 
-        <section className="content-band" aria-labelledby="supplier-title">
-          <div className="section-heading">
-            <p>Annuaire fournisseur</p>
-            <h2 id="supplier-title">Capacités prêtes à qualifier</h2>
+        <section className="content-band content-band--dark" aria-labelledby="supplier-title">
+          <div className="section-heading section-heading--inline">
+            <div>
+              <p>Annuaire fournisseur</p>
+              <h2 id="supplier-title">Capacités prêtes à qualifier</h2>
+            </div>
+            <Link className="text-action" href="/fournisseurs">
+              Tout afficher
+              <ArrowRight aria-hidden="true" size={16} />
+            </Link>
           </div>
           <div className="supplier-grid">
             {suppliers.map((supplier) => (
@@ -67,9 +125,12 @@ export default async function Home() {
         </section>
 
         <section className="content-band" aria-labelledby="pipeline-title">
-          <div className="section-heading">
-            <p>Pipeline sourcing</p>
-            <h2 id="pipeline-title">Demandes et opportunités en suivi</h2>
+          <div className="section-heading section-heading--inline">
+            <div>
+              <p>Pipeline sourcing</p>
+              <h2 id="pipeline-title">Demandes et opportunités en suivi</h2>
+            </div>
+            <span>Statuts non commerciaux</span>
           </div>
           <div className="pipeline-table" role="table" aria-label="Opportunités opérationnelles">
             <div role="row" className="pipeline-row pipeline-row--head">

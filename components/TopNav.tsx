@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, Factory, FileText, Gauge, MapPinned } from "lucide-react";
+import { Building2, Factory, FileText, Gauge, MapPinned, RadioTower } from "lucide-react";
 
 const links = [
   { href: "/fournisseurs", label: "Fournisseurs", icon: Factory },
@@ -13,7 +13,10 @@ export function TopNav() {
     <header className="top-nav">
       <Link className="brand" href="/" aria-label="Accueil Grand Katanga Industrial Services Hub">
         <Building2 aria-hidden="true" size={24} />
-        <span>Grand Katanga Industrial Services Hub</span>
+        <span>
+          <strong>GKIH</strong>
+          <small>Industrial Services Hub</small>
+        </span>
       </Link>
       <nav aria-label="Navigation principale">
         {links.map((link) => {
@@ -27,6 +30,10 @@ export function TopNav() {
           );
         })}
       </nav>
+      <div className="nav-signal" aria-label="Statut plateforme">
+        <RadioTower aria-hidden="true" size={16} />
+        <span>Online</span>
+      </div>
     </header>
   );
 }

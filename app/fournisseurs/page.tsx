@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import { SupplierCard } from "../../components/SupplierCard";
 import { TopNav } from "../../components/TopNav";
 import { cities, sectors } from "../../lib/seed-data";
@@ -26,13 +26,23 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
     <>
       <TopNav />
       <main className="app-shell">
-        <section className="page-head">
-          <p>Annuaire qualifié</p>
-          <h1>Fournisseurs industriels</h1>
-          <span>{suppliers.length} dossiers filtrés</span>
+        <section className="page-head page-head--visual">
+          <div>
+            <p>Annuaire qualifié</p>
+            <h1>Fournisseurs industriels</h1>
+            <span>{suppliers.length} dossiers filtrés avec capacités, documents et score.</span>
+          </div>
+          <div className="page-head__plate" aria-hidden="true">
+            <strong>{suppliers.length}</strong>
+            <span>résultats</span>
+          </div>
         </section>
 
-        <form className="filter-bar" action="/fournisseurs">
+        <form className="filter-bar filter-bar--premium" action="/fournisseurs">
+          <div className="filter-title">
+            <SlidersHorizontal aria-hidden="true" size={18} />
+            <span>Filtrage opérationnel</span>
+          </div>
           <label>
             Recherche
             <div className="input-icon">
@@ -65,7 +75,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
           <button type="submit">Filtrer</button>
         </form>
 
-        <section className="supplier-grid" aria-label="Résultats fournisseurs">
+        <section className="supplier-grid supplier-grid--directory" aria-label="Résultats fournisseurs">
           {suppliers.slice(0, 36).map((supplier) => (
             <SupplierCard key={supplier.slug} supplier={supplier} />
           ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { Send, ShieldCheck } from "lucide-react";
 import { cities, sectors } from "../lib/seed-data";
 
 type SubmitState =
@@ -40,6 +40,10 @@ export function RfqForm() {
       <div className="section-heading">
         <p>Demande de cotation</p>
         <h2>Qualifier un besoin terrain</h2>
+        <span className="form-assurance">
+          <ShieldCheck aria-hidden="true" size={15} />
+          Qualification interne avant shortlist
+        </span>
       </div>
       <label>
         Besoin

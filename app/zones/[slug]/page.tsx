@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Factory, MapPinned } from "lucide-react";
+import { ArrowRight, Factory, MapPinned, Route } from "lucide-react";
 import { SupplierCard } from "../../../components/SupplierCard";
 import { TopNav } from "../../../components/TopNav";
 import { cities } from "../../../lib/seed-data";
@@ -26,15 +26,13 @@ export default async function ZonePage({ params }: PageProps) {
     <>
       <TopNav />
       <main className="app-shell">
-        <section className="zone-hero">
-          <MapPinned aria-hidden="true" size={28} />
+        <section className="zone-hero zone-hero--premium">
+          <MapPinned aria-hidden="true" size={30} />
           <p>Zone prioritaire</p>
           <h1>{city.name}</h1>
-          <span>
-            Couverture fournisseur estimée: {Math.round(city.targetShare * 100)}% du référentiel
-          </span>
+          <span>Couverture fournisseur estimée: {Math.round(city.targetShare * 100)}% du référentiel</span>
         </section>
-        <section className="profile-grid">
+        <section className="profile-grid profile-grid--premium">
           <article>
             <Factory aria-hidden="true" size={22} />
             <h2>Secteurs dominants</h2>
@@ -45,7 +43,7 @@ export default async function ZonePage({ params }: PageProps) {
             </ul>
           </article>
           <article>
-            <Factory aria-hidden="true" size={22} />
+            <Route aria-hidden="true" size={22} />
             <h2>Risques suivis</h2>
             <ul>
               <li>Disponibilité flotte</li>
@@ -53,21 +51,32 @@ export default async function ZonePage({ params }: PageProps) {
               <li>Délai de mobilisation</li>
             </ul>
           </article>
+          <article>
+            <MapPinned aria-hidden="true" size={22} />
+            <h2>Priorité sourcing</h2>
+            <ul>
+              <li>Vérification T2 et plus</li>
+              <li>Capacité multi-sites</li>
+              <li>Réponse en moins de 48h</li>
+            </ul>
+          </article>
         </section>
-        <section className="content-band">
-          <div className="section-heading">
-            <p>Couverture locale</p>
-            <h2>Fournisseurs à qualifier</h2>
+        <section className="content-band content-band--dark">
+          <div className="section-heading section-heading--inline">
+            <div>
+              <p>Couverture locale</p>
+              <h2>Fournisseurs à qualifier</h2>
+            </div>
+            <Link className="text-action" href={`/fournisseurs?ville=${city.name}`}>
+              Filtrer l&apos;annuaire
+              <ArrowRight aria-hidden="true" size={18} />
+            </Link>
           </div>
           <div className="supplier-grid">
             {suppliers.map((supplier) => (
               <SupplierCard key={supplier.slug} supplier={supplier} />
             ))}
           </div>
-          <Link className="primary-action fit-action" href={`/fournisseurs?ville=${city.name}`}>
-            Filtrer l&apos;annuaire
-            <ArrowRight aria-hidden="true" size={18} />
-          </Link>
         </section>
       </main>
     </>

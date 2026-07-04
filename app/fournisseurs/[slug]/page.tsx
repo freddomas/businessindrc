@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BadgeCheck, FileCheck2, Gauge, MapPin } from "lucide-react";
+import { ArrowLeft, BadgeCheck, FileCheck2, Gauge, MapPin, Route } from "lucide-react";
 import { TopNav } from "../../../components/TopNav";
 import { getSupplierBySlug } from "../../../lib/repository";
 
@@ -26,7 +26,7 @@ export default async function SupplierProfilePage({ params }: PageProps) {
           <ArrowLeft aria-hidden="true" size={17} />
           Retour annuaire
         </Link>
-        <section className="profile-hero">
+        <section className="profile-hero profile-hero--premium">
           <div>
             <p>{supplier.city}</p>
             <h1>{supplier.name}</h1>
@@ -47,7 +47,7 @@ export default async function SupplierProfilePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="profile-grid">
+        <section className="profile-grid profile-grid--premium">
           <article>
             <Gauge aria-hidden="true" size={22} />
             <h2>Capacités</h2>
@@ -80,7 +80,7 @@ export default async function SupplierProfilePage({ params }: PageProps) {
             </ul>
           </article>
           <article>
-            <BadgeCheck aria-hidden="true" size={22} />
+            <Route aria-hidden="true" size={22} />
             <h2>Services</h2>
             <ul>
               {supplier.services.map((service) => (
