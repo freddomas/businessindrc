@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Business in DRC",
-  description: "Minimal web app skeleton with Postgres readiness."
+  title: "Grand Katanga Industrial Services Hub",
+  description:
+    "Plateforme B2B industrielle pour sourcing, RFQ et vérification fournisseur au Grand Katanga."
 };
 
 export default function RootLayout({

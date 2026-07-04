@@ -1,25 +1,36 @@
-# Business in DRC
+# Grand Katanga Industrial Services Hub
 
-Squelette minimal Next.js pour un premier deploiement Vercel avec Postgres.
+Plateforme B2B industrielle pour le Grand Katanga: annuaire fournisseurs,
+RFQ, sourcing managé, vérification, opportunités et console opérationnelle.
 
-## Demarrage local
+## Démarrage local
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Variables Vercel/Postgres
+## Base de données
 
 Copier `.env.example` vers `.env.local` en local, ou connecter une base
 Postgres/Neon dans Vercel pour injecter automatiquement `DATABASE_URL` ou
 `POSTGRES_URL`.
 
-Endpoint de verification :
-
-```text
-/api/health
+```bash
+npm run db:seed
 ```
 
-Sans variable Postgres, l'endpoint repond quand meme `ok: true` avec
-`database: "not_configured"` pour permettre un premier deploiement.
+## Vérification
+
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run test:e2e
+```
+
+Endpoint de santé: `/api/health`.
+
+Sans variable Postgres, les pages publiques utilisent le seed déterministe en
+lecture seule, mais les écritures RFQ nécessitent une base configurée.
