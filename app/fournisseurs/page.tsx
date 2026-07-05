@@ -29,7 +29,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
         <section className="page-head page-head--visual">
           <div>
             <p>Annuaire qualifié</p>
-            <h1>Fournisseurs industriels</h1>
+            <h1>Fournisseurs industriels qualifiés</h1>
             <span>{suppliers.length} dossiers filtrés avec capacités, documents et score.</span>
           </div>
           <div className="page-head__plate" aria-hidden="true">

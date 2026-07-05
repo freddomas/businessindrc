@@ -1,14 +1,23 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const publicFiles = ["app/page.tsx", "app/fournisseurs", "app/opportunites", "app/zones"];
+const publicFiles = [
+  "app/page.tsx",
+  "app/fournisseurs",
+  "app/opportunites",
+  "app/zones",
+  "app/connexion",
+  "components"
+];
 const forbidden = [
   "demo",
   "démonstration",
+  "test",
   "sample",
   "fake",
   "mock",
   "lorem",
+  "placeholder",
   "tutoriel",
   "guide",
   "exemple"

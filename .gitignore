@@ -16,5 +16,7 @@ tsconfig.tsbuildinfo
 .analysis
 playwright-report
 test-results
+qa/inspiration-playwright/
+qa/visual-proof/
 .env*
 !.env.example

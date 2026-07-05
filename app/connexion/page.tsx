@@ -9,7 +9,7 @@ export default function LoginPage() {
         <form className="auth-panel" action="/api/auth/login" method="post">
           <LockKeyhole aria-hidden="true" size={28} />
           <p>Accès restreint</p>
-          <h1>Console opérationnelle</h1>
+          <h1>Console de pilotage</h1>
           <label>
             Email
             <input name="email" type="email" autoComplete="email" required />

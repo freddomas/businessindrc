@@ -34,9 +34,9 @@ export default async function Home() {
               <ShieldCheck aria-hidden="true" size={18} />
               Sourcing industriel vérifiable
             </div>
-            <h1 id="home-title">Coordonner fournisseurs, RFQ et capacités terrain au Grand Katanga</h1>
+            <h1 id="home-title">Le cockpit premium du sourcing industriel au Grand Katanga</h1>
             <p>
-              Une plateforme B2B pour qualifier les fournisseurs, structurer les demandes de cotation
+              Un environnement B2B immersif pour qualifier les fournisseurs, structurer les demandes de cotation
               et piloter les shortlists sur les zones économiques fortes de RDC.
             </p>
             <div className="action-row">
@@ -47,6 +47,11 @@ export default async function Home() {
               <Link className="secondary-action" href="/opportunites">
                 Voir le pipeline
               </Link>
+            </div>
+            <div className="hero-proof-grid" aria-label="Repères de qualification">
+              <span>Fournisseurs scorés</span>
+              <span>RFQ structurées</span>
+              <span>Médias filtrés</span>
             </div>
           </div>
           <OperationsVisual />
@@ -77,7 +82,7 @@ export default async function Home() {
         <section className="process-band" aria-labelledby="process-title">
           <div className="section-heading">
             <p>Flux opéré</p>
-            <h2 id="process-title">Du besoin terrain à la shortlist</h2>
+            <h2 id="process-title">Un parcours cadré, de la demande terrain à la shortlist</h2>
           </div>
           <div className="process-steps">
             <article>
@@ -110,7 +115,7 @@ export default async function Home() {
           <div className="section-heading section-heading--inline">
             <div>
               <p>Annuaire fournisseur</p>
-              <h2 id="supplier-title">Capacités prêtes à qualifier</h2>
+              <h2 id="supplier-title">Capacités industrielles mises en scène pour décider vite</h2>
             </div>
             <Link className="text-action" href="/fournisseurs">
               Tout afficher
@@ -128,7 +133,7 @@ export default async function Home() {
           <div className="section-heading section-heading--inline">
             <div>
               <p>Pipeline sourcing</p>
-              <h2 id="pipeline-title">Demandes et opportunités en suivi</h2>
+              <h2 id="pipeline-title">Demandes et opportunités lisibles en un balayage</h2>
             </div>
             <span>Statuts non commerciaux</span>
           </div>

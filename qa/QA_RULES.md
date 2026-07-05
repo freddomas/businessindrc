@@ -15,3 +15,5 @@
 - Critical routes require console, network, layout, text and accessibility checks.
 - Media displayed publicly must pass review status, license status, AI-like and usage filters.
 - Do not run `npm run typecheck` in parallel with `npm run build`; Next regenerates `.next/types` during build and can produce false missing-file errors.
+- Visual rewrites require Playwright screenshots or attachments for the critical route matrix, not only passing DOM assertions.
+- Copy checks must include public shared components because visible labels, inputs and actions are often defined outside `app/`.

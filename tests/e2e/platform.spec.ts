@@ -1,17 +1,37 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page, type TestInfo } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const criticalStatuses = new Set([400, 401, 403, 404, 500, 502, 503, 504]);
+const forbiddenPublicCopy = [
+  "demo",
+  "démonstration",
+  "test",
+  "sample",
+  "fake",
+  "mock",
+  "lorem",
+  "placeholder",
+  "tutoriel",
+  "guide",
+  "exemple"
+];
 
-async function installGuards(page: Page) {
+const criticalRoutes = [
+  { name: "home", path: "/" },
+  { name: "suppliers", path: "/fournisseurs" },
+  { name: "suppliers-filtered", path: "/fournisseurs?ville=Kolwezi&secteur=Mines%20et%20support" },
+  { name: "opportunities", path: "/opportunites" },
+  { name: "zone-kolwezi", path: "/zones/kolwezi" },
+  { name: "login", path: "/connexion" }
+];
+
+function installGuards(page: Page) {
   const consoleErrors: string[] = [];
   const pageErrors: string[] = [];
   const networkErrors: string[] = [];
 
   page.on("console", (message) => {
-    if (message.type() === "error") {
-      consoleErrors.push(message.text());
-    }
+    if (message.type() === "error") consoleErrors.push(message.text());
   });
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("response", (response) => {
@@ -32,8 +52,15 @@ async function installGuards(page: Page) {
 
 async function auditVisibleText(page: Page) {
   const text = await page.locator("body").innerText();
-  expect(text).not.toMatch(/undefined|null|NaN|\[object Object\]/);
-  expect(text).not.toMatch(/Ã©|Ã¨|Ãª|Ã |â€™|â€œ|�|&eacute;|&agrave;|&ccedil;/);
+  expect(text).not.toMatch(/\b(undefined|null|NaN)\b|\[object Object\]/i);
+  expect(text).not.toMatch(/Ã|Â|�|â€™|â€œ|â€|&eacute;|&agrave;|&ccedil;/i);
+
+  for (const word of forbiddenPublicCopy) {
+    const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    expect(text, `forbidden public copy: ${word}`).not.toMatch(
+      new RegExp(`(^|[^\\p{L}])${escaped}([^\\p{L}]|$)`, "iu")
+    );
+  }
 }
 
 async function auditLayout(page: Page) {
@@ -45,70 +72,132 @@ async function auditLayout(page: Page) {
     return Array.from(document.querySelectorAll<HTMLElement>(selectors))
       .filter((element) => {
         const rect = element.getBoundingClientRect();
-        const style = window.getComputedStyle(element);
-        return (
-          style.visibility !== "hidden" &&
-          style.display !== "none" &&
-          rect.width > 0 &&
-          rect.height > 0 &&
-          (rect.right < 0 ||
-            rect.left > window.innerWidth ||
-            rect.bottom < -1)
-        );
+        const style = getComputedStyle(element);
+        if (style.visibility === "hidden" || style.display === "none" || Number(style.opacity) === 0) return false;
+        if (rect.width === 0 && rect.height === 0) return false;
+        return rect.width < 4 || rect.height < 4 || rect.left < -1 || rect.right > window.innerWidth + 1;
       })
-      .map((element) => element.textContent?.trim().slice(0, 80) ?? element.tagName);
+      .map((element) => ({
+        tag: element.tagName,
+        text: element.innerText.slice(0, 80),
+        box: element.getBoundingClientRect().toJSON()
+      }));
   });
 
-  expect(badBoxes, "elements outside viewport").toEqual([]);
+  expect(badBoxes, "clipped or invalid layout boxes").toEqual([]);
 }
 
-async function auditPrimaryAction(page: Page, name: RegExp) {
-  const action = page.getByRole("link", { name }).first();
-  await expect(action).toBeVisible();
-  const box = await action.boundingBox();
-  expect(box?.height ?? 0).toBeGreaterThanOrEqual(40);
+async function auditRealVisibility(page: Page) {
+  const blocked = await page.evaluate(() => {
+    const selectors = "a,button,input,select,textarea";
+    const issues: Array<{ tag: string; text: string; covering: string | null }> = [];
+
+    for (const element of Array.from(document.querySelectorAll<HTMLElement>(selectors))) {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      if (style.visibility === "hidden" || style.display === "none" || Number(style.opacity) === 0) continue;
+      if (rect.width <= 0 || rect.height <= 0) continue;
+      if (rect.bottom < 0 || rect.top > window.innerHeight || rect.right < 0 || rect.left > window.innerWidth) continue;
+
+      const x = Math.min(Math.max(rect.left + rect.width / 2, 1), window.innerWidth - 1);
+      const y = Math.min(Math.max(rect.top + rect.height / 2, 1), window.innerHeight - 1);
+      const topElement = document.elementFromPoint(x, y);
+      if (topElement && topElement !== element && !element.contains(topElement)) {
+        issues.push({
+          tag: element.tagName,
+          text: element.innerText.slice(0, 80),
+          covering: `${topElement.tagName} ${(topElement as HTMLElement).innerText?.slice(0, 80) ?? ""}`.trim()
+        });
+      }
+    }
+
+    return issues;
+  });
+
+  expect(blocked, "interactive element covered at center point").toEqual([]);
 }
 
-test("public cockpit is usable, accessible and visually stable", async ({ page }) => {
-  const guards = await installGuards(page);
+async function auditA11y(page: Page) {
+  const result = await new AxeBuilder({ page }).analyze();
+  expect(result.violations, "axe violations").toEqual([]);
+}
+
+async function attachVisualProof(page: Page, testInfo: TestInfo, name: string) {
+  const screenshot = await page.screenshot({ fullPage: true, animations: "disabled" });
+  await testInfo.attach(`${testInfo.project.name}-${name}`, {
+    body: screenshot,
+    contentType: "image/png"
+  });
+}
+
+for (const route of criticalRoutes) {
+  test(`${route.name} renders cleanly with visual proof`, async ({ page }, testInfo) => {
+    const guards = installGuards(page);
+    const response = await page.goto(route.path);
+    expect(response?.status(), `${route.path} status`).toBeLessThan(400);
+    await expect(page.locator("main")).toBeVisible();
+
+    await auditVisibleText(page);
+    await auditLayout(page);
+    await auditRealVisibility(page);
+    await auditA11y(page);
+    await attachVisualProof(page, testInfo, route.name);
+    guards.assertClean();
+  });
+}
+
+test("supplier profile flow stays navigable and visible", async ({ page }, testInfo) => {
+  const guards = installGuards(page);
+  await page.goto("/fournisseurs");
+  const firstProfileLink = page.getByRole("link", { name: /Voir dossier/i }).first();
+  await expect(firstProfileLink).toBeVisible();
+  await firstProfileLink.click();
+  await expect(page).toHaveURL(/\/fournisseurs\/.+/);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
+  await auditVisibleText(page);
+  await auditLayout(page);
+  await auditRealVisibility(page);
+  await auditA11y(page);
+  await attachVisualProof(page, testInfo, "supplier-profile");
+  guards.assertClean();
+});
+
+test("protected console redirects without session", async ({ page }, testInfo) => {
+  const guards = installGuards(page);
+  await page.goto("/console");
+  await expect(page).toHaveURL(/\/connexion$/);
+  await expect(page.getByRole("heading", { name: "Console de pilotage" })).toBeVisible();
+
+  await auditVisibleText(page);
+  await auditLayout(page);
+  await auditRealVisibility(page);
+  await attachVisualProof(page, testInfo, "console-redirect");
+  guards.assertClean();
+});
+
+test("reduced motion keeps the home page usable", async ({ page }, testInfo) => {
+  const guards = installGuards(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Coordonner fournisseurs/ })).toBeVisible();
-  await auditPrimaryAction(page, /Explorer l'annuaire/);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
   await auditVisibleText(page);
   await auditLayout(page);
-
-  const a11y = await new AxeBuilder({ page }).disableRules(["color-contrast"]).analyze();
-  expect(a11y.violations).toEqual([]);
+  await auditRealVisibility(page);
+  await attachVisualProof(page, testInfo, "home-reduced-motion");
   guards.assertClean();
 });
 
-test("supplier directory and profile routes work", async ({ page }) => {
-  const guards = await installGuards(page);
-  await page.goto("/fournisseurs?ville=Kolwezi&secteur=Mines%20et%20support");
-  await expect(page.getByRole("heading", { name: "Fournisseurs industriels" })).toBeVisible();
-  await Promise.all([
-    page.waitForURL(/\/fournisseurs\/[^/?#]+$/),
-    page.getByRole("link", { name: "Voir dossier" }).first().click()
-  ]);
-  await expect(page.getByRole("link", { name: /Retour annuaire/ })).toBeVisible();
-  await auditVisibleText(page);
-  await auditLayout(page);
-  guards.assertClean();
-});
-
-test("health and disabled public API responses are controlled", async ({ request }) => {
+test("health endpoint and disabled public API respond without exposing secrets", async ({ request }) => {
   const health = await request.get("/api/health");
-  expect([200, 500]).toContain(health.status());
+  expect([200, 500], "health status is controlled").toContain(health.status());
   const healthPayload = await health.json();
-  expect(typeof healthPayload.ok).toBe("boolean");
   expect(JSON.stringify(healthPayload)).not.toContain("postgres://");
+  expect(JSON.stringify(healthPayload)).not.toContain("postgresql://");
+  expect(healthPayload).toHaveProperty("ok");
+  expect(healthPayload).toHaveProperty("database");
 
   const publicApi = await request.get("/api/public/ping");
   expect(publicApi.status()).toBe(404);
-});
-
-test("protected console redirects without session", async ({ page }) => {
-  await page.goto("/console");
-  await expect(page).toHaveURL(/\/connexion$/);
-  await expect(page.getByRole("heading", { name: "Console opérationnelle" })).toBeVisible();
 });

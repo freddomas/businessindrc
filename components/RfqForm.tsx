@@ -47,12 +47,15 @@ export function RfqForm() {
       </div>
       <label>
         Besoin
+        <span className="field-hint" id="rfq-title-hint">
+          Décris la capacité, la contrainte et la ville cible.
+        </span>
         <input
           required
           minLength={8}
           name="title"
           autoComplete="off"
-          placeholder="Transport, HSE, IT, énergie..."
+          aria-describedby="rfq-title-hint"
         />
       </label>
       <div className="form-grid">
@@ -79,12 +82,15 @@ export function RfqForm() {
       </div>
       <label>
         Lignes de besoin
+        <span className="field-hint" id="rfq-lines-hint">
+          Indique capacité attendue, délai, documents requis et contraintes terrain.
+        </span>
         <textarea
           required
           minLength={16}
           name="lines"
           rows={4}
-          placeholder="Capacité attendue, délai, documents requis"
+          aria-describedby="rfq-lines-hint"
         />
       </label>
       <label>

@@ -11,6 +11,7 @@ export function CorridorMap() {
         <span>7 zones prioritaires</span>
       </div>
       <div className="corridor-map" aria-label="Répartition des villes prioritaires">
+        <div className="corridor-map__light" aria-hidden="true" />
         <div className="corridor-map__scan" aria-hidden="true" />
         {cities.slice(0, 7).map((city, index) => (
           <div

@@ -14,12 +14,12 @@ export default async function OpportunitiesPage() {
         <section className="page-head page-head--visual">
           <div>
             <p>Pipeline industriel</p>
-            <h1>Opportunités opérationnelles</h1>
+            <h1>Opportunités industrielles orchestrées</h1>
             <span>{opportunities.length} besoins actifs ou en qualification sur les zones prioritaires.</span>
           </div>
           <div className="page-head__plate" aria-hidden="true">
             <Radar size={28} />
-            <span>Sourcing radar</span>
+            <span>Lecture priorisée</span>
           </div>
         </section>
 

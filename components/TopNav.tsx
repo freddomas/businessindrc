@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, Factory, FileText, Gauge, MapPinned, RadioTower } from "lucide-react";
+import { Building2, Factory, FileText, Gauge, MapPinned, ShieldCheck } from "lucide-react";
 
 const links = [
   { href: "/fournisseurs", label: "Fournisseurs", icon: Factory },
@@ -31,8 +31,8 @@ export function TopNav() {
         })}
       </nav>
       <div className="nav-signal" aria-label="Statut plateforme">
-        <RadioTower aria-hidden="true" size={16} />
-        <span>Online</span>
+        <ShieldCheck aria-hidden="true" size={16} />
+        <span>Contrôlé</span>
       </div>
     </header>
   );

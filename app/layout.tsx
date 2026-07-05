@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { InteractiveBackdrop } from "../components/InteractiveBackdrop";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <InteractiveBackdrop />
+        {children}
+      </body>
     </html>
   );
 }

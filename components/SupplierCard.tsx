@@ -8,10 +8,11 @@ export function SupplierCard({ supplier }: { supplier: Supplier }) {
 
   return (
     <article className="supplier-card">
+      <div className="supplier-card__shine" aria-hidden="true" />
       <div className="supplier-card__top">
         <div>
           <p>{supplier.city}</p>
-          <h3>{supplier.name}</h3>
+          <h2>{supplier.name}</h2>
         </div>
         <span className="tier">T{supplier.verificationTier}</span>
       </div>
