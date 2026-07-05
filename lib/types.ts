@@ -94,6 +94,11 @@ export type Opportunity = {
 export type MediaAsset = {
   id: string;
   title: string;
+  url?: string;
+  sourceDomain?: string;
+  sourceUrl?: string;
+  licenseUrl?: string;
+  credit?: string;
   reviewStatus: "APPROVED" | "PENDING" | "REJECTED";
   licenseStatus: "VALID" | "PENDING" | "INVALID";
   isAiLike: boolean;

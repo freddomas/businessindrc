@@ -1,16 +1,8 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  BadgeCheck,
-  BriefcaseBusiness,
-  FileSearch,
-  Handshake,
-  Layers3,
-  ShieldCheck,
-  Sparkles
-} from "lucide-react";
+import { ArrowRight, FileSearch, Handshake, Layers3, ShieldCheck } from "lucide-react";
 import { CommandScene } from "../components/CommandScene";
 import { CorridorMap } from "../components/CorridorMap";
+import { EditorialMedia } from "../components/EditorialMedia";
 import { MetricCard } from "../components/MetricCard";
 import { RfqForm } from "../components/RfqForm";
 import { SupplierCard } from "../components/SupplierCard";
@@ -36,12 +28,12 @@ export default async function Home() {
           <div className="hero-copy">
             <div className="kicker">
               <ShieldCheck aria-hidden="true" size={18} />
-              Deal desk B2B Haut-Katanga / Lualaba
+              Maison de sourcing Haut-Katanga / Lualaba
             </div>
-            <h1 id="home-title">OCTOPUS assemble les prestataires qui rendent les operations possibles</h1>
+            <h1 id="home-title">Un salon prive pour transformer les besoins complexes en missions executees</h1>
             <p>
-              Une plateforme immersive pour qualifier des sous-traitants, recevoir des besoins clients et
-              structurer des offres de services signees par OCTOPUS Mining.
+              OCTOPUS qualifie les prestataires, orchestre les RFQ et presente les opportunites comme une selection
+              verifiee, lisible et prete a etre arbitree.
             </p>
             <div className="action-row">
               <Link className="primary-action" href="#besoin">
@@ -58,31 +50,7 @@ export default async function Home() {
               <span>Execution suivie</span>
             </div>
           </div>
-          <aside className="deal-console" aria-label="Synthese operationnelle">
-            <div className="deal-console__header">
-              <span>Mission control</span>
-              <strong>OCTOPUS Mining</strong>
-            </div>
-            <div className="deal-console__metric">
-              <span>Portefeuille actif</span>
-              <strong>{stats.opportunities}</strong>
-              <small>offres a piloter</small>
-            </div>
-            <div className="deal-console__stack">
-              <span>
-                <BadgeCheck size={15} aria-hidden="true" />
-                {stats.verifiedSuppliers} dossiers controles
-              </span>
-              <span>
-                <BriefcaseBusiness size={15} aria-hidden="true" />
-                {stats.rfqs} besoins structures
-              </span>
-              <span>
-                <Sparkles size={15} aria-hidden="true" />
-                {stats.cities} zones couvertes
-              </span>
-            </div>
-          </aside>
+          <EditorialMedia />
         </section>
 
         <section className="metrics-ribbon" aria-label="Indicateurs operationnels">

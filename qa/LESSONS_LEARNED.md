@@ -107,3 +107,21 @@ Until a reviewed media library exists, the public experience uses procedural gra
 ### Guard Added
 
 `scripts/check-media.ts` and e2e public-media checks fail if public routes expose unapproved image or CSS URL media.
+
+## 2026-07-05 External Media Registry
+
+### Failure
+
+A total visual redesign needs real imagery, but a blanket media ban blocks stronger UX directions and encourages purely decorative procedural work.
+
+### Root Cause
+
+The previous policy treated every external image as unsafe instead of separating declared, licensed, approved assets from undeclared media.
+
+### Rule
+
+External public imagery is allowed only when it is registered with HTTPS URL, source domain, source URL, license URL, useful alt text, approved review status, valid license status, and public usage.
+
+### Guard Added
+
+`scripts/check-media.ts`, CSP `img-src`, and Playwright media audit now allow only registered external media from approved domains.

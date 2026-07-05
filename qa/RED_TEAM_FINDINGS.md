@@ -5,7 +5,7 @@
 - Scope risk: the full brief describes a broad B2B platform; shipping every possible module at once would create weak, unverified features.
 - Credibility risk: seeded commercial data must support navigation and dashboards without pretending to be proven market traction.
 - Security risk: local shared-password users are acceptable only for controlled validation and must be disabled or rotated before commercial launch.
-- Media risk: no public page should use unreviewed industrial photography, generated photorealistic scenes, scraped assets, or stock media.
+- Media risk: public pages may use external imagery only when it is declared in the media registry with source, domain, license, approval status and public usage.
 - Deployment risk: Vercel project settings can override repository intent; the deployed URL must be verified after push.
 - Visual risk: reference-site screenshots are useful local evidence, but third-party artifacts must not be committed.
 - UX risk: cinematic motion can reduce trust if it hides RFQ intake, supplier scoring, deal status, or closed V1 flags.

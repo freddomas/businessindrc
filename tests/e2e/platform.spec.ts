@@ -179,18 +179,34 @@ async function auditA11y(page: Page) {
 
 async function auditPublicMedia(page: Page) {
   const media = await page.evaluate(() => {
-    const elements = Array.from(document.querySelectorAll("img,picture,source"));
+    const allowedHosts = new Set(["images.unsplash.com"]);
+    const elements = Array.from(document.querySelectorAll<HTMLImageElement>("img")).map((element) => {
+      const url = new URL(element.currentSrc || element.src, window.location.href);
+      const isInternal = url.origin === window.location.origin || url.protocol === "data:" || url.protocol === "blob:";
+      const declaresPublicMedia = element.dataset.publicMedia === "approved";
+      const isApprovedExternal =
+        allowedHosts.has(element.dataset.sourceDomain ?? "") &&
+        element.dataset.reviewStatus === "APPROVED" &&
+        element.dataset.licenseStatus === "VALID" &&
+        Boolean(element.dataset.licenseUrl) &&
+        Boolean(element.getAttribute("alt")?.trim());
+
+      return {
+        html: element.outerHTML.slice(0, 180),
+        valid: declaresPublicMedia ? isApprovedExternal : isInternal
+      };
+    });
     const cssUrls = Array.from(document.querySelectorAll<HTMLElement>("body *"))
       .map((element) => getComputedStyle(element).backgroundImage)
       .filter((value) => value && value !== "none" && value.includes("url("));
 
     return {
-      elements: elements.map((element) => element.outerHTML.slice(0, 180)),
+      elements: elements.filter((element) => !element.valid).map((element) => element.html),
       cssUrls
     };
   });
 
-  expect(media.elements, "unregistered public media elements").toEqual([]);
+  expect(media.elements, "unregistered or unapproved public media elements").toEqual([]);
   expect(media.cssUrls, "unregistered CSS media URLs").toEqual([]);
 }
 

@@ -50,7 +50,11 @@ export function SupplierCard({ supplier }: { supplier: Supplier }) {
       </div>
       <div className="supplier-card__foot">
         <strong>{supplier.availability}</strong>
-        <Link className="inline-action" href={`/fournisseurs/${supplier.slug}`}>
+        <Link
+          aria-label={`Voir dossier ${supplier.name}`}
+          className="inline-action supplier-card__link"
+          href={`/fournisseurs/${supplier.slug}`}
+        >
           Voir dossier
           <ArrowUpRight aria-hidden="true" size={16} />
         </Link>

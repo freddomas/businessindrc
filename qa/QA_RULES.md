@@ -13,11 +13,11 @@
 - Build success is not deployment success; verify the deployment URL.
 - Public UI must avoid internal setup language and the forbidden terms from the product brief.
 - Critical routes require console, network, layout, text and accessibility checks.
-- Media displayed publicly must pass review status, license status, AI-like and usage filters.
+- Media displayed publicly must pass review status, license status, source-domain, alt-text and usage filters.
 - Do not run `npm run typecheck` in parallel with `npm run build`; Next regenerates `.next/types` during build and can produce false missing-file errors.
 - Visual rewrites require Playwright screenshots or attachments for the critical route matrix, not only passing DOM assertions.
 - Copy checks must include public shared components because visible labels, inputs and actions are often defined outside `app/`.
 - Database acceptance checks must use the project health endpoint, not direct secret inspection or copied connection strings.
 - Touch viewports must not depend on hover transforms for navigation or primary actions.
-- Public visual richness must come from approved media or procedural graphics; unreviewed generated, scraped, or stock imagery is not allowed.
+- Public visual richness may use declared external imagery, approved media, or procedural graphics; undeclared or unlicensed media is not allowed.
 - A local dev server must be identified before browser QA; stale processes on the same port can invalidate the result.

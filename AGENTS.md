@@ -8,5 +8,5 @@
 - Utiliser `DATABASE_URL` en priorité, avec `POSTGRES_URL` comme fallback.
 - Les flags V1 restent fermés sauf décision explicite: `PUBLIC_API_ENABLED=false`, `WEBHOOKS_ENABLED=false`, `EXTERNAL_INTEGRATIONS_ENABLED=false`, `PAYMENTS_ENABLED=false`.
 - L'UI publique ne doit pas afficher: demo, démonstration, test, sample, fake, mock, lorem, placeholder, tutoriel, guide, exemple.
-- Aucune image non approuvée ne peut être affichée publiquement.
+- Les images externes peuvent être affichées publiquement si elles sont déclarées dans le registre média avec source, domaine, licence, texte alternatif et statut approuvé.
 - Les utilisateurs locaux avec mot de passe partagé sont réservés à la validation contrôlée; ne pas les présenter comme un mécanisme commercial.

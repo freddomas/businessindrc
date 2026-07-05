@@ -196,6 +196,48 @@ export function generateMediaAssets(): MediaAsset[] {
       alt: "Scene abstraite des corridors industriels"
     },
     {
+      id: "external-operations-sparks-01",
+      title: "Operation terrain haute intensite",
+      url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=82",
+      sourceDomain: "images.unsplash.com",
+      sourceUrl: "https://unsplash.com/license",
+      licenseUrl: "https://unsplash.com/license",
+      credit: "Unsplash",
+      reviewStatus: "APPROVED",
+      licenseStatus: "VALID",
+      isAiLike: false,
+      allowedUse: ["web_public", "editorial_hero"],
+      alt: "Intervention technique avec projection d'etincelles sur site"
+    },
+    {
+      id: "external-engineering-lab-01",
+      title: "Ingenierie et qualification",
+      url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=82",
+      sourceDomain: "images.unsplash.com",
+      sourceUrl: "https://unsplash.com/license",
+      licenseUrl: "https://unsplash.com/license",
+      credit: "Unsplash",
+      reviewStatus: "APPROVED",
+      licenseStatus: "VALID",
+      isAiLike: false,
+      allowedUse: ["web_public", "editorial_support"],
+      alt: "Poste d'ingenierie dans un atelier technique lumineux"
+    },
+    {
+      id: "external-deal-room-01",
+      title: "Salle de coordination",
+      url: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=82",
+      sourceDomain: "images.unsplash.com",
+      sourceUrl: "https://unsplash.com/license",
+      licenseUrl: "https://unsplash.com/license",
+      credit: "Unsplash",
+      reviewStatus: "APPROVED",
+      licenseStatus: "VALID",
+      isAiLike: false,
+      allowedUse: ["web_public", "editorial_support"],
+      alt: "Reunion de coordination autour d'une table de travail"
+    },
+    {
       id: "private-asset-review-01",
       title: "Asset interne a revoir",
       reviewStatus: "PENDING",

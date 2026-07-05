@@ -3,6 +3,14 @@ const nextConfig = {
   poweredByHeader: false,
   outputFileTracingRoot: process.cwd(),
   allowedDevOrigins: ["127.0.0.1"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com"
+      }
+    ]
+  },
   async headers() {
     const scriptSrc =
       process.env.NODE_ENV === "development"
@@ -18,7 +26,7 @@ const nextConfig = {
       "form-action 'self'",
       "frame-ancestors 'none'",
       "object-src 'none'",
-      "img-src 'self' data: blob:",
+      "img-src 'self' data: blob: https://images.unsplash.com",
       "font-src 'self' data:",
       styleSrc,
       scriptSrc,
