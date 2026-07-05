@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Building2, Factory, FileText, Gauge, MapPinned, ShieldCheck } from "lucide-react";
+import { BriefcaseBusiness, Gauge, MapPinned, Network, Pickaxe, ShieldCheck } from "lucide-react";
 
 const links = [
-  { href: "/fournisseurs", label: "Fournisseurs", icon: Factory },
-  { href: "/opportunites", label: "Opportunités", icon: FileText },
+  { href: "/fournisseurs", label: "Prestataires", icon: Network },
+  { href: "/opportunites", label: "Offres", icon: BriefcaseBusiness },
   { href: "/zones/kolwezi", label: "Zones", icon: MapPinned },
   { href: "/console", label: "Console", icon: Gauge }
 ];
@@ -11,17 +11,18 @@ const links = [
 export function TopNav() {
   return (
     <header className="top-nav">
-      <Link className="brand" href="/" aria-label="Accueil Grand Katanga Industrial Services Hub">
-        <Building2 aria-hidden="true" size={24} />
+      <Link className="brand" href="/" aria-label="Accueil OCTOPUS Mining Industrial Services Hub">
+        <span className="brand-mark" aria-hidden="true">
+          <Pickaxe size={21} />
+        </span>
         <span>
-          <strong>GKIH</strong>
+          <strong>OCTOPUS Mining</strong>
           <small>Industrial Services Hub</small>
         </span>
       </Link>
       <nav aria-label="Navigation principale">
         {links.map((link) => {
           const Icon = link.icon;
-
           return (
             <Link href={link.href} key={link.href}>
               <Icon aria-hidden="true" size={17} />
@@ -30,9 +31,9 @@ export function TopNav() {
           );
         })}
       </nav>
-      <div className="nav-signal" aria-label="Statut plateforme">
+      <div className="nav-signal" aria-label="Statut de qualification">
         <ShieldCheck aria-hidden="true" size={16} />
-        <span>Contrôlé</span>
+        <span>Qualifie</span>
       </div>
     </header>
   );

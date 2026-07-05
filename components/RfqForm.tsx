@@ -14,6 +14,10 @@ export function RfqForm() {
   const [state, setState] = useState<SubmitState>({ status: "idle" });
 
   async function submit(formData: FormData) {
+    if (state.status === "submitting") {
+      return;
+    }
+
     setState({ status: "submitting" });
     const response = await fetch("/api/rfq", {
       method: "POST",
@@ -27,7 +31,7 @@ export function RfqForm() {
     if (!response.ok || !payload.id) {
       setState({
         status: "error",
-        message: payload.message ?? "Demande non enregistrée"
+        message: payload.message ?? "Enregistrement indisponible pour le moment."
       });
       return;
     }
@@ -38,31 +42,25 @@ export function RfqForm() {
   return (
     <form className="rfq-form" action={submit}>
       <div className="section-heading">
-        <p>Demande de cotation</p>
-        <h2>Qualifier un besoin terrain</h2>
+        <p>Portail client</p>
+        <h2>Confier un besoin a OCTOPUS</h2>
         <span className="form-assurance">
           <ShieldCheck aria-hidden="true" size={15} />
-          Qualification interne avant shortlist
+          Qualification interne avant proposition
         </span>
       </div>
       <label>
         Besoin
         <span className="field-hint" id="rfq-title-hint">
-          Décris la capacité, la contrainte et la ville cible.
+          Service attendu, site, contrainte et resultat vise.
         </span>
-        <input
-          required
-          minLength={8}
-          name="title"
-          autoComplete="off"
-          aria-describedby="rfq-title-hint"
-        />
+        <input required minLength={8} name="title" autoComplete="off" aria-describedby="rfq-title-hint" />
       </label>
       <div className="form-grid">
         <label>
-          Ville
+          Zone
           <select name="city" required>
-            {cities.slice(0, 7).map((city) => (
+            {cities.slice(0, 8).map((city) => (
               <option key={city.slug} value={city.name}>
                 {city.name}
               </option>
@@ -81,20 +79,14 @@ export function RfqForm() {
         </label>
       </div>
       <label>
-        Lignes de besoin
+        Details operationnels
         <span className="field-hint" id="rfq-lines-hint">
-          Indique capacité attendue, délai, documents requis et contraintes terrain.
+          Delai, documents attendus, contraintes de site et niveau de confidentialite.
         </span>
-        <textarea
-          required
-          minLength={16}
-          name="lines"
-          rows={4}
-          aria-describedby="rfq-lines-hint"
-        />
+        <textarea required minLength={16} name="lines" rows={4} aria-describedby="rfq-lines-hint" />
       </label>
       <label>
-        Urgence
+        Priorite
         <select name="urgency" required>
           <option value="standard">Standard</option>
           <option value="priority">Prioritaire</option>
@@ -103,10 +95,10 @@ export function RfqForm() {
       </label>
       <button type="submit" disabled={state.status === "submitting"}>
         <Send aria-hidden="true" size={18} />
-        {state.status === "submitting" ? "Enregistrement..." : "Soumettre"}
+        {state.status === "submitting" ? "Analyse en cours" : "Envoyer le besoin"}
       </button>
       <div className="form-status" aria-live="polite">
-        {state.status === "success" && `Demande reçue: ${state.id}`}
+        {state.status === "success" && `Besoin recu par OCTOPUS: ${state.id}`}
         {state.status === "error" && state.message}
       </div>
     </form>

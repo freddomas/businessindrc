@@ -2,6 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const publicFiles = [
+  "app/layout.tsx",
   "app/page.tsx",
   "app/fournisseurs",
   "app/opportunites",
@@ -9,6 +10,7 @@ const publicFiles = [
   "app/connexion",
   "components"
 ];
+
 const forbidden = [
   "demo",
   "démonstration",
@@ -22,6 +24,7 @@ const forbidden = [
   "guide",
   "exemple"
 ];
+
 const visibleTechnicalTerms = ["squelette", "template", "base minimale", "DATABASE_URL", "POSTGRES_URL"];
 
 function collectFiles(path: string): string[] {
@@ -40,16 +43,21 @@ function hasForbiddenWord(content: string, word: string): boolean {
   return new RegExp(`(^|[^\\p{L}])${escaped}([^\\p{L}]|$)`, "iu").test(content);
 }
 
+function extractStringLiterals(content: string): string {
+  return [...content.matchAll(/(["'`])((?:(?!\1).){3,}?)\1/gs)]
+    .map((match) => match[2])
+    .join("\n");
+}
+
 const files = publicFiles
   .flatMap(collectFiles)
   .filter((file) => /\.(tsx|ts)$/.test(file) && !file.includes(`${join("app", "api")}${join("", "")}`));
+
 const failures: string[] = [];
 
 for (const file of files) {
   const content = readFileSync(file, "utf8");
-  const stringLiterals = [...content.matchAll(/(["'`])((?:(?!\1).){3,}?)\1/gs)]
-    .map((match) => match[2])
-    .join("\n");
+  const stringLiterals = extractStringLiterals(content);
 
   for (const word of [...forbidden, ...visibleTechnicalTerms]) {
     if (hasForbiddenWord(stringLiterals, word)) {
@@ -58,8 +66,9 @@ for (const file of files) {
   }
 }
 
-if (failures.length) {
-  throw new Error(failures.join("\n"));
+if (failures.length > 0) {
+  console.error(failures.join("\n"));
+  process.exit(1);
 }
 
 console.log("Public copy validation passed.");

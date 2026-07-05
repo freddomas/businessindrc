@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BadgeCheck, FileCheck2, Gauge, MapPin, Route } from "lucide-react";
+import { ArrowLeft, BadgeCheck, Clock, FileCheck2, MapPin, Radius, Truck } from "lucide-react";
 import { TopNav } from "../../../components/TopNav";
 import { getSupplierBySlug } from "../../../lib/repository";
 
@@ -10,7 +10,7 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export default async function SupplierProfilePage({ params }: PageProps) {
+export default async function SupplierProfile({ params }: PageProps) {
   const { slug } = await params;
   const supplier = await getSupplierBySlug(slug);
 
@@ -23,70 +23,67 @@ export default async function SupplierProfilePage({ params }: PageProps) {
       <TopNav />
       <main className="app-shell">
         <Link className="back-link" href="/fournisseurs">
-          <ArrowLeft aria-hidden="true" size={17} />
-          Retour annuaire
+          <ArrowLeft aria-hidden="true" size={16} />
+          Retour prestataires
         </Link>
-        <section className="profile-hero profile-hero--premium">
+        <section className="profile-hero">
           <div>
             <p>{supplier.city}</p>
             <h1>{supplier.name}</h1>
-            <div className="supplier-meta">
-              <span>
-                <MapPin aria-hidden="true" size={16} />
-                {supplier.sector}
-              </span>
-              <span>
-                <BadgeCheck aria-hidden="true" size={16} />
-                {supplier.verificationLabel}
-              </span>
-            </div>
+            <span>{supplier.sector}</span>
           </div>
-          <div className="score-dial" aria-label={`Score ${supplier.score} sur 100`}>
+          <aside className="profile-score" aria-label={`Score ${supplier.score} sur 100`}>
             <strong>{supplier.score}</strong>
-            <span>score</span>
-          </div>
+            <span>score OCTOPUS</span>
+          </aside>
         </section>
 
-        <section className="profile-grid profile-grid--premium">
-          <article>
-            <Gauge aria-hidden="true" size={22} />
-            <h2>Capacités</h2>
-            <dl>
-              <div>
-                <dt>Équipes</dt>
-                <dd>{supplier.capacity.crew}</dd>
-              </div>
-              <div>
-                <dt>Flotte</dt>
-                <dd>{supplier.capacity.fleet}</dd>
-              </div>
-              <div>
-                <dt>Rayon</dt>
-                <dd>{supplier.capacity.serviceRadiusKm} km</dd>
-              </div>
-              <div>
-                <dt>Réponse</dt>
-                <dd>{supplier.capacity.responseTimeHours} h</dd>
-              </div>
-            </dl>
+        <section className="profile-grid">
+          <article className="profile-panel">
+            <h2>Capacites confirmees</h2>
+            <div className="profile-facts">
+              <span>
+                <Truck aria-hidden="true" size={17} />
+                {supplier.capacity.fleet} unites terrain
+              </span>
+              <span>
+                <Clock aria-hidden="true" size={17} />
+                {supplier.capacity.responseTimeHours}h de mobilisation
+              </span>
+              <span>
+                <Radius aria-hidden="true" size={17} />
+                {supplier.capacity.serviceRadiusKm} km de couverture
+              </span>
+              <span>
+                <MapPin aria-hidden="true" size={17} />
+                {supplier.city}
+              </span>
+            </div>
           </article>
-          <article>
-            <FileCheck2 aria-hidden="true" size={22} />
-            <h2>Documents</h2>
-            <ul>
-              {supplier.documents.map((document) => (
-                <li key={document}>{document}</li>
-              ))}
-            </ul>
-          </article>
-          <article>
-            <Route aria-hidden="true" size={22} />
+
+          <article className="profile-panel">
             <h2>Services</h2>
-            <ul>
+            <div className="service-list service-list--large">
               {supplier.services.map((service) => (
-                <li key={service}>{service}</li>
+                <span key={service}>{service}</span>
               ))}
-            </ul>
+            </div>
+          </article>
+
+          <article className="profile-panel">
+            <h2>Verification</h2>
+            <div className="profile-facts">
+              <span>
+                <BadgeCheck aria-hidden="true" size={17} />
+                {supplier.verificationLabel}
+              </span>
+              {supplier.documents.map((document) => (
+                <span key={document}>
+                  <FileCheck2 aria-hidden="true" size={17} />
+                  {document}
+                </span>
+              ))}
+            </div>
           </article>
         </section>
       </main>

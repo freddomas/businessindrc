@@ -1,5 +1,6 @@
 import { CalendarClock, Layers3, Radar } from "lucide-react";
 import { TopNav } from "../../components/TopNav";
+import { formatAccessLevel, formatOpportunityStatus } from "../../lib/display";
 import { getOpportunities } from "../../lib/repository";
 
 export const dynamic = "force-dynamic";
@@ -13,13 +14,13 @@ export default async function OpportunitiesPage() {
       <main className="app-shell">
         <section className="page-head page-head--visual">
           <div>
-            <p>Pipeline industriel</p>
-            <h1>Opportunités industrielles orchestrées</h1>
-            <span>{opportunities.length} besoins actifs ou en qualification sur les zones prioritaires.</span>
+            <p>Portail offres</p>
+            <h1>Deals de services pilotes par OCTOPUS</h1>
+            <span>{opportunities.length} offres en cadrage, matching, negociation ou signature.</span>
           </div>
           <div className="page-head__plate" aria-hidden="true">
             <Radar size={28} />
-            <span>Lecture priorisée</span>
+            <span>Lecture priorisee</span>
           </div>
         </section>
 
@@ -41,9 +42,9 @@ export default async function OpportunitiesPage() {
                 </span>
                 <span>
                   <Layers3 aria-hidden="true" size={16} />
-                  {opportunity.accessLevel}
+                  {formatAccessLevel(opportunity.accessLevel)}
                 </span>
-                <strong>{opportunity.status}</strong>
+                <strong>{formatOpportunityStatus(opportunity.status)}</strong>
               </div>
             </article>
           ))}

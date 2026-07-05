@@ -19,7 +19,8 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
   const suppliers = await getSuppliers({
     city: params.ville,
     sector: params.secteur,
-    q: params.q
+    q: params.q,
+    limit: 48
   });
 
   return (
@@ -28,20 +29,20 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
       <main className="app-shell">
         <section className="page-head page-head--visual">
           <div>
-            <p>Annuaire qualifié</p>
-            <h1>Fournisseurs industriels qualifiés</h1>
-            <span>{suppliers.length} dossiers filtrés avec capacités, documents et score.</span>
+            <p>Incubateur prestataires</p>
+            <h1>Reseau de sous-traitants qualifies</h1>
+            <span>{suppliers.length} dossiers affiches avec capacites, pieces et disponibilite terrain.</span>
           </div>
           <div className="page-head__plate" aria-hidden="true">
             <strong>{suppliers.length}</strong>
-            <span>résultats</span>
+            <span>profils</span>
           </div>
         </section>
 
         <form className="filter-bar filter-bar--premium" action="/fournisseurs">
           <div className="filter-title">
             <SlidersHorizontal aria-hidden="true" size={18} />
-            <span>Filtrage opérationnel</span>
+            <span>Filtrage decisionnel</span>
           </div>
           <label>
             Recherche
@@ -51,7 +52,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
             </div>
           </label>
           <label>
-            Ville
+            Zone
             <select name="ville" defaultValue={params.ville ?? ""}>
               <option value="">Toutes</option>
               {cities.map((city) => (
@@ -72,11 +73,11 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
               ))}
             </select>
           </label>
-          <button type="submit">Filtrer</button>
+          <button type="submit">Appliquer</button>
         </form>
 
-        <section className="supplier-grid supplier-grid--directory" aria-label="Résultats fournisseurs">
-          {suppliers.slice(0, 36).map((supplier) => (
+        <section className="supplier-grid supplier-grid--wide" aria-label="Liste prestataires">
+          {suppliers.map((supplier) => (
             <SupplierCard key={supplier.slug} supplier={supplier} />
           ))}
         </section>

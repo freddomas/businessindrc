@@ -7,25 +7,25 @@ export const SESSION_COOKIE = "gkih_session";
 
 const localUsers: Array<SessionUser & { password: string }> = [
   {
-    email: "admin@gkih.local",
-    name: "Admin plateforme",
+    email: "admin@octopus.local",
+    name: "Administrateur plateforme",
     role: "SuperAdmin",
-    organization: "Grand Katanga Industrial Services Hub",
-    password: "demo2026!"
+    organization: "OCTOPUS Mining",
+    password: "octopus2026!"
   },
   {
-    email: "sourcing@gkih.local",
-    name: "Sourcing manager",
+    email: "deals@octopus.local",
+    name: "Deal desk",
     role: "SourcingManager",
-    organization: "Grand Katanga Industrial Services Hub",
-    password: "demo2026!"
+    organization: "OCTOPUS Mining",
+    password: "octopus2026!"
   },
   {
-    email: "buyer@gkih.local",
-    name: "Acheteur industriel",
+    email: "client@octopus.local",
+    name: "Client industriel",
     role: "BuyerAdmin",
-    organization: "Acheteur local",
-    password: "demo2026!"
+    organization: "Client entreprise",
+    password: "octopus2026!"
   }
 ];
 

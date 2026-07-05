@@ -9,12 +9,14 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "db:seed": "tsx scripts/seed-db.ts",
+    "db:reset": "tsx scripts/reset-db.ts",
     "seed:validate": "tsx scripts/validate-seed.ts",
     "test": "npm run test:copy && npm run seed:validate && npm run test:rbac && npm run test:media",
     "test:copy": "tsx scripts/check-copy.ts",
     "test:rbac": "tsx scripts/check-rbac.ts",
     "test:media": "tsx scripts/check-media.ts",
-    "test:e2e": "node scripts/run-e2e.mjs"
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "qa:full": "npm run lint && npm run typecheck && npm run test && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -24,6 +26,7 @@
     "pg": "^8.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "three": "^0.185.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -33,6 +36,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.185.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.0",
     "postcss": "^8.5.16",

@@ -15,25 +15,15 @@ const rfqSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  if (!hasDatabaseUrl()) {
-    return NextResponse.json(
-      {
-        ok: false,
-        message: "Base de données indisponible pour enregistrer la demande."
-      },
-      { status: 503 }
-    );
+  const payload = rfqSchema.safeParse(await request.json());
+  if (!payload.success) {
+    return NextResponse.json({ ok: false, message: "Informations invalides." }, { status: 422 });
   }
 
-  const payload = rfqSchema.safeParse(await request.json());
-
-  if (!payload.success) {
+  if (!hasDatabaseUrl()) {
     return NextResponse.json(
-      {
-        ok: false,
-        message: "Données invalides."
-      },
-      { status: 422 }
+      { ok: false, message: "Enregistrement indisponible pour le moment." },
+      { status: 503 }
     );
   }
 
@@ -43,7 +33,14 @@ export async function POST(request: Request) {
       .split(/\n|;/)
       .map((line) => line.trim())
       .filter(Boolean)
-  });
+  }).catch(() => null);
+
+  if (!id) {
+    return NextResponse.json(
+      { ok: false, message: "Enregistrement indisponible pour le moment." },
+      { status: 503 }
+    );
+  }
 
   return NextResponse.json({ ok: true, id }, { status: 201 });
 }

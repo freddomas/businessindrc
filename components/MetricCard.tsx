@@ -1,16 +1,16 @@
 type MetricCardProps = {
   label: string;
-  value: string | number;
+  value: number | string;
   detail: string;
   tone?: "teal" | "copper" | "gold" | "steel";
 };
 
-export function MetricCard({ label, value, detail, tone = "teal" }: MetricCardProps) {
+export function MetricCard({ label, value, detail, tone = "steel" }: MetricCardProps) {
   return (
     <article className={`metric-card metric-card--${tone}`}>
-      <span>{label}</span>
+      <p>{label}</p>
       <strong>{value}</strong>
-      <small>{detail}</small>
+      <span>{detail}</span>
     </article>
   );
 }

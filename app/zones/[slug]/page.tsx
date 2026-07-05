@@ -30,46 +30,44 @@ export default async function ZonePage({ params }: PageProps) {
           <MapPinned aria-hidden="true" size={30} />
           <p>Zone prioritaire</p>
           <h1>{city.name}</h1>
-          <span>Couverture fournisseur estimée: {Math.round(city.targetShare * 100)}% du référentiel</span>
+          <span>{Math.round(city.targetShare * 100)}% du reseau prestataires cible cette zone.</span>
         </section>
+
         <section className="profile-grid profile-grid--premium">
           <article>
             <Factory aria-hidden="true" size={22} />
             <h2>Secteurs dominants</h2>
             <ul>
               <li>Mines et support industriel</li>
-              <li>Logistique corridor</li>
-              <li>Énergie et maintenance terrain</li>
+              <li>Construction et manutention</li>
+              <li>Services professionnels</li>
             </ul>
           </article>
           <article>
             <Route aria-hidden="true" size={22} />
-            <h2>Risques suivis</h2>
+            <h2>Points suivis</h2>
             <ul>
-              <li>Disponibilité flotte</li>
-              <li>Documents fournisseur incomplets</li>
-              <li>Délai de mobilisation</li>
+              <li>Disponibilite des equipes</li>
+              <li>Pieces de verification</li>
+              <li>Delai de mobilisation</li>
             </ul>
           </article>
           <article>
             <MapPinned aria-hidden="true" size={22} />
-            <h2>Priorité sourcing</h2>
-            <ul>
-              <li>Vérification T2 et plus</li>
-              <li>Capacité multi-sites</li>
-              <li>Réponse en moins de 48h</li>
-            </ul>
+            <h2>Priorite OCTOPUS</h2>
+            <p>Assembler une offre claire avec les prestataires les plus fiables de la zone.</p>
           </article>
         </section>
-        <section className="content-band content-band--dark">
+
+        <section className="content-band content-band--dark" aria-labelledby="zone-suppliers">
           <div className="section-heading section-heading--inline">
             <div>
-              <p>Couverture locale</p>
-              <h2>Fournisseurs à qualifier</h2>
+              <p>Prestataires dans la zone</p>
+              <h2 id="zone-suppliers">Capacites disponibles a {city.name}</h2>
             </div>
-            <Link className="text-action" href={`/fournisseurs?ville=${city.name}`}>
-              Filtrer l&apos;annuaire
-              <ArrowRight aria-hidden="true" size={18} />
+            <Link className="text-action" href="/fournisseurs">
+              Voir le reseau
+              <ArrowRight aria-hidden="true" size={16} />
             </Link>
           </div>
           <div className="supplier-grid">

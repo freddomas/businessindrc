@@ -1,14 +1,13 @@
 import Link from "next/link";
-import { ArrowUpRight, BadgeCheck, Clock, MapPin, Truck } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Clock, FileCheck2, MapPin, Truck } from "lucide-react";
 import type { Supplier } from "../lib/types";
 
 export function SupplierCard({ supplier }: { supplier: Supplier }) {
   const scoreClass =
-    supplier.score >= 90 ? "supplier-score--high" : supplier.score >= 80 ? "supplier-score--mid" : "supplier-score--base";
+    supplier.score >= 92 ? "supplier-score--high" : supplier.score >= 84 ? "supplier-score--mid" : "supplier-score--base";
 
   return (
     <article className="supplier-card">
-      <div className="supplier-card__shine" aria-hidden="true" />
       <div className="supplier-card__top">
         <div>
           <p>{supplier.city}</p>
@@ -31,25 +30,31 @@ export function SupplierCard({ supplier }: { supplier: Supplier }) {
           <span key={service}>{service}</span>
         ))}
       </div>
-      <div className={`supplier-score ${scoreClass}`}>
-        <div aria-hidden="true" />
+      <div className={`supplier-score ${scoreClass}`} aria-label={`Score ${supplier.score} sur 100`}>
+        <div aria-hidden="true" style={{ width: `${supplier.score}%` }} />
         <span>{supplier.score}/100</span>
       </div>
       <div className="capacity-strip">
         <span>
           <Truck aria-hidden="true" size={15} />
-          {supplier.capacity.fleet} unités
+          {supplier.capacity.fleet} unites
         </span>
         <span>
           <Clock aria-hidden="true" size={15} />
           {supplier.capacity.responseTimeHours}h
         </span>
-        <strong>{supplier.availability}</strong>
+        <span>
+          <FileCheck2 aria-hidden="true" size={15} />
+          {supplier.documents.length} pieces
+        </span>
       </div>
-      <Link className="inline-action" href={`/fournisseurs/${supplier.slug}`}>
-        Voir dossier
-        <ArrowUpRight aria-hidden="true" size={16} />
-      </Link>
+      <div className="supplier-card__foot">
+        <strong>{supplier.availability}</strong>
+        <Link className="inline-action" href={`/fournisseurs/${supplier.slug}`}>
+          Voir dossier
+          <ArrowUpRight aria-hidden="true" size={16} />
+        </Link>
+      </div>
     </article>
   );
 }

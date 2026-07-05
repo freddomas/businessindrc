@@ -1,11 +1,6 @@
 import { hash } from "bcryptjs";
 import { getSql, hasDatabaseUrl } from "./db";
-import {
-  generateMediaAssets,
-  generateOpportunities,
-  generateRfqs,
-  generateSuppliers
-} from "./seed-data";
+import { generateMediaAssets, generateOpportunities, generateRfqs, generateSuppliers } from "./seed-data";
 
 let bootstrapPromise: Promise<void> | null = null;
 
@@ -15,13 +10,22 @@ export async function ensureDataStore(): Promise<void> {
   }
 
   if (!bootstrapPromise) {
-    bootstrapPromise = bootstrap();
+    bootstrapPromise = bootstrap(false);
   }
 
   await bootstrapPromise;
 }
 
-async function bootstrap(): Promise<void> {
+export async function resetDataStore(): Promise<void> {
+  if (!hasDatabaseUrl()) {
+    return;
+  }
+
+  bootstrapPromise = bootstrap(true);
+  await bootstrapPromise;
+}
+
+async function bootstrap(forceSeed: boolean): Promise<void> {
   const sql = getSql();
 
   await sql`
@@ -112,10 +116,22 @@ async function bootstrap(): Promise<void> {
     )
   `;
 
-  const supplierCount = (await sql`SELECT COUNT(*)::int as count FROM suppliers`) as Array<
-    Record<string, unknown>
-  >;
-  if (Number(supplierCount[0]?.count ?? 0) > 0) {
+  if (forceSeed) {
+    await sql`
+      TRUNCATE TABLE
+        audit_logs,
+        app_users,
+        media_assets,
+        opportunities,
+        rfqs,
+        suppliers
+      RESTART IDENTITY
+    `;
+  }
+
+  const supplierCount = (await sql<{ count: number }>`SELECT COUNT(*)::int AS count FROM suppliers`)[0]?.count ?? 0;
+
+  if (!forceSeed && Number(supplierCount) > 0) {
     return;
   }
 
@@ -152,8 +168,9 @@ export async function seedData(): Promise<void> {
         origin, visibility, review_status
       )
       VALUES (
-        ${rfq.id}, ${rfq.title}, ${rfq.city}, ${rfq.sector}, ${rfq.status},
-        ${rfq.urgency}, ${rfq.deadline}, ${JSON.stringify(rfq.lines)}::jsonb,
+        ${rfq.id}, ${rfq.title}, ${rfq.city}, ${rfq.sector},
+        ${rfq.status}, ${rfq.urgency}, ${rfq.deadline},
+        ${JSON.stringify(rfq.lines)}::jsonb,
         ${rfq.origin}, ${rfq.visibility}, ${rfq.reviewStatus}
       )
       ON CONFLICT (id) DO NOTHING
@@ -189,11 +206,11 @@ export async function seedData(): Promise<void> {
     `;
   }
 
-  const passwordHash = await hash("demo2026!", 10);
+  const passwordHash = await hash("octopus2026!", 10);
   const users = [
-    ["admin@gkih.local", "Admin plateforme", "SuperAdmin", "Grand Katanga Industrial Services Hub"],
-    ["sourcing@gkih.local", "Sourcing manager", "SourcingManager", "Grand Katanga Industrial Services Hub"],
-    ["buyer@gkih.local", "Acheteur industriel", "BuyerAdmin", "Acheteur local"]
+    ["admin@octopus.local", "Administrateur plateforme", "SuperAdmin", "OCTOPUS Mining"],
+    ["deals@octopus.local", "Deal desk", "SourcingManager", "OCTOPUS Mining"],
+    ["client@octopus.local", "Client industriel", "BuyerAdmin", "Client entreprise"]
   ] as const;
 
   for (const [email, name, role, organization] of users) {

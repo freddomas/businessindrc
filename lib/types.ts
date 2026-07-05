@@ -6,6 +6,7 @@ export type Origin =
 
 export type Visibility = "staging_only" | "public" | "private";
 export type ReviewStatus = "draft" | "reviewed" | "approved" | "rejected";
+
 export type RfqStatus =
   | "draft"
   | "submitted"
@@ -83,8 +84,8 @@ export type Opportunity = {
   city: string;
   sector: string;
   deadline: string;
-  accessLevel: "open" | "qualified" | "managed";
-  status: "active" | "screening" | "shortlist";
+  accessLevel: "mandat" | "qualification" | "proposition" | "signature";
+  status: "en_cadrage" | "matching" | "negociation" | "pret_signature";
   origin: Origin;
   visibility: Visibility;
   reviewStatus: ReviewStatus;
@@ -93,8 +94,8 @@ export type Opportunity = {
 export type MediaAsset = {
   id: string;
   title: string;
-  reviewStatus: "APPROVED" | "REJECTED" | "PENDING";
-  licenseStatus: "VALID" | "INVALID" | "PENDING";
+  reviewStatus: "APPROVED" | "PENDING" | "REJECTED";
+  licenseStatus: "VALID" | "PENDING" | "INVALID";
   isAiLike: boolean;
   allowedUse: string[];
   alt: string;

@@ -1,91 +1,86 @@
 import type { DashboardStats, MediaAsset, Opportunity, Rfq, Supplier } from "./types";
 
-export const SEED_ID = "GKIH_V1_2026";
+export const SEED_ID = "OCTOPUS_B2B_SERVICES_2026";
 
 export const cities = [
-  { name: "Kolwezi", slug: "kolwezi", targetShare: 0.32 },
-  { name: "Lubumbashi", slug: "lubumbashi", targetShare: 0.28 },
-  { name: "Likasi", slug: "likasi", targetShare: 0.13 },
-  { name: "Fungurume", slug: "fungurume", targetShare: 0.09 },
+  { name: "Kolwezi", slug: "kolwezi", targetShare: 0.26 },
+  { name: "Lubumbashi", slug: "lubumbashi", targetShare: 0.22 },
+  { name: "Likasi", slug: "likasi", targetShare: 0.12 },
+  { name: "Fungurume", slug: "fungurume", targetShare: 0.1 },
   { name: "Kasumbalesa", slug: "kasumbalesa", targetShare: 0.08 },
-  { name: "Kipushi", slug: "kipushi", targetShare: 0.04 },
-  { name: "Sakania", slug: "sakania", targetShare: 0.03 },
-  { name: "Tenke", slug: "tenke", targetShare: 0.03 }
+  { name: "Kipushi", slug: "kipushi", targetShare: 0.07 },
+  { name: "Tenke", slug: "tenke", targetShare: 0.06 },
+  { name: "Sakania", slug: "sakania", targetShare: 0.04 },
+  { name: "Dilolo", slug: "dilolo", targetShare: 0.03 },
+  { name: "Mutshatsha", slug: "mutshatsha", targetShare: 0.02 }
 ] as const;
 
 export const sectors = [
-  { name: "Mines et support", slug: "mines-support", targetShare: 0.3 },
-  { name: "Logistique", slug: "logistique", targetShare: 0.16 },
-  { name: "IT et sécurité", slug: "it-securite", targetShare: 0.14 },
-  { name: "BTP", slug: "btp", targetShare: 0.12 },
-  { name: "Agro-supply", slug: "agro-supply", targetShare: 0.1 },
-  { name: "HSE et conformité", slug: "hse-conformite", targetShare: 0.08 },
-  { name: "Énergie", slug: "energie", targetShare: 0.06 },
-  { name: "Forêt et environnement", slug: "foret-environnement", targetShare: 0.04 }
+  { name: "Mines", slug: "mines", targetShare: 0.18 },
+  { name: "Agriculture", slug: "agriculture", targetShare: 0.1 },
+  { name: "Agro-alimentaire", slug: "agro-alimentaire", targetShare: 0.09 },
+  { name: "Forets et environnement", slug: "forets-environnement", targetShare: 0.08 },
+  { name: "IT et systemes", slug: "it-systemes", targetShare: 0.09 },
+  { name: "Droit des affaires", slug: "droit-affaires", targetShare: 0.07 },
+  { name: "Fiscalite", slug: "fiscalite", targetShare: 0.07 },
+  { name: "Comptabilite", slug: "comptabilite", targetShare: 0.07 },
+  { name: "Manutention", slug: "manutention", targetShare: 0.1 },
+  { name: "Construction", slug: "construction", targetShare: 0.1 },
+  { name: "Energie", slug: "energie", targetShare: 0.03 },
+  { name: "HSE et conformite", slug: "hse-conformite", targetShare: 0.02 }
 ] as const;
 
-const supplierPrefixes = [
-  "Kivu",
-  "Katanga",
-  "Lualaba",
-  "Copperbelt",
-  "Nzuri",
-  "Mwanga",
-  "Tshamilemba",
-  "Kando",
-  "Ruzizi",
-  "Upemba"
-];
-
-const supplierSuffixes = [
-  "Industrial Services",
-  "Field Operations",
-  "Logistics",
-  "Supply",
-  "Technical Group",
-  "HSE Partners",
-  "Engineering",
-  "Works",
-  "Systems",
-  "Fleet"
-];
-
 const serviceBySector: Record<string, string[]> = {
-  "Mines et support": [
-    "maintenance équipements",
-    "EPI industriels",
-    "support camp",
-    "pièces critiques"
-  ],
-  Logistique: ["transport lourd", "entreposage", "transit corridor", "gestion flotte"],
-  "IT et sécurité": ["réseaux site", "CCTV", "contrôle accès", "sauvegarde"],
-  BTP: ["génie civil", "charpente", "maintenance bâtiments", "voirie"],
-  "Agro-supply": ["cantines", "approvisionnement frais", "stockage froid", "contrats volume"],
-  "HSE et conformité": ["audit HSE", "formations", "dossiers ARSP", "reporting local content"],
-  Énergie: ["groupes électrogènes", "solaire hybride", "maintenance électrique", "câblage"],
-  "Forêt et environnement": ["reboisement", "bois légal", "suivi environnemental", "réhabilitation"]
+  Mines: ["maintenance de site", "pieces critiques", "support forage", "atelier mobile"],
+  Agriculture: ["irrigation", "mecanisation", "intrants suivis", "maintenance tracteurs"],
+  "Agro-alimentaire": ["chaine froide", "conditionnement", "controle qualite", "cantines industrielles"],
+  "Forets et environnement": ["reboisement", "suivi environnemental", "rehabilitation", "bois legal"],
+  "IT et systemes": ["reseaux site", "cybersecurite", "ERP terrain", "support utilisateurs"],
+  "Droit des affaires": ["contrats", "contentieux", "due diligence", "local content"],
+  Fiscalite: ["declarations", "audit fiscal", "prix de transfert", "veille fiscale"],
+  Comptabilite: ["tenue comptes", "reporting", "paie", "controle interne"],
+  Manutention: ["levage", "chargement", "stock yard", "equipes portuaires"],
+  Construction: ["genie civil", "charpente", "VRD", "maintenance batiments"],
+  Energie: ["solaire hybride", "groupes electrogenes", "cablage", "maintenance electrique"],
+  "HSE et conformite": ["formation HSE", "audit terrain", "plan urgence", "inspection EPI"]
 };
 
+const prefixes = [
+  "Kamoa",
+  "Lualaba",
+  "Upemba",
+  "Copperline",
+  "Mwanga",
+  "Tshamilemba",
+  "Nzuri",
+  "Kipushi",
+  "Katanga",
+  "Mutanda"
+];
+
+const suffixes = [
+  "Field Services",
+  "Industrial Partners",
+  "Prime Works",
+  "Technical Group",
+  "Operations",
+  "Advisory",
+  "Supply Chain",
+  "Engineering",
+  "Agro Services",
+  "Compliance"
+];
+
 function cityForIndex(index: number): string {
-  if (index < 48) return "Kolwezi";
-  if (index < 90) return "Lubumbashi";
-  if (index < 110) return "Likasi";
-  if (index < 124) return "Fungurume";
-  if (index < 136) return "Kasumbalesa";
-  if (index < 142) return "Kipushi";
-  if (index < 146) return "Sakania";
-  return "Tenke";
+  const thresholds = [39, 72, 90, 105, 117, 128, 137, 143, 147, 150];
+  const found = thresholds.findIndex((limit) => index < limit);
+  return cities[Math.max(found, 0)].name;
 }
 
 function sectorForIndex(index: number): string {
-  if (index < 45) return "Mines et support";
-  if (index < 69) return "Logistique";
-  if (index < 90) return "IT et sécurité";
-  if (index < 108) return "BTP";
-  if (index < 123) return "Agro-supply";
-  if (index < 135) return "HSE et conformité";
-  if (index < 144) return "Énergie";
-  return "Forêt et environnement";
+  const thresholds = [27, 42, 56, 68, 82, 93, 104, 115, 130, 145, 149, 150];
+  const found = thresholds.findIndex((limit) => index < limit);
+  return sectors[Math.max(found, 0)].name;
 }
 
 function slugify(value: string): string {
@@ -100,40 +95,35 @@ function slugify(value: string): string {
 export function generateSuppliers(count = 150): Supplier[] {
   return Array.from({ length: count }, (_, index) => {
     const city = cityForIndex(index);
-    const sector = sectorForIndex(index);
-    const name = `${supplierPrefixes[index % supplierPrefixes.length]} ${
-      supplierSuffixes[(index * 3) % supplierSuffixes.length]
-    } ${String(index + 1).padStart(3, "0")}`;
-    const tier = index % 11 === 0 ? 4 : index % 5 === 0 ? 3 : index % 3 === 0 ? 2 : 1;
-    const services = serviceBySector[sector] ?? ["services opérationnels"];
+    const sector = sectorForIndex((index * 7) % 150);
+    const prefix = prefixes[index % prefixes.length];
+    const suffix = suffixes[(index * 3) % suffixes.length];
+    const name = `${prefix} ${sector.split(" ")[0]} ${suffix}`;
+    const tier = 2 + (index % 3);
+    const services = serviceBySector[sector] ?? serviceBySector.Mines;
 
     return {
-      slug: slugify(name),
+      slug: `${slugify(name)}-${String(index + 1).padStart(3, "0")}`,
       name,
       city,
       sector,
       verificationTier: tier,
       verificationLabel:
-        tier >= 4
-          ? "Terrain confirmé"
-          : tier === 3
-            ? "Références confirmées"
-            : tier === 2
-              ? "Documents revus"
-              : "Contact confirmé",
-      availability: index % 4 === 0 ? "Capacité prioritaire" : "Capacité ouverte",
-      score: 72 + ((index * 7) % 24),
+        tier === 4 ? "Dossier complet" : tier === 3 ? "References controlees" : "Prequalification active",
+      availability:
+        index % 5 === 0 ? "Reserve mission prioritaire" : index % 3 === 0 ? "Equipe mobilisable" : "Capacite ouverte",
+      score: 74 + ((index * 11) % 25),
       services: services.slice(0, 3),
       capacity: {
-        crew: 8 + ((index * 5) % 84),
-        fleet: 1 + ((index * 2) % 18),
-        serviceRadiusKm: 35 + ((index * 11) % 240),
-        responseTimeHours: 8 + ((index * 3) % 40)
+        crew: 6 + ((index * 5) % 96),
+        fleet: 1 + ((index * 2) % 22),
+        serviceRadiusKm: 30 + ((index * 13) % 260),
+        responseTimeHours: 8 + ((index * 3) % 48)
       },
       documents:
-        tier >= 3
-          ? ["RCCM", "Identification nationale", "Dossier fiscal", "Références"]
-          : ["RCCM", "Identification nationale"],
+        tier >= 4
+          ? ["RCCM", "Identification nationale", "Dossier fiscal", "References client", "Assurances"]
+          : ["RCCM", "Identification nationale", "Dossier fiscal"],
       origin: "synthetic_seed",
       visibility: "staging_only",
       reviewStatus: "approved"
@@ -152,22 +142,18 @@ export function generateRfqs(count = 60): Rfq[] {
   ];
 
   return Array.from({ length: count }, (_, index) => {
-    const city = cityForIndex((index * 3) % 150);
-    const sector = sectorForIndex((index * 5) % 150);
+    const city = cityForIndex((index * 5) % 150);
+    const sector = sectorForIndex((index * 9) % 150);
 
     return {
       id: `rfq-${String(index + 1).padStart(3, "0")}`,
-      title: `${sector} - besoin opérationnel ${String(index + 1).padStart(2, "0")}`,
+      title: `${sector} pour operation ${city}`,
       city,
       sector,
       status: statuses[index % statuses.length],
       urgency: index % 7 === 0 ? "critical" : index % 3 === 0 ? "priority" : "standard",
-      deadline: new Date(Date.UTC(2026, 6, 10 + (index % 45))).toISOString().slice(0, 10),
-      lines: [
-        "qualification fournisseur",
-        "capacité documentée",
-        "délai terrain confirmé"
-      ],
+      deadline: new Date(Date.UTC(2026, 6, 12 + (index % 42))).toISOString().slice(0, 10),
+      lines: ["scope a cadrer", "prestataires a qualifier", "proposition OCTOPUS a structurer"],
       origin: "synthetic_seed",
       visibility: "staging_only",
       reviewStatus: "approved"
@@ -176,18 +162,21 @@ export function generateRfqs(count = 60): Rfq[] {
 }
 
 export function generateOpportunities(count = 120): Opportunity[] {
+  const access: Opportunity["accessLevel"][] = ["mandat", "qualification", "proposition", "signature"];
+  const statuses: Opportunity["status"][] = ["en_cadrage", "matching", "negociation", "pret_signature"];
+
   return Array.from({ length: count }, (_, index) => {
-    const city = cityForIndex((index * 2) % 150);
-    const sector = sectorForIndex((index * 7) % 150);
+    const city = cityForIndex((index * 4) % 150);
+    const sector = sectorForIndex((index * 11) % 150);
 
     return {
-      id: `opp-${String(index + 1).padStart(3, "0")}`,
-      title: `${sector} - capacité recherchée ${String(index + 1).padStart(2, "0")}`,
+      id: `deal-${String(index + 1).padStart(3, "0")}`,
+      title: `${sector} - offre de service assemblee`,
       city,
       sector,
-      deadline: new Date(Date.UTC(2026, 7, 1 + (index % 50))).toISOString().slice(0, 10),
-      accessLevel: index % 5 === 0 ? "managed" : index % 2 === 0 ? "qualified" : "open",
-      status: index % 4 === 0 ? "shortlist" : index % 3 === 0 ? "screening" : "active",
+      deadline: new Date(Date.UTC(2026, 6, 18 + (index % 55))).toISOString().slice(0, 10),
+      accessLevel: access[index % access.length],
+      status: statuses[(index + 1) % statuses.length],
       origin: "synthetic_seed",
       visibility: "staging_only",
       reviewStatus: "approved"
@@ -196,26 +185,24 @@ export function generateOpportunities(count = 120): Opportunity[] {
 }
 
 export function generateMediaAssets(): MediaAsset[] {
-  const approved = Array.from({ length: 18 }, (_, index): MediaAsset => ({
-    id: `media-approved-${String(index + 1).padStart(2, "0")}`,
-    title: `Asset opérationnel validé ${index + 1}`,
-    reviewStatus: "APPROVED",
-    licenseStatus: "VALID",
-    isAiLike: false,
-    allowedUse: ["web_public", "internal_dashboard"],
-    alt: "Visuel de support opérationnel validé"
-  }));
-
   return [
-    ...approved,
     {
-      id: "media-quarantine-01",
-      title: "Asset à revoir",
+      id: "procedural-scene-01",
+      title: "Scene procedurale OCTOPUS",
+      reviewStatus: "APPROVED",
+      licenseStatus: "VALID",
+      isAiLike: false,
+      allowedUse: ["web_public"],
+      alt: "Scene abstraite des corridors industriels"
+    },
+    {
+      id: "private-asset-review-01",
+      title: "Asset interne a revoir",
       reviewStatus: "PENDING",
       licenseStatus: "PENDING",
       isAiLike: true,
       allowedUse: ["internal_review"],
-      alt: "Asset non public"
+      alt: "Asset interne"
     }
   ];
 }
@@ -230,7 +217,7 @@ export function getPublicMediaAssets(): MediaAsset[] {
   );
 }
 
-export function getDashboardStats(): DashboardStats {
+export function getSeedStats(): DashboardStats {
   const suppliers = generateSuppliers();
   const rfqs = generateRfqs();
   const opportunities = generateOpportunities();
@@ -239,8 +226,10 @@ export function getDashboardStats(): DashboardStats {
     suppliers: suppliers.length,
     rfqs: rfqs.length,
     opportunities: opportunities.length,
-    verifiedSuppliers: suppliers.filter((supplier) => supplier.verificationTier >= 2).length,
+    verifiedSuppliers: suppliers.filter((supplier) => supplier.verificationTier >= 3).length,
     cities: cities.length,
     approvedMedia: getPublicMediaAssets().length
   };
 }
+
+export const getDashboardStats = getSeedStats;

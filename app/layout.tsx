@@ -3,9 +3,9 @@ import { InteractiveBackdrop } from "../components/InteractiveBackdrop";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Grand Katanga Industrial Services Hub",
+  title: "OCTOPUS Mining Industrial Services Hub",
   description:
-    "Plateforme B2B industrielle pour sourcing, RFQ et vérification fournisseur au Grand Katanga."
+    "Plateforme B2B pour qualifier des prestataires et structurer des offres de services dans le Haut-Katanga et le Lualaba."
 };
 
 export default function RootLayout({

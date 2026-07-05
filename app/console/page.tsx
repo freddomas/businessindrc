@@ -4,6 +4,7 @@ import { LogoutButton } from "../../components/LogoutButton";
 import { MetricCard } from "../../components/MetricCard";
 import { TopNav } from "../../components/TopNav";
 import { getSessionUser } from "../../lib/auth";
+import { formatRfqStatus } from "../../lib/display";
 import { canAccess } from "../../lib/rbac";
 import { getRfqs, getStats, getSuppliers } from "../../lib/repository";
 
@@ -11,16 +12,11 @@ export const dynamic = "force-dynamic";
 
 export default async function ConsolePage() {
   const user = await getSessionUser();
-
   if (!user || !canAccess(user.role, "view_console")) {
     redirect("/connexion");
   }
 
-  const [stats, rfqs, suppliers] = await Promise.all([
-    getStats(),
-    getRfqs(8),
-    getSuppliers({ limit: 8 })
-  ]);
+  const [stats, rfqs, suppliers] = await Promise.all([getStats(), getRfqs(8), getSuppliers({ limit: 8 })]);
 
   return (
     <>
@@ -28,8 +24,8 @@ export default async function ConsolePage() {
       <main className="app-shell">
         <section className="console-head console-head--premium">
           <div>
-            <p>Console opérationnelle</p>
-            <h1>Pilotage sourcing et vérification</h1>
+            <p>Deal desk</p>
+            <h1>Pilotage OCTOPUS des besoins et prestataires</h1>
             <span>
               {user.name} · {user.role}
             </span>
@@ -38,56 +34,53 @@ export default async function ConsolePage() {
         </section>
 
         <section className="metrics-ribbon metrics-ribbon--console">
-          <MetricCard tone="teal" label="Fournisseurs" value={stats.suppliers} detail="Référentiel actif" />
-          <MetricCard tone="copper" label="Vérifiés" value={stats.verifiedSuppliers} detail="T2 et plus" />
-          <MetricCard tone="gold" label="RFQ" value={stats.rfqs} detail="Pipeline total" />
+          <MetricCard tone="teal" label="Prestataires" value={stats.suppliers} detail="Reseau actif" />
+          <MetricCard tone="copper" label="Controles" value={stats.verifiedSuppliers} detail="T3 et T4" />
+          <MetricCard tone="gold" label="Besoins" value={stats.rfqs} detail="Pipeline total" />
           <MetricCard tone="steel" label="Zones" value={stats.cities} detail="Couverture prioritaire" />
         </section>
 
         <section className="console-grid">
           <article className="console-panel console-panel--timeline">
             <div className="section-heading">
-              <p>RFQ</p>
+              <p>Besoins client</p>
               <h2>Qualification en cours</h2>
             </div>
             {rfqs.map((rfq) => (
               <div className="compact-row compact-row--premium" key={rfq.id}>
                 <Activity aria-hidden="true" size={17} />
                 <span>{rfq.title}</span>
-                <strong>{rfq.status}</strong>
+                <strong>{formatRfqStatus(rfq.status)}</strong>
               </div>
             ))}
           </article>
+
           <article className="console-panel">
             <div className="section-heading">
-              <p>Vérification</p>
-              <h2>Fournisseurs prioritaires</h2>
+              <p>Prestataires</p>
+              <h2>Shortlist prioritaire</h2>
             </div>
             {suppliers.map((supplier) => (
               <div className="compact-row compact-row--premium" key={supplier.slug}>
                 <UserRoundCheck aria-hidden="true" size={17} />
                 <span>{supplier.name}</span>
-                <strong>T{supplier.verificationTier}</strong>
+                <strong>{supplier.score}/100</strong>
               </div>
             ))}
           </article>
-          <article className="console-panel console-panel--assurance">
-            <div className="section-heading">
-              <p>Contrôles</p>
-              <h2>Garde-fous actifs</h2>
-            </div>
-            <div className="assurance-list">
+
+          <article className="console-panel console-panel--guard">
+            <ShieldCheck aria-hidden="true" size={22} />
+            <h2>Garde-fous</h2>
+            <p>Les integrations externes, paiements et API publiques restent fermes sans decision explicite.</p>
+            <div className="guard-list">
               <span>
-                <ShieldCheck aria-hidden="true" size={18} />
-                RBAC serveur
+                <BadgeCheck aria-hidden="true" size={15} />
+                Medias controles
               </span>
               <span>
-                <ClipboardList aria-hidden="true" size={18} />
-                Audit RFQ
-              </span>
-              <span>
-                <BadgeCheck aria-hidden="true" size={18} />
-                Filtrage médias
+                <ClipboardList aria-hidden="true" size={15} />
+                Trace des demandes
               </span>
             </div>
           </article>
