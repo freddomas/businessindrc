@@ -11,7 +11,7 @@ export function EditorialMedia() {
   }
 
   return (
-    <aside className="editorial-media" aria-label="Scenes de qualification et coordination">
+    <aside className="editorial-media" aria-label="Scènes de qualification et coordination">
       <figure className="editorial-media__lead">
         <Image
           src={lead.url!}
@@ -27,7 +27,7 @@ export function EditorialMedia() {
         />
         <figcaption>
           <span>Terrain</span>
-          <strong>Operations qualifiees avant engagement</strong>
+          <strong>Opérations qualifiées avant engagement</strong>
         </figcaption>
       </figure>
       <div className="editorial-media__stack">
@@ -45,7 +45,7 @@ export function EditorialMedia() {
               data-license-url={asset.licenseUrl}
             />
             <figcaption>
-              <span>{index === 0 ? "Expertise" : "Decision"}</span>
+              <span>{index === 0 ? "Expertise" : "Décision"}</span>
               <ArrowUpRight aria-hidden="true" size={14} />
             </figcaption>
           </figure>

@@ -7,7 +7,7 @@ import { MetricCard } from "../components/MetricCard";
 import { RfqForm } from "../components/RfqForm";
 import { SupplierCard } from "../components/SupplierCard";
 import { TopNav } from "../components/TopNav";
-import { formatAccessLevel, formatOpportunityStatus } from "../lib/display";
+import { formatAccessLevel, formatDisplayText, formatOpportunityStatus } from "../lib/display";
 import { getOpportunities, getStats, getSuppliers } from "../lib/repository";
 
 export const dynamic = "force-dynamic";
@@ -30,10 +30,10 @@ export default async function Home() {
               <ShieldCheck aria-hidden="true" size={18} />
               Maison de sourcing Haut-Katanga / Lualaba
             </div>
-            <h1 id="home-title">Un salon prive pour transformer les besoins complexes en missions executees</h1>
+            <h1 id="home-title">Un salon privé pour transformer les besoins complexes en missions exécutées</h1>
             <p>
-              OCTOPUS qualifie les prestataires, orchestre les RFQ et presente les opportunites comme une selection
-              verifiee, lisible et prete a etre arbitree.
+              OCTOPUS qualifie les prestataires, orchestre les RFQ et présente les opportunités comme une sélection
+              vérifiée, lisible et prête à être arbitrée.
             </p>
             <div className="action-row">
               <Link className="primary-action" href="#besoin">
@@ -44,17 +44,17 @@ export default async function Home() {
                 Explorer les prestataires
               </Link>
             </div>
-            <div className="hero-proof-grid" aria-label="Reperes de confiance">
-              <span>Prestataires prequalifies</span>
+            <div className="hero-proof-grid" aria-label="Repères de confiance">
+              <span>Prestataires préqualifiés</span>
               <span>Mandats cadres</span>
-              <span>Execution suivie</span>
+              <span>Exécution suivie</span>
             </div>
           </div>
           <EditorialMedia />
         </section>
 
-        <section className="metrics-ribbon" aria-label="Indicateurs operationnels">
-          <MetricCard tone="teal" label="Prestataires" value={stats.suppliers} detail="Reseau qualifie par secteur" />
+        <section className="metrics-ribbon" aria-label="Indicateurs opérationnels">
+          <MetricCard tone="teal" label="Prestataires" value={stats.suppliers} detail="Réseau qualifié par secteur" />
           <MetricCard tone="copper" label="Besoins" value={stats.rfqs} detail="Demandes client en qualification" />
           <MetricCard tone="gold" label="Offres" value={stats.opportunities} detail="Deals en cadrage ou signature" />
           <MetricCard tone="steel" label="Zones" value={stats.cities} detail="Haut-Katanga et Lualaba" />
@@ -62,27 +62,27 @@ export default async function Home() {
 
         <section className="process-band" aria-labelledby="process-title">
           <div className="section-heading">
-            <p>Modele opere</p>
-            <h2 id="process-title">Deux portails, une responsabilite contractuelle claire</h2>
+            <p>Modèle opéré</p>
+            <h2 id="process-title">Deux portails, une responsabilité contractuelle claire</h2>
           </div>
           <div className="process-steps">
             <article>
               <FileSearch aria-hidden="true" size={22} />
               <span>01</span>
-              <h3>Referencer</h3>
-              <p>Le prestataire depose son profil, ses capacites, ses preuves et sa zone d&apos;intervention.</p>
+              <h3>Référencer</h3>
+              <p>Le prestataire dépose son profil, ses capacités, ses preuves et sa zone d&apos;intervention.</p>
             </article>
             <article>
               <Layers3 aria-hidden="true" size={22} />
               <span>02</span>
               <h3>Assembler</h3>
-              <p>OCTOPUS combine les bonnes competences pour creer une offre exploitable.</p>
+              <p>OCTOPUS combine les bonnes compétences pour créer une offre exploitable.</p>
             </article>
             <article>
               <Handshake aria-hidden="true" size={22} />
               <span>03</span>
               <h3>Signer</h3>
-              <p>Le client contracte avec OCTOPUS Mining; les sous-traitants executent dans un cadre pilote.</p>
+              <p>Le client contracte avec OCTOPUS Mining; les sous-traitants exécutent dans un cadre pilote.</p>
             </article>
           </div>
         </section>
@@ -96,7 +96,7 @@ export default async function Home() {
           <div className="section-heading section-heading--inline">
             <div>
               <p>Incubateur prestataires</p>
-              <h2 id="supplier-title">Des capacites locales presentees pour la decision</h2>
+              <h2 id="supplier-title">Des capacités locales présentées pour la décision</h2>
             </div>
             <Link className="text-action" href="/fournisseurs">
               Tout afficher
@@ -116,7 +116,7 @@ export default async function Home() {
               <p>Portail offres de services</p>
               <h2 id="pipeline-title">Le pipeline client reste lisible en un balayage</h2>
             </div>
-            <span>Responsabilite OCTOPUS</span>
+            <span>Responsabilité OCTOPUS</span>
           </div>
           <div className="pipeline-table" role="table" aria-label="Offres de services en cours">
             <div role="row" className="pipeline-row pipeline-row--head">
@@ -128,9 +128,9 @@ export default async function Home() {
             </div>
             {opportunities.map((opportunity) => (
               <div role="row" className="pipeline-row" key={opportunity.id}>
-                <span role="cell">{opportunity.title}</span>
+                  <span role="cell">{formatDisplayText(opportunity.title)}</span>
                 <span role="cell">{opportunity.city}</span>
-                <span role="cell">{opportunity.sector}</span>
+                  <span role="cell">{formatDisplayText(opportunity.sector)}</span>
                 <span role="cell">{formatAccessLevel(opportunity.accessLevel)}</span>
                 <span role="cell" className="status-pill">
                   {formatOpportunityStatus(opportunity.status)}
@@ -140,12 +140,12 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="control-strip" aria-label="Garde-fous operationnels">
+        <section className="control-strip" aria-label="Garde-fous opérationnels">
           <ShieldCheck aria-hidden="true" size={20} />
-          <span>API publique fermee</span>
-          <span>Integrations fermees</span>
-          <span>Paiements fermes</span>
-          <span>Medias controles</span>
+          <span>API publique fermée</span>
+          <span>Intégrations fermées</span>
+          <span>Paiements fermés</span>
+          <span>Médias contrôlés</span>
         </section>
       </main>
     </>

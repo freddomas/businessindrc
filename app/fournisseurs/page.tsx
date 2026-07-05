@@ -30,8 +30,8 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
         <section className="page-head page-head--visual">
           <div>
             <p>Incubateur prestataires</p>
-            <h1>Reseau de sous-traitants qualifies</h1>
-            <span>{suppliers.length} dossiers affiches avec capacites, pieces et disponibilite terrain.</span>
+            <h1>Réseau de sous-traitants qualifiés</h1>
+            <span>{suppliers.length} dossiers affichés avec capacités, pièces et disponibilité terrain.</span>
           </div>
           <div className="page-head__plate" aria-hidden="true">
             <strong>{suppliers.length}</strong>
@@ -42,7 +42,7 @@ export default async function SuppliersPage({ searchParams }: PageProps) {
         <form className="filter-bar filter-bar--premium" action="/fournisseurs">
           <div className="filter-title">
             <SlidersHorizontal aria-hidden="true" size={18} />
-            <span>Filtrage decisionnel</span>
+            <span>Filtrage décisionnel</span>
           </div>
           <label>
             Recherche

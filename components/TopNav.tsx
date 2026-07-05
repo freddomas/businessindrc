@@ -33,7 +33,7 @@ export function TopNav() {
       </nav>
       <div className="nav-signal" aria-label="Statut de qualification">
         <ShieldCheck aria-hidden="true" size={16} />
-        <span>Qualifie</span>
+        <span>Qualifié</span>
       </div>
     </header>
   );

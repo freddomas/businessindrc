@@ -43,7 +43,7 @@ export function RfqForm() {
     <form className="rfq-form" action={submit}>
       <div className="section-heading">
         <p>Portail client</p>
-        <h2>Confier un besoin a OCTOPUS</h2>
+        <h2>Confier un besoin à OCTOPUS</h2>
         <span className="form-assurance">
           <ShieldCheck aria-hidden="true" size={15} />
           Qualification interne avant proposition
@@ -52,7 +52,7 @@ export function RfqForm() {
       <label>
         Besoin
         <span className="field-hint" id="rfq-title-hint">
-          Service attendu, site, contrainte et resultat vise.
+          Service attendu, site, contrainte et résultat visé.
         </span>
         <input required minLength={8} name="title" autoComplete="off" aria-describedby="rfq-title-hint" />
       </label>
@@ -79,14 +79,14 @@ export function RfqForm() {
         </label>
       </div>
       <label>
-        Details operationnels
+        Détails opérationnels
         <span className="field-hint" id="rfq-lines-hint">
-          Delai, documents attendus, contraintes de site et niveau de confidentialite.
+          Délai, documents attendus, contraintes de site et niveau de confidentialité.
         </span>
         <textarea required minLength={16} name="lines" rows={4} aria-describedby="rfq-lines-hint" />
       </label>
       <label>
-        Priorite
+        Priorité
         <select name="urgency" required>
           <option value="standard">Standard</option>
           <option value="priority">Prioritaire</option>
@@ -98,7 +98,7 @@ export function RfqForm() {
         {state.status === "submitting" ? "Analyse en cours" : "Envoyer le besoin"}
       </button>
       <div className="form-status" aria-live="polite">
-        {state.status === "success" && `Besoin recu par OCTOPUS: ${state.id}`}
+        {state.status === "success" && `Besoin reçu par OCTOPUS: ${state.id}`}
         {state.status === "error" && state.message}
       </div>
     </form>

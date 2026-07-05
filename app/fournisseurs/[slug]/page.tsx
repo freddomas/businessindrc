@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BadgeCheck, Clock, FileCheck2, MapPin, Radius, Truck } from "lucide-react";
 import { TopNav } from "../../../components/TopNav";
+import { formatDisplayText } from "../../../lib/display";
 import { getSupplierBySlug } from "../../../lib/repository";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +30,8 @@ export default async function SupplierProfile({ params }: PageProps) {
         <section className="profile-hero">
           <div>
             <p>{supplier.city}</p>
-            <h1>{supplier.name}</h1>
-            <span>{supplier.sector}</span>
+            <h1>{formatDisplayText(supplier.name)}</h1>
+            <span>{formatDisplayText(supplier.sector)}</span>
           </div>
           <aside className="profile-score" aria-label={`Score ${supplier.score} sur 100`}>
             <strong>{supplier.score}</strong>
@@ -40,11 +41,11 @@ export default async function SupplierProfile({ params }: PageProps) {
 
         <section className="profile-grid">
           <article className="profile-panel">
-            <h2>Capacites confirmees</h2>
+            <h2>Capacités confirmées</h2>
             <div className="profile-facts">
               <span>
                 <Truck aria-hidden="true" size={17} />
-                {supplier.capacity.fleet} unites terrain
+                {supplier.capacity.fleet} unités terrain
               </span>
               <span>
                 <Clock aria-hidden="true" size={17} />
@@ -65,22 +66,22 @@ export default async function SupplierProfile({ params }: PageProps) {
             <h2>Services</h2>
             <div className="service-list service-list--large">
               {supplier.services.map((service) => (
-                <span key={service}>{service}</span>
+                <span key={service}>{formatDisplayText(service)}</span>
               ))}
             </div>
           </article>
 
           <article className="profile-panel">
-            <h2>Verification</h2>
+            <h2>Vérification</h2>
             <div className="profile-facts">
               <span>
                 <BadgeCheck aria-hidden="true" size={17} />
-                {supplier.verificationLabel}
+                {formatDisplayText(supplier.verificationLabel)}
               </span>
               {supplier.documents.map((document) => (
                 <span key={document}>
                   <FileCheck2 aria-hidden="true" size={17} />
-                  {document}
+                  {formatDisplayText(document)}
                 </span>
               ))}
             </div>

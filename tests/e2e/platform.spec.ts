@@ -210,6 +210,57 @@ async function auditPublicMedia(page: Page) {
   expect(media.cssUrls, "unregistered CSS media URLs").toEqual([]);
 }
 
+async function auditInteractiveTargets(page: Page) {
+  const domIssues = await page.evaluate(() => {
+    function isVisible(element: HTMLElement) {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return (
+        style.visibility !== "hidden" &&
+        style.display !== "none" &&
+        Number(style.opacity) !== 0 &&
+        rect.width > 0 &&
+        rect.height > 0
+      );
+    }
+
+    const linkIssues = Array.from(document.querySelectorAll<HTMLAnchorElement>("a")).flatMap((anchor) => {
+      if (!isVisible(anchor)) return [];
+
+      const href = anchor.getAttribute("href")?.trim() ?? "";
+      const label = (anchor.innerText || anchor.getAttribute("aria-label") || "").trim();
+
+      if (!href || href === "#") {
+        return [`Link without destination: ${label || anchor.outerHTML.slice(0, 120)}`];
+      }
+
+      if (href.startsWith("#") && !document.getElementById(href.slice(1))) {
+        return [`Missing fragment target ${href}: ${label}`];
+      }
+
+      return [];
+    });
+
+    const buttonIssues = Array.from(document.querySelectorAll<HTMLButtonElement>("button")).flatMap((button) => {
+      if (!isVisible(button) || button.disabled) return [];
+
+      const label = (button.innerText || button.getAttribute("aria-label") || "").trim();
+      const type = button.getAttribute("type");
+
+      if (!label) return [`Button without accessible text: ${button.outerHTML.slice(0, 120)}`];
+      if (!type) return [`Button without explicit type: ${label}`];
+      if (type === "submit" && !button.closest("form")) return [`Submit button outside form: ${label}`];
+
+      return [];
+    });
+
+    return [...linkIssues, ...buttonIssues];
+  });
+
+  expect(domIssues, "inactive or ambiguous interactive controls").toEqual([]);
+
+}
+
 async function attachVisualProof(page: Page, testInfo: TestInfo, name: string) {
   const screenshot = await page.screenshot({ fullPage: true, animations: "disabled" });
   expect(screenshot.length, "screenshot should not be empty").toBeGreaterThan(25_000);
@@ -228,6 +279,7 @@ for (const route of criticalRoutes) {
     await auditVisibleText(page);
     await auditLayout(page);
     await auditRealVisibility(page);
+    await auditInteractiveTargets(page);
     await auditPublicMedia(page);
     await auditA11y(page);
     await attachVisualProof(page, testInfo, route.name);
@@ -245,6 +297,22 @@ test("home scene renders an interactive WebGL surface", async ({ page }, testInf
   expect(box?.height).toBeGreaterThan(250);
   await attachVisualProof(page, testInfo, "home-webgl-scene");
   guards.assertClean();
+});
+
+test("primary home CTA reaches the RFQ intake section", async ({ page }) => {
+  const guards = installGuards(page);
+  await page.goto("/");
+  await page.getByRole("link", { name: /Confier un besoin/i }).click();
+  await expect(page.locator("section#besoin")).toBeVisible();
+  await expect(page).toHaveURL(/#besoin$/);
+  guards.assertClean();
+});
+
+test("primary internal navigation links resolve", async ({ request }) => {
+  for (const path of ["/", "/fournisseurs", "/opportunites", "/zones/kolwezi", "/console"]) {
+    const response = await request.get(path, { maxRedirects: 3 });
+    expect(response.status(), `internal route ${path}`).toBeLessThan(400);
+  }
 });
 
 test("supplier profile flow keeps detail page clean", async ({ page }, testInfo) => {
@@ -316,11 +384,11 @@ test("rfq API rejects invalid payloads and handles valid intake explicitly", asy
 
   const valid = await request.post("/api/rfq", {
     data: {
-      title: "Maintenance electrique urgente Kolwezi",
+      title: "Maintenance électrique urgente Kolwezi",
       city: "Kolwezi",
-      sector: "Energie",
+      sector: "Énergie",
       urgency: "priority",
-      lines: "Inspection, equipe mobilisable, pieces critiques, delai sous quarante-huit heures"
+      lines: "Inspection, équipe mobilisable, pièces critiques, délai sous quarante-huit heures"
     }
   });
   expect([201, 503]).toContain(valid.status());

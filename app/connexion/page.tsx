@@ -8,11 +8,11 @@ export default function LoginPage() {
       <main className="auth-shell">
         <form className="auth-panel" action="/api/auth/login" method="post">
           <LockKeyhole aria-hidden="true" size={28} />
-          <p>Acces restreint</p>
+          <p>Accès restreint</p>
           <h1>Console de pilotage</h1>
           <span className="auth-note">
             <ShieldCheck aria-hidden="true" size={15} />
-            Espace reserve aux equipes autorisees.
+            Espace réservé aux équipes autorisées.
           </span>
           <label>
             Email

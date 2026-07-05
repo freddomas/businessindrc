@@ -2560,7 +2560,24 @@ body::before {
 .supplier-card,
 .supplier-card:hover,
 .supplier-card:focus-within {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
   transform: none !important;
+}
+
+.supplier-card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  color: transparent;
+  text-decoration: none;
+}
+
+.supplier-card__overlay:focus-visible {
+  outline: 3px solid rgba(0, 111, 116, 0.72);
+  outline-offset: 4px;
 }
 
 .supplier-card__foot {
@@ -2569,7 +2586,7 @@ body::before {
 
 .supplier-card__link {
   position: relative;
-  z-index: 3;
+  z-index: 5;
   min-width: 154px;
   min-height: 52px;
   justify-content: center;

@@ -30,7 +30,7 @@ export default async function ZonePage({ params }: PageProps) {
           <MapPinned aria-hidden="true" size={30} />
           <p>Zone prioritaire</p>
           <h1>{city.name}</h1>
-          <span>{Math.round(city.targetShare * 100)}% du reseau prestataires cible cette zone.</span>
+          <span>{Math.round(city.targetShare * 100)}% du réseau prestataires cible cette zone.</span>
         </section>
 
         <section className="profile-grid profile-grid--premium">
@@ -47,14 +47,14 @@ export default async function ZonePage({ params }: PageProps) {
             <Route aria-hidden="true" size={22} />
             <h2>Points suivis</h2>
             <ul>
-              <li>Disponibilite des equipes</li>
-              <li>Pieces de verification</li>
-              <li>Delai de mobilisation</li>
+              <li>Disponibilité des équipes</li>
+              <li>Pièces de vérification</li>
+              <li>Délai de mobilisation</li>
             </ul>
           </article>
           <article>
             <MapPinned aria-hidden="true" size={22} />
-            <h2>Priorite OCTOPUS</h2>
+            <h2>Priorité OCTOPUS</h2>
             <p>Assembler une offre claire avec les prestataires les plus fiables de la zone.</p>
           </article>
         </section>
@@ -63,10 +63,10 @@ export default async function ZonePage({ params }: PageProps) {
           <div className="section-heading section-heading--inline">
             <div>
               <p>Prestataires dans la zone</p>
-              <h2 id="zone-suppliers">Capacites disponibles a {city.name}</h2>
+              <h2 id="zone-suppliers">Capacités disponibles à {city.name}</h2>
             </div>
             <Link className="text-action" href="/fournisseurs">
-              Voir le reseau
+              Voir le réseau
               <ArrowRight aria-hidden="true" size={16} />
             </Link>
           </div>

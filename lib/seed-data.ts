@@ -19,30 +19,30 @@ export const sectors = [
   { name: "Mines", slug: "mines", targetShare: 0.18 },
   { name: "Agriculture", slug: "agriculture", targetShare: 0.1 },
   { name: "Agro-alimentaire", slug: "agro-alimentaire", targetShare: 0.09 },
-  { name: "Forets et environnement", slug: "forets-environnement", targetShare: 0.08 },
-  { name: "IT et systemes", slug: "it-systemes", targetShare: 0.09 },
+  { name: "Forêts et environnement", slug: "forets-environnement", targetShare: 0.08 },
+  { name: "IT et systèmes", slug: "it-systemes", targetShare: 0.09 },
   { name: "Droit des affaires", slug: "droit-affaires", targetShare: 0.07 },
-  { name: "Fiscalite", slug: "fiscalite", targetShare: 0.07 },
-  { name: "Comptabilite", slug: "comptabilite", targetShare: 0.07 },
+  { name: "Fiscalité", slug: "fiscalite", targetShare: 0.07 },
+  { name: "Comptabilité", slug: "comptabilite", targetShare: 0.07 },
   { name: "Manutention", slug: "manutention", targetShare: 0.1 },
   { name: "Construction", slug: "construction", targetShare: 0.1 },
-  { name: "Energie", slug: "energie", targetShare: 0.03 },
-  { name: "HSE et conformite", slug: "hse-conformite", targetShare: 0.02 }
+  { name: "Énergie", slug: "energie", targetShare: 0.03 },
+  { name: "HSE et conformité", slug: "hse-conformite", targetShare: 0.02 }
 ] as const;
 
 const serviceBySector: Record<string, string[]> = {
-  Mines: ["maintenance de site", "pieces critiques", "support forage", "atelier mobile"],
-  Agriculture: ["irrigation", "mecanisation", "intrants suivis", "maintenance tracteurs"],
-  "Agro-alimentaire": ["chaine froide", "conditionnement", "controle qualite", "cantines industrielles"],
-  "Forets et environnement": ["reboisement", "suivi environnemental", "rehabilitation", "bois legal"],
-  "IT et systemes": ["reseaux site", "cybersecurite", "ERP terrain", "support utilisateurs"],
+  Mines: ["maintenance de site", "pièces critiques", "support forage", "atelier mobile"],
+  Agriculture: ["irrigation", "mécanisation", "intrants suivis", "maintenance tracteurs"],
+  "Agro-alimentaire": ["chaîne froide", "conditionnement", "contrôle qualité", "cantines industrielles"],
+  "Forêts et environnement": ["reboisement", "suivi environnemental", "réhabilitation", "bois légal"],
+  "IT et systèmes": ["réseaux site", "cybersécurité", "ERP terrain", "support utilisateurs"],
   "Droit des affaires": ["contrats", "contentieux", "due diligence", "local content"],
-  Fiscalite: ["declarations", "audit fiscal", "prix de transfert", "veille fiscale"],
-  Comptabilite: ["tenue comptes", "reporting", "paie", "controle interne"],
-  Manutention: ["levage", "chargement", "stock yard", "equipes portuaires"],
-  Construction: ["genie civil", "charpente", "VRD", "maintenance batiments"],
-  Energie: ["solaire hybride", "groupes electrogenes", "cablage", "maintenance electrique"],
-  "HSE et conformite": ["formation HSE", "audit terrain", "plan urgence", "inspection EPI"]
+  "Fiscalité": ["déclarations", "audit fiscal", "prix de transfert", "veille fiscale"],
+  "Comptabilité": ["tenue comptes", "reporting", "paie", "contrôle interne"],
+  Manutention: ["levage", "chargement", "stock yard", "équipes portuaires"],
+  Construction: ["génie civil", "charpente", "VRD", "maintenance bâtiments"],
+  "Énergie": ["solaire hybride", "groupes électrogènes", "câblage", "maintenance électrique"],
+  "HSE et conformité": ["formation HSE", "audit terrain", "plan urgence", "inspection EPI"]
 };
 
 const prefixes = [
@@ -109,9 +109,9 @@ export function generateSuppliers(count = 150): Supplier[] {
       sector,
       verificationTier: tier,
       verificationLabel:
-        tier === 4 ? "Dossier complet" : tier === 3 ? "References controlees" : "Prequalification active",
+        tier === 4 ? "Dossier complet" : tier === 3 ? "Références contrôlées" : "Préqualification active",
       availability:
-        index % 5 === 0 ? "Reserve mission prioritaire" : index % 3 === 0 ? "Equipe mobilisable" : "Capacite ouverte",
+        index % 5 === 0 ? "Réserve mission prioritaire" : index % 3 === 0 ? "Équipe mobilisable" : "Capacité ouverte",
       score: 74 + ((index * 11) % 25),
       services: services.slice(0, 3),
       capacity: {
@@ -122,7 +122,7 @@ export function generateSuppliers(count = 150): Supplier[] {
       },
       documents:
         tier >= 4
-          ? ["RCCM", "Identification nationale", "Dossier fiscal", "References client", "Assurances"]
+          ? ["RCCM", "Identification nationale", "Dossier fiscal", "Références client", "Assurances"]
           : ["RCCM", "Identification nationale", "Dossier fiscal"],
       origin: "synthetic_seed",
       visibility: "staging_only",
@@ -147,7 +147,7 @@ export function generateRfqs(count = 60): Rfq[] {
 
     return {
       id: `rfq-${String(index + 1).padStart(3, "0")}`,
-      title: `${sector} pour operation ${city}`,
+      title: `${sector} pour opération ${city}`,
       city,
       sector,
       status: statuses[index % statuses.length],
@@ -171,7 +171,7 @@ export function generateOpportunities(count = 120): Opportunity[] {
 
     return {
       id: `deal-${String(index + 1).padStart(3, "0")}`,
-      title: `${sector} - offre de service assemblee`,
+      title: `${sector} - offre de service assemblée`,
       city,
       sector,
       deadline: new Date(Date.UTC(2026, 6, 18 + (index % 55))).toISOString().slice(0, 10),
@@ -188,16 +188,16 @@ export function generateMediaAssets(): MediaAsset[] {
   return [
     {
       id: "procedural-scene-01",
-      title: "Scene procedurale OCTOPUS",
+      title: "Scène procédurale OCTOPUS",
       reviewStatus: "APPROVED",
       licenseStatus: "VALID",
       isAiLike: false,
       allowedUse: ["web_public"],
-      alt: "Scene abstraite des corridors industriels"
+      alt: "Scène abstraite des corridors industriels"
     },
     {
       id: "external-operations-sparks-01",
-      title: "Operation terrain haute intensite",
+      title: "Opération terrain haute intensité",
       url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=82",
       sourceDomain: "images.unsplash.com",
       sourceUrl: "https://unsplash.com/license",
@@ -207,11 +207,11 @@ export function generateMediaAssets(): MediaAsset[] {
       licenseStatus: "VALID",
       isAiLike: false,
       allowedUse: ["web_public", "editorial_hero"],
-      alt: "Intervention technique avec projection d'etincelles sur site"
+      alt: "Intervention technique avec projection d’étincelles sur site"
     },
     {
       id: "external-engineering-lab-01",
-      title: "Ingenierie et qualification",
+      title: "Ingénierie et qualification",
       url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=82",
       sourceDomain: "images.unsplash.com",
       sourceUrl: "https://unsplash.com/license",
@@ -221,7 +221,7 @@ export function generateMediaAssets(): MediaAsset[] {
       licenseStatus: "VALID",
       isAiLike: false,
       allowedUse: ["web_public", "editorial_support"],
-      alt: "Poste d'ingenierie dans un atelier technique lumineux"
+      alt: "Poste d’ingénierie dans un atelier technique lumineux"
     },
     {
       id: "external-deal-room-01",
@@ -235,11 +235,11 @@ export function generateMediaAssets(): MediaAsset[] {
       licenseStatus: "VALID",
       isAiLike: false,
       allowedUse: ["web_public", "editorial_support"],
-      alt: "Reunion de coordination autour d'une table de travail"
+      alt: "Réunion de coordination autour d'une table de travail"
     },
     {
       id: "private-asset-review-01",
-      title: "Asset interne a revoir",
+      title: "Asset interne à revoir",
       reviewStatus: "PENDING",
       licenseStatus: "PENDING",
       isAiLike: true,

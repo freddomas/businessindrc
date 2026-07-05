@@ -1,33 +1,38 @@
-import Link from "next/link";
 import { ArrowUpRight, BadgeCheck, Clock, FileCheck2, MapPin, Truck } from "lucide-react";
+import { formatDisplayText } from "../lib/display";
 import type { Supplier } from "../lib/types";
 
 export function SupplierCard({ supplier }: { supplier: Supplier }) {
   const scoreClass =
     supplier.score >= 92 ? "supplier-score--high" : supplier.score >= 84 ? "supplier-score--mid" : "supplier-score--base";
+  const supplierName = formatDisplayText(supplier.name);
 
   return (
-    <article className="supplier-card">
+    <a
+      aria-label={`Voir dossier ${supplierName}`}
+      className="supplier-card"
+      href={`/fournisseurs/${supplier.slug}`}
+    >
       <div className="supplier-card__top">
         <div>
           <p>{supplier.city}</p>
-          <h2>{supplier.name}</h2>
+          <h2>{supplierName}</h2>
         </div>
         <span className="tier">T{supplier.verificationTier}</span>
       </div>
       <div className="supplier-meta">
         <span>
           <MapPin aria-hidden="true" size={15} />
-          {supplier.sector}
+          {formatDisplayText(supplier.sector)}
         </span>
         <span>
           <BadgeCheck aria-hidden="true" size={15} />
-          {supplier.verificationLabel}
+          {formatDisplayText(supplier.verificationLabel)}
         </span>
       </div>
       <div className="service-list">
         {supplier.services.map((service) => (
-          <span key={service}>{service}</span>
+          <span key={service}>{formatDisplayText(service)}</span>
         ))}
       </div>
       <div className={`supplier-score ${scoreClass}`} aria-label={`Score ${supplier.score} sur 100`}>
@@ -37,7 +42,7 @@ export function SupplierCard({ supplier }: { supplier: Supplier }) {
       <div className="capacity-strip">
         <span>
           <Truck aria-hidden="true" size={15} />
-          {supplier.capacity.fleet} unites
+          {supplier.capacity.fleet} unités
         </span>
         <span>
           <Clock aria-hidden="true" size={15} />
@@ -45,20 +50,16 @@ export function SupplierCard({ supplier }: { supplier: Supplier }) {
         </span>
         <span>
           <FileCheck2 aria-hidden="true" size={15} />
-          {supplier.documents.length} pieces
+          {supplier.documents.length} pièces
         </span>
       </div>
       <div className="supplier-card__foot">
-        <strong>{supplier.availability}</strong>
-        <Link
-          aria-label={`Voir dossier ${supplier.name}`}
-          className="inline-action supplier-card__link"
-          href={`/fournisseurs/${supplier.slug}`}
-        >
+        <strong>{formatDisplayText(supplier.availability)}</strong>
+        <span className="inline-action supplier-card__link" aria-hidden="true">
           Voir dossier
           <ArrowUpRight aria-hidden="true" size={16} />
-        </Link>
+        </span>
       </div>
-    </article>
+    </a>
   );
 }

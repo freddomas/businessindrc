@@ -4,7 +4,7 @@ import { LogoutButton } from "../../components/LogoutButton";
 import { MetricCard } from "../../components/MetricCard";
 import { TopNav } from "../../components/TopNav";
 import { getSessionUser } from "../../lib/auth";
-import { formatRfqStatus } from "../../lib/display";
+import { formatDisplayText, formatRfqStatus } from "../../lib/display";
 import { canAccess } from "../../lib/rbac";
 import { getRfqs, getStats, getSuppliers } from "../../lib/repository";
 
@@ -34,8 +34,8 @@ export default async function ConsolePage() {
         </section>
 
         <section className="metrics-ribbon metrics-ribbon--console">
-          <MetricCard tone="teal" label="Prestataires" value={stats.suppliers} detail="Reseau actif" />
-          <MetricCard tone="copper" label="Controles" value={stats.verifiedSuppliers} detail="T3 et T4" />
+          <MetricCard tone="teal" label="Prestataires" value={stats.suppliers} detail="Réseau actif" />
+          <MetricCard tone="copper" label="Contrôles" value={stats.verifiedSuppliers} detail="T3 et T4" />
           <MetricCard tone="gold" label="Besoins" value={stats.rfqs} detail="Pipeline total" />
           <MetricCard tone="steel" label="Zones" value={stats.cities} detail="Couverture prioritaire" />
         </section>
@@ -49,7 +49,7 @@ export default async function ConsolePage() {
             {rfqs.map((rfq) => (
               <div className="compact-row compact-row--premium" key={rfq.id}>
                 <Activity aria-hidden="true" size={17} />
-                <span>{rfq.title}</span>
+                <span>{formatDisplayText(rfq.title)}</span>
                 <strong>{formatRfqStatus(rfq.status)}</strong>
               </div>
             ))}
@@ -63,7 +63,7 @@ export default async function ConsolePage() {
             {suppliers.map((supplier) => (
               <div className="compact-row compact-row--premium" key={supplier.slug}>
                 <UserRoundCheck aria-hidden="true" size={17} />
-                <span>{supplier.name}</span>
+                <span>{formatDisplayText(supplier.name)}</span>
                 <strong>{supplier.score}/100</strong>
               </div>
             ))}
@@ -72,11 +72,11 @@ export default async function ConsolePage() {
           <article className="console-panel console-panel--guard">
             <ShieldCheck aria-hidden="true" size={22} />
             <h2>Garde-fous</h2>
-            <p>Les integrations externes, paiements et API publiques restent fermes sans decision explicite.</p>
+            <p>Les intégrations externes, paiements et API publiques restent fermés sans décision explicite.</p>
             <div className="guard-list">
               <span>
                 <BadgeCheck aria-hidden="true" size={15} />
-                Medias controles
+                Médias contrôlés
               </span>
               <span>
                 <ClipboardList aria-hidden="true" size={15} />
