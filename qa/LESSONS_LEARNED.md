@@ -43,3 +43,21 @@ Les sections avec action inline doivent passer en colonne sous 760px, et les eff
 ### Impact sur le framework QA
 
 La matrice responsive complète reste obligatoire après toute modification de motion, car les reflets et transforms peuvent créer un scroll horizontal invisible au premier regard.
+
+## 2026-07-05 Encoding Audit Precision
+
+### Ce qui s'est mal passé
+
+La validation Vercel a fait échouer `/fournisseurs` parce que l'audit encodage confondait le `â` légitime de `bâtiments` avec une séquence mojibake.
+
+### Cause racine
+
+Le test utilisait une regex insensible à la casse; `Â` pouvait donc matcher `â`.
+
+### Règle à appliquer désormais
+
+Les audits mojibake doivent cibler des séquences cassées exactes et ne doivent pas utiliser le mode case-insensitive quand une lettre accentuée normale pourrait être la variante minuscule.
+
+### Test de non-régression ajouté
+
+`tests/e2e/platform.spec.ts` garde l'audit encodage, mais sans flag `i` sur les séquences mojibake.

@@ -53,7 +53,7 @@ function installGuards(page: Page) {
 async function auditVisibleText(page: Page) {
   const text = await page.locator("body").innerText();
   expect(text).not.toMatch(/\b(undefined|null|NaN)\b|\[object Object\]/i);
-  expect(text).not.toMatch(/Ã|Â|�|â€™|â€œ|â€|&eacute;|&agrave;|&ccedil;/i);
+  expect(text).not.toMatch(/Ã|Â|�|â€™|â€œ|â€|&eacute;|&agrave;|&ccedil;/);
 
   for (const word of forbiddenPublicCopy) {
     const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
