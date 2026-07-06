@@ -37,12 +37,12 @@ export const mediaRegistry: MediaAsset[] = [
   },
   {
     id: "octopus-portfolio",
-    file: "/media/octopus-portfolio.png",
-    title: "Portefeuille multisectoriel",
-    source: "generated",
-    sourceDetail: "Image créée pour OCTOPUS Mining et contrôlée avant intégration",
-    license: "Actif généré approuvé pour cette interface",
-    alt: "Table de coordination regroupant des secteurs industriels et services stratégiques",
+    file: "/media/octopus-industrial-real.jpg",
+    title: "Photographie industrielle réelle",
+    source: "external",
+    sourceDetail: "Wikimedia Commons, File:Twincreeksblast.jpg, auteur Geomartin, recadrage et étalonnage appliqués",
+    license: "Creative Commons Attribution-Share Alike 3.0 Unported",
+    alt: "Photographie réelle d'une mine à ciel ouvert avec gradins, pistes et engins industriels",
     approved: true
   }
 ];

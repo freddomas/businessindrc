@@ -245,6 +245,8 @@ h3 {
 .assurance-copy p,
 .process-item p,
 .assurance-grid p,
+.profile-grid p,
+.sector-card p,
 .login-intro {
   color: var(--muted);
   font-size: 1.05rem;
@@ -369,10 +371,140 @@ h3 {
   color: var(--muted);
 }
 
+.octopus-profile-section,
+.trust-section,
 .portfolio-section,
+.sector-intelligence-section,
 .model-section,
 .assurance-section {
   padding: 96px 42px;
+}
+
+.octopus-profile-section {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.84fr) minmax(420px, 1.16fr);
+  gap: 48px;
+  align-items: start;
+  background:
+    radial-gradient(circle at 78% 12%, rgba(104, 216, 194, 0.12), transparent 32%),
+    #0b1118;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-grid article {
+  min-height: 252px;
+  padding: 24px;
+}
+
+.profile-grid svg,
+.sector-card svg {
+  color: var(--teal);
+}
+
+.profile-grid svg {
+  margin-bottom: 22px;
+}
+
+.trust-section {
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #0b1017, #101720),
+    var(--graphite);
+}
+
+.trust-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  padding: 10px 0 8px;
+}
+
+.trust-track::-webkit-scrollbar {
+  display: none;
+}
+
+.trust-track.is-dragging {
+  cursor: grabbing;
+}
+
+.trust-card {
+  flex: 0 0 264px;
+  min-height: 118px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.028)),
+    rgba(255, 255, 255, 0.035);
+  padding: 18px;
+}
+
+.trust-logo-mark {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  flex: 0 0 74px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(232, 188, 103, 0.45);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 224, 162, 0.22), transparent 34%),
+    linear-gradient(135deg, rgba(232, 188, 103, 0.16), rgba(88, 234, 214, 0.08)),
+    rgba(8, 13, 19, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.trust-logo-mark::before,
+.trust-logo-mark::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(88, 234, 214, 0.18);
+  border-radius: 999px;
+}
+
+.trust-logo-mark::after {
+  inset: auto 12px 14px;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, rgba(232, 188, 103, 0.72), transparent);
+}
+
+.trust-logo-mark span {
+  color: var(--copper-strong);
+  font-size: 1.18rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.trust-card-copy {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.trust-card-copy strong {
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.16;
+}
+
+.trust-card-copy small,
+.sector-card strong,
+.real-asset figcaption {
+  color: var(--muted);
 }
 
 .portfolio-section {
@@ -394,6 +526,7 @@ h3 {
 }
 
 .portfolio-image-wrap {
+  margin: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
@@ -403,6 +536,35 @@ h3 {
 .portfolio-image-wrap img {
   width: 100%;
   height: auto;
+}
+
+.real-asset figcaption {
+  border-top: 1px solid var(--line);
+  background: rgba(5, 8, 12, 0.82);
+  padding: 10px 12px;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.insight-list,
+.subsector-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.insight-list {
+  margin-top: 22px;
+}
+
+.insight-list span,
+.subsector-list span {
+  border: 1px solid rgba(227, 189, 120, 0.24);
+  border-radius: 999px;
+  background: rgba(227, 189, 120, 0.075);
+  color: var(--ink);
+  padding: 8px 11px;
+  font-size: 0.82rem;
 }
 
 .sector-band {
@@ -426,6 +588,43 @@ h3 {
   font-size: 0.86rem;
 }
 
+.sector-intelligence-section {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(199, 157, 93, 0.1), transparent 34%),
+    #0d141d;
+}
+
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sector-card {
+  min-height: 312px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding: 24px;
+}
+
+.sector-card-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sector-card-heading h3,
+.sector-card p {
+  margin-bottom: 0;
+}
+
+.sector-card strong {
+  align-self: end;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
 .process-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -434,6 +633,8 @@ h3 {
 
 .process-item,
 .assurance-grid div,
+.profile-grid article,
+.sector-card,
 .registry-panel,
 .login-panel,
 .partner-modal,
@@ -880,9 +1081,15 @@ h3 {
     height: 320px;
   }
 
+  .octopus-profile-section,
   .portfolio-section,
   .assurance-section {
     grid-template-columns: 1fr;
+  }
+
+  .profile-grid,
+  .sector-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .process-grid,
@@ -929,6 +1136,8 @@ h3 {
   .metrics-band,
   .process-grid,
   .assurance-grid,
+  .profile-grid,
+  .sector-grid,
   .console-shell,
   .console-metrics,
   .registry-toolbar,
@@ -937,7 +1146,10 @@ h3 {
   }
 
   .metrics-band div,
+  .octopus-profile-section,
+  .trust-section,
   .portfolio-section,
+  .sector-intelligence-section,
   .model-section,
   .assurance-section,
   .sector-band,
@@ -991,6 +1203,15 @@ h3 {
   .primary-action,
   .secondary-action {
     width: 100%;
+  }
+
+  .trust-card {
+    flex-basis: 218px;
+  }
+
+  .profile-grid article,
+  .sector-card {
+    min-height: auto;
   }
 
   .login-page {

@@ -58,7 +58,7 @@ export type MediaAsset = {
   id: string;
   file: string;
   title: string;
-  source: "provided" | "generated";
+  source: "provided" | "generated" | "external";
   sourceDetail: string;
   license: string;
   alt: string;
