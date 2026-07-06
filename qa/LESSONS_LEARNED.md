@@ -125,3 +125,34 @@ External public imagery is allowed only when it is registered with HTTPS URL, so
 ### Guard Added
 
 `scripts/check-media.ts`, CSP `img-src`, and Playwright media audit now allow only registered external media from approved domains.
+
+## 2026-07-06 OCTOPUS Clean Slate QA
+
+### What went wrong
+
+- A decorative WebGL container used `aria-label` on a plain `div`, producing an axe `aria-prohibited-attr` failure.
+- Browser login created a session cookie but did not reliably navigate with the plain HTML redirect flow.
+- Console actions could be clicked before React hydration, so the modal did not open even though the button looked usable.
+- The first console layout widened the document on mobile because the table min-content size escaped its scroll wrapper.
+- Logout navigated away even when `/api/auth/logout` failed once during dev compilation, leaving the session active.
+- The CRUD test asserted UI state before waiting for the POST, PATCH and DELETE responses.
+
+### Root cause
+
+The initial rebuild mixed server-rendered controls, client handlers, database cold starts and responsive tables without explicit readiness and action-specific API waits.
+
+### Rule to apply now
+
+- Decorative canvas wrappers must be `aria-hidden` or given a valid role.
+- Private console controls must expose a hydration-ready state before Playwright clicks them.
+- Logout must never navigate unless the server has actually cleared the session.
+- Tables can scroll inside their wrapper, but they must not increase `documentElement.scrollWidth`.
+- Mutating tests must wait for the exact API response triggered by the action before asserting UI state.
+
+### Regression guard added
+
+`tests/e2e/public-smoke.spec.ts`, `tests/e2e/auth-console.spec.ts`, and `tests/e2e/api-contract.spec.ts` now cover WebGL rendering, mobile layout, auth, logout, private partners API, health DB, and CRUD.
+
+### Framework impact
+
+The QA helper set now separates public page audits, API contracts, auth-console flows, screenshot proof, runtime guards, layout checks, real visibility, media checks and secret leak checks.

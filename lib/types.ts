@@ -1,123 +1,66 @@
-export type Origin =
-  | "synthetic_seed"
-  | "public_market"
-  | "user_submitted"
-  | "verified_real";
+export type Role = "Admin" | "Reviewer";
 
-export type Visibility = "staging_only" | "public" | "private";
-export type ReviewStatus = "draft" | "reviewed" | "approved" | "rejected";
+export type PartnerStatus = "Qualifié" | "En analyse" | "Sous réserve" | "Suspendu";
 
-export type RfqStatus =
-  | "draft"
-  | "submitted"
-  | "qualified"
-  | "suppliers_invited"
-  | "responses_received"
-  | "shortlisted"
-  | "closed_won"
-  | "closed_lost"
-  | "cancelled";
+export type RiskLevel = "Bas" | "Modéré" | "Élevé";
 
-export type Role =
-  | "SuperAdmin"
-  | "PlatformAdmin"
-  | "SourcingManager"
-  | "VerificationOfficer"
-  | "MediaReviewer"
-  | "SupplierOwner"
-  | "SupplierMember"
-  | "BuyerAdmin"
-  | "BuyerRequester"
-  | "InvestorViewer"
-  | "Auditor";
-
-export type FeatureFlags = {
-  PUBLIC_API_ENABLED: boolean;
-  WEBHOOKS_ENABLED: boolean;
-  EXTERNAL_INTEGRATIONS_ENABLED: boolean;
-  PAYMENTS_ENABLED: boolean;
-  PRESENTATION_SEED_ENABLED: boolean;
-  AI_PHOTO_GENERATION_ENABLED: boolean;
-  MEDIA_REVIEW_REQUIRED: boolean;
-  INVESTOR_MODE_ENABLED: boolean;
-};
-
-export type Supplier = {
-  slug: string;
-  name: string;
-  city: string;
+export type Partner = {
+  id: string;
+  companyName: string;
   sector: string;
-  verificationTier: number;
-  verificationLabel: string;
-  availability: string;
-  score: number;
+  city: string;
+  province: "Lualaba" | "Haut-Katanga";
+  contactName: string;
+  contactTitle: string;
+  phone: string;
+  email: string;
+  status: PartnerStatus;
+  riskLevel: RiskLevel;
+  readinessScore: number;
+  workforce: number;
+  annualCapacity: string;
+  zoneCoverage: string[];
   services: string[];
-  capacity: {
-    crew: number;
-    fleet: number;
-    serviceRadiusKm: number;
-    responseTimeHours: number;
-  };
-  documents: string[];
-  origin: Origin;
-  visibility: Visibility;
-  reviewStatus: ReviewStatus;
+  certifications: string[];
+  lastAssessment: string;
+  notes: string;
 };
 
-export type Rfq = {
-  id: string;
-  title: string;
-  city: string;
-  sector: string;
-  status: RfqStatus;
-  urgency: "standard" | "priority" | "critical";
-  deadline: string;
-  lines: string[];
-  origin: Origin;
-  visibility: Visibility;
-  reviewStatus: ReviewStatus;
+export type PartnerInput = Omit<Partner, "id"> & {
+  id?: string;
 };
 
-export type Opportunity = {
-  id: string;
-  title: string;
-  city: string;
-  sector: string;
-  deadline: string;
-  accessLevel: "mandat" | "qualification" | "proposition" | "signature";
-  status: "en_cadrage" | "matching" | "negociation" | "pret_signature";
-  origin: Origin;
-  visibility: Visibility;
-  reviewStatus: ReviewStatus;
-};
-
-export type MediaAsset = {
-  id: string;
-  title: string;
-  url?: string;
-  sourceDomain?: string;
-  sourceUrl?: string;
-  licenseUrl?: string;
-  credit?: string;
-  reviewStatus: "APPROVED" | "PENDING" | "REJECTED";
-  licenseStatus: "VALID" | "PENDING" | "INVALID";
-  isAiLike: boolean;
-  allowedUse: string[];
-  alt: string;
+export type PartnerFilters = {
+  sector?: string;
+  city?: string;
+  status?: PartnerStatus | "";
+  query?: string;
 };
 
 export type DashboardStats = {
-  suppliers: number;
-  rfqs: number;
-  opportunities: number;
-  verifiedSuppliers: number;
+  total: number;
+  qualified: number;
+  underReview: number;
+  averageReadiness: number;
+  sectors: number;
   cities: number;
-  approvedMedia: number;
 };
 
 export type SessionUser = {
+  username: string;
   email: string;
   name: string;
   role: Role;
   organization: string;
+};
+
+export type MediaAsset = {
+  id: string;
+  file: string;
+  title: string;
+  source: "provided" | "generated";
+  sourceDetail: string;
+  license: string;
+  alt: string;
+  approved: boolean;
 };

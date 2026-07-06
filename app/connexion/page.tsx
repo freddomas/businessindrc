@@ -1,30 +1,36 @@
-import { LockKeyhole, ShieldCheck } from "lucide-react";
-import { TopNav } from "../../components/TopNav";
+import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { LoginForm } from "../../components/LoginForm";
+import { getSessionUser } from "../../lib/auth";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ error?: string }>;
+}) {
+  const user = await getSessionUser();
+
+  if (user) {
+    redirect("/console");
+  }
+
+  const params = await searchParams;
+  const hasError = Boolean(params?.error);
+
   return (
-    <>
-      <TopNav />
-      <main className="auth-shell">
-        <form className="auth-panel" action="/api/auth/login" method="post">
-          <LockKeyhole aria-hidden="true" size={28} />
-          <p>Accès restreint</p>
-          <h1>Console de pilotage</h1>
-          <span className="auth-note">
-            <ShieldCheck aria-hidden="true" size={15} />
-            Espace réservé aux équipes autorisées.
-          </span>
-          <label>
-            Email
-            <input name="email" type="email" autoComplete="email" required />
-          </label>
-          <label>
-            Mot de passe
-            <input name="password" type="password" autoComplete="current-password" required />
-          </label>
-          <button type="submit">Entrer</button>
-        </form>
-      </main>
-    </>
+    <main className="login-page">
+      <section className="login-panel" aria-labelledby="login-title">
+        <Link href="/" className="login-logo" aria-label="OCTOPUS Mining">
+          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={190} height={76} priority />
+        </Link>
+        <p className="eyebrow">Accès réservé</p>
+        <h1 id="login-title">Console de pilotage</h1>
+        <p className="login-intro">
+          Authentification requise pour consulter et mettre à jour le registre des partenaires qualifiés.
+        </p>
+        <LoginForm initialError={hasError} />
+      </section>
+    </main>
   );
 }

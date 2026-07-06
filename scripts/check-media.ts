@@ -1,4 +1,6 @@
-import { generateMediaAssets, getPublicMediaAssets } from "../lib/seed-data";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { mediaRegistry } from "../lib/seed-data";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -6,34 +8,14 @@ function assert(condition: unknown, message: string): asserts condition {
   }
 }
 
-const allAssets = generateMediaAssets();
-const publicAssets = getPublicMediaAssets();
-const allowedExternalDomains = new Set(["images.unsplash.com"]);
+assert(mediaRegistry.length >= 3, "Media registry must include the logo and page visuals.");
 
-assert(allAssets.length > publicAssets.length, "Media quarantine path must exist.");
-assert(
-  publicAssets.every(
-    (asset) =>
-      asset.reviewStatus === "APPROVED" &&
-      asset.licenseStatus === "VALID" &&
-      !asset.isAiLike &&
-      asset.allowedUse.includes("web_public")
-  ),
-  "Public media filter leaked an unapproved asset."
-);
-
-for (const asset of publicAssets.filter((asset) => asset.url)) {
-  assert(asset.sourceDomain, `Public media ${asset.id} needs a source domain.`);
-  assert(asset.licenseUrl, `Public media ${asset.id} needs a license URL.`);
-  assert(asset.sourceUrl, `Public media ${asset.id} needs a source URL.`);
-  assert(asset.alt.trim().length >= 12, `Public media ${asset.id} needs useful alt text.`);
-
-  const url = new URL(asset.url!);
-  assert(url.protocol === "https:", `Public media ${asset.id} must use HTTPS.`);
-  assert(
-    allowedExternalDomains.has(url.hostname) && asset.sourceDomain === url.hostname,
-    `Public media ${asset.id} uses an unapproved source domain.`
-  );
+for (const asset of mediaRegistry) {
+  assert(asset.approved, `Media asset ${asset.id} must be approved.`);
+  assert(asset.alt.trim().length >= 12, `Media asset ${asset.id} needs useful alt text.`);
+  assert(asset.license.trim().length >= 12, `Media asset ${asset.id} needs a license note.`);
+  assert(asset.file.startsWith("/media/"), `Media asset ${asset.id} must be local.`);
+  assert(existsSync(join(process.cwd(), "public", asset.file)), `Media asset ${asset.id} is missing.`);
 }
 
 console.log("Media validation passed.");

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createSessionToken, resolveLocalUser, SESSION_COOKIE } from "../../../../lib/auth";
-import { findUserByEmail } from "../../../../lib/repository";
+import { createSessionToken, resolveUser, SESSION_COOKIE } from "../../../../lib/auth";
+import { findUserByIdentifier } from "../../../../lib/repository";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 const attempts = new Map<string, { count: number; resetAt: number }>();
 
 const loginSchema = z.object({
-  email: z.string().email().max(160),
+  identifier: z.string().trim().min(3).max(160),
   password: z.string().min(8).max(120)
 });
 
@@ -36,36 +36,52 @@ function isLimited(key: string): boolean {
 
 export async function POST(request: Request) {
   const key = getClientKey(request);
+  const requestUrl = new URL(request.url);
+  const secureCookie =
+    requestUrl.protocol === "https:" || request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() === "https";
+  const wantsJson = request.headers.get("x-login-mode") === "fetch";
 
   if (isLimited(key)) {
-    return NextResponse.json({ ok: false, message: "Accès temporairement limité." }, { status: 429 });
+    if (wantsJson) {
+      return NextResponse.json({ ok: false }, { status: 429 });
+    }
+    return NextResponse.redirect(new URL("/connexion?error=limited", request.url), { status: 303 });
   }
 
   const formData = await request.formData();
   const payload = loginSchema.safeParse({
-    email: formData.get("email"),
+    identifier: formData.get("identifier"),
     password: formData.get("password")
   });
 
   if (!payload.success) {
-    return NextResponse.redirect(new URL("/connexion", request.url), { status: 303 });
+    if (wantsJson) {
+      return NextResponse.json({ ok: false }, { status: 422 });
+    }
+    return NextResponse.redirect(new URL("/connexion?error=invalid", request.url), { status: 303 });
   }
 
-  const databaseUser = await findUserByEmail(payload.data.email).catch(() => null);
-  const user = await resolveLocalUser(payload.data.email, payload.data.password, databaseUser);
+  const localUser = await resolveUser(payload.data.identifier, payload.data.password, null);
+  const databaseUser = localUser ? null : await findUserByIdentifier(payload.data.identifier).catch(() => null);
+  const user = localUser ?? (await resolveUser(payload.data.identifier, payload.data.password, databaseUser));
 
   if (!user) {
-    return NextResponse.redirect(new URL("/connexion", request.url), { status: 303 });
+    if (wantsJson) {
+      return NextResponse.json({ ok: false }, { status: 401 });
+    }
+    return NextResponse.redirect(new URL("/connexion?error=invalid", request.url), { status: 303 });
   }
 
-  const response = NextResponse.redirect(new URL("/console", request.url), { status: 303 });
+  const response = wantsJson
+    ? NextResponse.json({ ok: true, redirectTo: "/console" })
+    : NextResponse.redirect(new URL("/console", request.url), { status: 303 });
   const token = await createSessionToken(user);
 
   response.cookies.set({
     name: SESSION_COOKIE,
     value: token,
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: secureCookie,
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 8

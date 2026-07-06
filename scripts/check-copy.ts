@@ -1,15 +1,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const publicFiles = [
-  "app/layout.tsx",
-  "app/page.tsx",
-  "app/fournisseurs",
-  "app/opportunites",
-  "app/zones",
-  "app/connexion",
-  "components"
-];
+const publicFiles = ["app/layout.tsx", "app/page.tsx", "app/connexion", "components"];
 
 const forbidden = [
   "demo",
@@ -22,10 +14,13 @@ const forbidden = [
   "placeholder",
   "tutoriel",
   "guide",
-  "exemple"
+  "exemple",
+  "squelette",
+  "template",
+  "base minimale",
+  "DATABASE_URL",
+  "POSTGRES_URL"
 ];
-
-const visibleTechnicalTerms = ["squelette", "template", "base minimale", "DATABASE_URL", "POSTGRES_URL"];
 
 function collectFiles(path: string): string[] {
   const fullPath = join(process.cwd(), path);
@@ -59,7 +54,7 @@ for (const file of files) {
   const content = readFileSync(file, "utf8");
   const stringLiterals = extractStringLiterals(content);
 
-  for (const word of [...forbidden, ...visibleTechnicalTerms]) {
+  for (const word of forbidden) {
     if (hasForbiddenWord(stringLiterals, word)) {
       failures.push(`${file}: visible copy contains "${word}"`);
     }

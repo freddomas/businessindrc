@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { InteractiveBackdrop } from "../components/InteractiveBackdrop";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "OCTOPUS Mining Industrial Services Hub",
+  title: "OCTOPUS Mining",
   description:
-    "Plateforme B2B pour qualifier des prestataires et structurer des offres de services dans le Haut-Katanga et le Lualaba."
+    "Plateforme privée de qualification et de pilotage des partenaires industriels OCTOPUS Mining dans le Lualaba et le Haut-Katanga.",
+  icons: {
+    icon: "/icon.svg"
+  }
 };
 
 export default function RootLayout({
@@ -15,10 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>
-        <InteractiveBackdrop />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

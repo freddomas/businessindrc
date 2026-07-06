@@ -7,25 +7,12 @@ export const SESSION_COOKIE = "gkih_session";
 
 const localUsers: Array<SessionUser & { password: string }> = [
   {
+    username: "admin",
     email: "admin@octopus.local",
-    name: "Administrateur plateforme",
-    role: "SuperAdmin",
+    name: "Administrateur OCTOPUS",
+    role: "Admin",
     organization: "OCTOPUS Mining",
-    password: "octopus2026!"
-  },
-  {
-    email: "deals@octopus.local",
-    name: "Deal desk",
-    role: "SourcingManager",
-    organization: "OCTOPUS Mining",
-    password: "octopus2026!"
-  },
-  {
-    email: "client@octopus.local",
-    name: "Client industriel",
-    role: "BuyerAdmin",
-    organization: "Client entreprise",
-    password: "octopus2026!"
+    password: "demo2026!"
   }
 ];
 
@@ -41,6 +28,7 @@ function getSecret(): Uint8Array {
 
 export async function createSessionToken(user: SessionUser): Promise<string> {
   return new SignJWT({
+    username: user.username,
     email: user.email,
     name: user.name,
     role: user.role,
@@ -57,6 +45,7 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
     const { payload } = await jwtVerify(token, getSecret());
 
     if (
+      typeof payload.username !== "string" ||
       typeof payload.email !== "string" ||
       typeof payload.name !== "string" ||
       typeof payload.role !== "string" ||
@@ -66,6 +55,7 @@ export async function verifySessionToken(token: string): Promise<SessionUser | n
     }
 
     return {
+      username: payload.username,
       email: payload.email,
       name: payload.name,
       role: payload.role as Role,
@@ -87,8 +77,8 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   return verifySessionToken(token);
 }
 
-export async function resolveLocalUser(
-  email: string,
+export async function resolveUser(
+  identifier: string,
   password: string,
   databaseUser:
     | (SessionUser & {
@@ -98,6 +88,7 @@ export async function resolveLocalUser(
 ): Promise<SessionUser | null> {
   if (databaseUser && (await compare(password, databaseUser.passwordHash))) {
     return {
+      username: databaseUser.username,
       email: databaseUser.email,
       name: databaseUser.name,
       role: databaseUser.role,
@@ -105,17 +96,21 @@ export async function resolveLocalUser(
     };
   }
 
-  if (process.env.DEMO_USERS_ENABLED?.toLowerCase() === "false") {
+  if (process.env.LOCAL_ADMIN_ENABLED?.toLowerCase() === "false") {
     return null;
   }
 
-  const localUser = localUsers.find((user) => user.email === email.toLowerCase());
+  const normalized = identifier.trim().toLowerCase();
+  const localUser = localUsers.find(
+    (user) => user.username === normalized || user.email.toLowerCase() === normalized
+  );
 
   if (!localUser || localUser.password !== password) {
     return null;
   }
 
   return {
+    username: localUser.username,
     email: localUser.email,
     name: localUser.name,
     role: localUser.role,

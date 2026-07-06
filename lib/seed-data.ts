@@ -1,277 +1,414 @@
-import type { DashboardStats, MediaAsset, Opportunity, Rfq, Supplier } from "./types";
-
-export const SEED_ID = "OCTOPUS_B2B_SERVICES_2026";
-
-export const cities = [
-  { name: "Kolwezi", slug: "kolwezi", targetShare: 0.26 },
-  { name: "Lubumbashi", slug: "lubumbashi", targetShare: 0.22 },
-  { name: "Likasi", slug: "likasi", targetShare: 0.12 },
-  { name: "Fungurume", slug: "fungurume", targetShare: 0.1 },
-  { name: "Kasumbalesa", slug: "kasumbalesa", targetShare: 0.08 },
-  { name: "Kipushi", slug: "kipushi", targetShare: 0.07 },
-  { name: "Tenke", slug: "tenke", targetShare: 0.06 },
-  { name: "Sakania", slug: "sakania", targetShare: 0.04 },
-  { name: "Dilolo", slug: "dilolo", targetShare: 0.03 },
-  { name: "Mutshatsha", slug: "mutshatsha", targetShare: 0.02 }
-] as const;
+import type { DashboardStats, MediaAsset, Partner } from "./types";
 
 export const sectors = [
-  { name: "Mines", slug: "mines", targetShare: 0.18 },
-  { name: "Agriculture", slug: "agriculture", targetShare: 0.1 },
-  { name: "Agro-alimentaire", slug: "agro-alimentaire", targetShare: 0.09 },
-  { name: "Forêts et environnement", slug: "forets-environnement", targetShare: 0.08 },
-  { name: "IT et systèmes", slug: "it-systemes", targetShare: 0.09 },
-  { name: "Droit des affaires", slug: "droit-affaires", targetShare: 0.07 },
-  { name: "Fiscalité", slug: "fiscalite", targetShare: 0.07 },
-  { name: "Comptabilité", slug: "comptabilite", targetShare: 0.07 },
-  { name: "Manutention", slug: "manutention", targetShare: 0.1 },
-  { name: "Construction", slug: "construction", targetShare: 0.1 },
-  { name: "Énergie", slug: "energie", targetShare: 0.03 },
-  { name: "HSE et conformité", slug: "hse-conformite", targetShare: 0.02 }
-] as const;
-
-const serviceBySector: Record<string, string[]> = {
-  Mines: ["maintenance de site", "pièces critiques", "support forage", "atelier mobile"],
-  Agriculture: ["irrigation", "mécanisation", "intrants suivis", "maintenance tracteurs"],
-  "Agro-alimentaire": ["chaîne froide", "conditionnement", "contrôle qualité", "cantines industrielles"],
-  "Forêts et environnement": ["reboisement", "suivi environnemental", "réhabilitation", "bois légal"],
-  "IT et systèmes": ["réseaux site", "cybersécurité", "ERP terrain", "support utilisateurs"],
-  "Droit des affaires": ["contrats", "contentieux", "due diligence", "local content"],
-  "Fiscalité": ["déclarations", "audit fiscal", "prix de transfert", "veille fiscale"],
-  "Comptabilité": ["tenue comptes", "reporting", "paie", "contrôle interne"],
-  Manutention: ["levage", "chargement", "stock yard", "équipes portuaires"],
-  Construction: ["génie civil", "charpente", "VRD", "maintenance bâtiments"],
-  "Énergie": ["solaire hybride", "groupes électrogènes", "câblage", "maintenance électrique"],
-  "HSE et conformité": ["formation HSE", "audit terrain", "plan urgence", "inspection EPI"]
-};
-
-const prefixes = [
-  "Kamoa",
-  "Lualaba",
-  "Upemba",
-  "Copperline",
-  "Mwanga",
-  "Tshamilemba",
-  "Nzuri",
-  "Kipushi",
-  "Katanga",
-  "Mutanda"
+  "Avocats",
+  "Comptabilité",
+  "Lobbying",
+  "Mines",
+  "Agriculture",
+  "Secteur forestier",
+  "Experts IT & cybersécurité",
+  "Télécommunications",
+  "Agro-alimentaire",
+  "Support médical",
+  "Construction"
 ];
 
-const suffixes = [
-  "Field Services",
-  "Industrial Partners",
-  "Prime Works",
-  "Technical Group",
-  "Operations",
-  "Advisory",
-  "Supply Chain",
-  "Engineering",
-  "Agro Services",
-  "Compliance"
+export const mediaRegistry: MediaAsset[] = [
+  {
+    id: "octopus-logo",
+    file: "/media/octopus-logo.png",
+    title: "Identité OCTOPUS Mining",
+    source: "provided",
+    sourceDetail: "Logo transmis par le propriétaire du projet",
+    license: "Actif propriétaire approuvé pour cette interface",
+    alt: "Logo OCTOPUS Mining",
+    approved: true
+  },
+  {
+    id: "octopus-hero",
+    file: "/media/octopus-hero.png",
+    title: "Centre de pilotage industriel",
+    source: "generated",
+    sourceDetail: "Image créée pour OCTOPUS Mining et contrôlée avant intégration",
+    license: "Actif généré approuvé pour cette interface",
+    alt: "Salle de pilotage industrielle surplombant un site minier au lever du jour",
+    approved: true
+  },
+  {
+    id: "octopus-portfolio",
+    file: "/media/octopus-portfolio.png",
+    title: "Portefeuille multisectoriel",
+    source: "generated",
+    sourceDetail: "Image créée pour OCTOPUS Mining et contrôlée avant intégration",
+    license: "Actif généré approuvé pour cette interface",
+    alt: "Table de coordination regroupant des secteurs industriels et services stratégiques",
+    approved: true
+  }
 ];
 
-function cityForIndex(index: number): string {
-  const thresholds = [39, 72, 90, 105, 117, 128, 137, 143, 147, 150];
-  const found = thresholds.findIndex((limit) => index < limit);
-  return cities[Math.max(found, 0)].name;
-}
+export const seedPartners: Partner[] = [
+  {
+    id: "katanga-legal-advisory",
+    companyName: "Katanga Legal Advisory",
+    sector: "Avocats",
+    city: "Lubumbashi",
+    province: "Haut-Katanga",
+    contactName: "Clarisse Mukendi",
+    contactTitle: "Associée droit minier",
+    phone: "+243 997 410 215",
+    email: "contact@katangalegal.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 91,
+    workforce: 18,
+    annualCapacity: "34 dossiers de conformité minière et foncière",
+    zoneCoverage: ["Lubumbashi", "Likasi", "Kasumbalesa"],
+    services: ["Due diligence", "Permis miniers", "Contrats de sous-traitance"],
+    certifications: ["Barreau du Haut-Katanga", "OHADA"],
+    lastAssessment: "2026-06-18",
+    notes: "Bonne traçabilité documentaire et capacité forte sur les contrats bilingues."
+  },
+  {
+    id: "fiducia-kolwezi",
+    companyName: "Fiducia Kolwezi Audit",
+    sector: "Comptabilité",
+    city: "Kolwezi",
+    province: "Lualaba",
+    contactName: "Patrick Ilunga",
+    contactTitle: "Directeur audit",
+    phone: "+243 812 706 944",
+    email: "operations@fiduciakolwezi.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 88,
+    workforce: 26,
+    annualCapacity: "12 clôtures industrielles et 48 missions fiscales",
+    zoneCoverage: ["Kolwezi", "Fungurume", "Mutshatsha"],
+    services: ["Audit financier", "Paie", "Fiscalité locale"],
+    certifications: ["ONEC", "IFRS PME"],
+    lastAssessment: "2026-06-10",
+    notes: "Équipe stable, références contrôlées dans le secteur extractif."
+  },
+  {
+    id: "copperbelt-public-affairs",
+    companyName: "Copperbelt Public Affairs",
+    sector: "Lobbying",
+    city: "Lubumbashi",
+    province: "Haut-Katanga",
+    contactName: "Joël Kabongo",
+    contactTitle: "Directeur relations institutionnelles",
+    phone: "+243 991 330 882",
+    email: "desk@copperbelt-pa.cd",
+    status: "En analyse",
+    riskLevel: "Modéré",
+    readinessScore: 76,
+    workforce: 9,
+    annualCapacity: "22 dossiers d'alignement institutionnel",
+    zoneCoverage: ["Lubumbashi", "Kinshasa", "Kolwezi"],
+    services: ["Cartographie parties prenantes", "Veille réglementaire", "Briefing exécutif"],
+    certifications: ["Charte interne anticorruption"],
+    lastAssessment: "2026-06-21",
+    notes: "Processus de validation des mandats à renforcer avant engagements sensibles."
+  },
+  {
+    id: "lualaba-heavy-maintenance",
+    companyName: "Lualaba Heavy Maintenance",
+    sector: "Mines",
+    city: "Kolwezi",
+    province: "Lualaba",
+    contactName: "Gaël Mwamba",
+    contactTitle: "Responsable opérations",
+    phone: "+243 821 905 472",
+    email: "planning@lhm.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 94,
+    workforce: 142,
+    annualCapacity: "420 interventions engins lourds et convoyeurs",
+    zoneCoverage: ["Kolwezi", "Tenke", "Fungurume"],
+    services: ["Maintenance engins", "Hydraulique", "Arrêts programmés"],
+    certifications: ["ISO 45001 en cours", "Habilitation site niveau 3"],
+    lastAssessment: "2026-06-25",
+    notes: "Atelier mobile disponible sous vingt-quatre heures sur le corridor Kolwezi-Fungurume."
+  },
+  {
+    id: "haut-katanga-agri-services",
+    companyName: "Haut-Katanga Agri Services",
+    sector: "Agriculture",
+    city: "Likasi",
+    province: "Haut-Katanga",
+    contactName: "Anita Kabeya",
+    contactTitle: "Directrice agronomie",
+    phone: "+243 999 601 118",
+    email: "supply@hkagri.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 84,
+    workforce: 73,
+    annualCapacity: "1 800 tonnes de maïs et légumineuses contractualisables",
+    zoneCoverage: ["Likasi", "Kambove", "Lubumbashi"],
+    services: ["Approvisionnement vivrier", "Traçabilité parcellaire", "Logistique courte"],
+    certifications: ["Contrôle phytosanitaire provincial"],
+    lastAssessment: "2026-06-08",
+    notes: "Bonne couverture coopérative et suivi qualité régulier."
+  },
+  {
+    id: "miombo-forest-stewardship",
+    companyName: "Miombo Forest Stewardship",
+    sector: "Secteur forestier",
+    city: "Kasenga",
+    province: "Haut-Katanga",
+    contactName: "Dieudonné Kalala",
+    contactTitle: "Coordinateur terrain",
+    phone: "+243 813 555 604",
+    email: "field@miombofs.cd",
+    status: "Sous réserve",
+    riskLevel: "Modéré",
+    readinessScore: 68,
+    workforce: 41,
+    annualCapacity: "6 sites de reboisement et inventaire communautaire",
+    zoneCoverage: ["Kasenga", "Pweto", "Kipushi"],
+    services: ["Inventaire forestier", "Reboisement", "Suivi communautaire"],
+    certifications: ["Autorisation environnementale locale"],
+    lastAssessment: "2026-05-29",
+    notes: "Documentation foncière incomplète sur deux zones périphériques."
+  },
+  {
+    id: "cyber-katanga-secops",
+    companyName: "Cyber Katanga SecOps",
+    sector: "Experts IT & cybersécurité",
+    city: "Lubumbashi",
+    province: "Haut-Katanga",
+    contactName: "Sarah Tshibanda",
+    contactTitle: "Lead sécurité opérationnelle",
+    phone: "+243 852 018 343",
+    email: "soc@cyberkatanga.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 90,
+    workforce: 32,
+    annualCapacity: "24 audits d'infrastructure et supervision 24/7",
+    zoneCoverage: ["Lubumbashi", "Kolwezi", "Likasi"],
+    services: ["SOC managé", "Durcissement réseau", "Réponse incident"],
+    certifications: ["ISO 27001 lead implementer", "Cisco CCNP Security"],
+    lastAssessment: "2026-06-24",
+    notes: "Procédures d'escalade claires et journalisation exploitable."
+  },
+  {
+    id: "tshamilemba-fiberworks",
+    companyName: "Tshamilemba Fiberworks",
+    sector: "Télécommunications",
+    city: "Lubumbashi",
+    province: "Haut-Katanga",
+    contactName: "Arnaud Kalonji",
+    contactTitle: "Chef déploiement",
+    phone: "+243 840 441 907",
+    email: "deploy@fiberworks.cd",
+    status: "En analyse",
+    riskLevel: "Modéré",
+    readinessScore: 73,
+    workforce: 57,
+    annualCapacity: "96 km de fibre et 38 relais radio industriels",
+    zoneCoverage: ["Lubumbashi", "Kipushi", "Kasumbalesa"],
+    services: ["Fibre optique", "Radio point à point", "Maintenance relais"],
+    certifications: ["ARPTC", "Travail en hauteur"],
+    lastAssessment: "2026-06-17",
+    notes: "Bon potentiel, besoin de renforcer les preuves de stock critique."
+  },
+  {
+    id: "lualaba-food-industries",
+    companyName: "Lualaba Food Industries",
+    sector: "Agro-alimentaire",
+    city: "Kolwezi",
+    province: "Lualaba",
+    contactName: "Mireille Kanku",
+    contactTitle: "Directrice qualité",
+    phone: "+243 977 844 526",
+    email: "qualite@lualabafood.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 86,
+    workforce: 119,
+    annualCapacity: "2,4 millions de repas emballés et lots secs",
+    zoneCoverage: ["Kolwezi", "Mutshatsha", "Fungurume"],
+    services: ["Rations industrielles", "Chaîne froide", "Contrôle qualité"],
+    certifications: ["HACCP", "Inspection sanitaire provinciale"],
+    lastAssessment: "2026-06-12",
+    notes: "Traçabilité lot par lot et procédures d'hygiène solides."
+  },
+  {
+    id: "copperbelt-medical-response",
+    companyName: "Copperbelt Medical Response",
+    sector: "Support médical",
+    city: "Likasi",
+    province: "Haut-Katanga",
+    contactName: "Dr Nadège Mbuyi",
+    contactTitle: "Médecin coordinatrice",
+    phone: "+243 815 221 708",
+    email: "dispatch@cmresponse.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 89,
+    workforce: 64,
+    annualCapacity: "16 sites couverts et évacuation médicalisée",
+    zoneCoverage: ["Likasi", "Kambove", "Lubumbashi"],
+    services: ["Infirmerie site", "Évacuation", "Formation premiers secours"],
+    certifications: ["Ordre des médecins", "Ambulances agréées"],
+    lastAssessment: "2026-06-20",
+    notes: "Bon protocole HSE et coordination radio éprouvée."
+  },
+  {
+    id: "katanga-build-epc",
+    companyName: "Katanga Build EPC",
+    sector: "Construction",
+    city: "Kolwezi",
+    province: "Lualaba",
+    contactName: "Blaise Nkulu",
+    contactTitle: "Directeur projets",
+    phone: "+243 998 712 400",
+    email: "projects@katangabuildepc.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 92,
+    workforce: 211,
+    annualCapacity: "38 chantiers industriels moyens et ouvrages béton",
+    zoneCoverage: ["Kolwezi", "Lubudi", "Fungurume"],
+    services: ["Génie civil", "Charpente métallique", "Base-vie"],
+    certifications: ["ISO 9001 en cours", "HSE site minier"],
+    lastAssessment: "2026-06-19",
+    notes: "Planification solide et matériel propre pour travaux en zone isolée."
+  },
+  {
+    id: "kasumbalesa-border-logistics",
+    companyName: "Kasumbalesa Border Logistics",
+    sector: "Mines",
+    city: "Kasumbalesa",
+    province: "Haut-Katanga",
+    contactName: "Éric Musonda",
+    contactTitle: "Directeur transit",
+    phone: "+243 970 118 680",
+    email: "ops@kbl.cd",
+    status: "En analyse",
+    riskLevel: "Modéré",
+    readinessScore: 79,
+    workforce: 88,
+    annualCapacity: "7 500 dossiers transit et pièces critiques",
+    zoneCoverage: ["Kasumbalesa", "Lubumbashi", "Likasi"],
+    services: ["Transit", "Déclarations douanières", "Suivi pièces critiques"],
+    certifications: ["Commissionnaire agréé"],
+    lastAssessment: "2026-06-14",
+    notes: "Capacité intéressante, dépendance forte aux créneaux frontaliers."
+  },
+  {
+    id: "mutshatsha-green-farms",
+    companyName: "Mutshatsha Green Farms",
+    sector: "Agriculture",
+    city: "Mutshatsha",
+    province: "Lualaba",
+    contactName: "Odette Kazadi",
+    contactTitle: "Coordinatrice coopératives",
+    phone: "+243 813 902 771",
+    email: "coops@mgfarms.cd",
+    status: "Sous réserve",
+    riskLevel: "Modéré",
+    readinessScore: 65,
+    workforce: 52,
+    annualCapacity: "900 tonnes de légumes feuilles et tubercules",
+    zoneCoverage: ["Mutshatsha", "Kolwezi"],
+    services: ["Production locale", "Tri", "Approvisionnement cantines"],
+    certifications: ["Contrôle phytosanitaire local"],
+    lastAssessment: "2026-06-03",
+    notes: "Qualité correcte, capacité logistique à sécuriser avant hausse de volume."
+  },
+  {
+    id: "lubumbashi-datacenter-services",
+    companyName: "Lubumbashi Datacenter Services",
+    sector: "Experts IT & cybersécurité",
+    city: "Lubumbashi",
+    province: "Haut-Katanga",
+    contactName: "Marc Monga",
+    contactTitle: "Directeur technique",
+    phone: "+243 998 300 291",
+    email: "noc@lds.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 87,
+    workforce: 45,
+    annualCapacity: "180 baies suivies et continuité électrique renforcée",
+    zoneCoverage: ["Lubumbashi", "Likasi", "Kolwezi"],
+    services: ["Hébergement privé", "Sauvegarde", "Continuité d'activité"],
+    certifications: ["Uptime practices", "ISO 27001 foundation"],
+    lastAssessment: "2026-06-23",
+    notes: "Bonne redondance énergie et procédure d'accès stricte."
+  },
+  {
+    id: "kambove-industrial-clinic",
+    companyName: "Kambove Industrial Clinic",
+    sector: "Support médical",
+    city: "Kambove",
+    province: "Haut-Katanga",
+    contactName: "Dr Bosco Mpoyi",
+    contactTitle: "Directeur médical",
+    phone: "+243 977 600 144",
+    email: "admin@kic.cd",
+    status: "En analyse",
+    riskLevel: "Modéré",
+    readinessScore: 72,
+    workforce: 38,
+    annualCapacity: "11 postes santé site et 4 unités mobiles",
+    zoneCoverage: ["Kambove", "Likasi", "Fungurume"],
+    services: ["Consultation site", "Médecine du travail", "Stock pharmacie"],
+    certifications: ["Autorisation sanitaire provinciale"],
+    lastAssessment: "2026-06-09",
+    notes: "Capacité médicale crédible, plan de stock d'urgence à compléter."
+  },
+  {
+    id: "tenke-structural-works",
+    companyName: "Tenke Structural Works",
+    sector: "Construction",
+    city: "Fungurume",
+    province: "Lualaba",
+    contactName: "Christian Kayembe",
+    contactTitle: "Responsable structures",
+    phone: "+243 812 441 389",
+    email: "steel@tenkeworks.cd",
+    status: "Qualifié",
+    riskLevel: "Bas",
+    readinessScore: 85,
+    workforce: 97,
+    annualCapacity: "2 600 tonnes de structure métallique légère",
+    zoneCoverage: ["Fungurume", "Tenke", "Kolwezi"],
+    services: ["Charpente", "Soudage certifié", "Montage site"],
+    certifications: ["Soudeurs qualifiés", "Contrôle CND partenaire"],
+    lastAssessment: "2026-06-16",
+    notes: "Réactivité forte sur pièces métalliques et équipes mobiles."
+  }
+];
 
-function sectorForIndex(index: number): string {
-  const thresholds = [27, 42, 56, 68, 82, 93, 104, 115, 130, 145, 149, 150];
-  const found = thresholds.findIndex((limit) => index < limit);
-  return sectors[Math.max(found, 0)].name;
-}
-
-function slugify(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
-export function generateSuppliers(count = 150): Supplier[] {
-  return Array.from({ length: count }, (_, index) => {
-    const city = cityForIndex(index);
-    const sector = sectorForIndex((index * 7) % 150);
-    const prefix = prefixes[index % prefixes.length];
-    const suffix = suffixes[(index * 3) % suffixes.length];
-    const name = `${prefix} ${sector.split(" ")[0]} ${suffix}`;
-    const tier = 2 + (index % 3);
-    const services = serviceBySector[sector] ?? serviceBySector.Mines;
-
-    return {
-      slug: `${slugify(name)}-${String(index + 1).padStart(3, "0")}`,
-      name,
-      city,
-      sector,
-      verificationTier: tier,
-      verificationLabel:
-        tier === 4 ? "Dossier complet" : tier === 3 ? "Références contrôlées" : "Préqualification active",
-      availability:
-        index % 5 === 0 ? "Réserve mission prioritaire" : index % 3 === 0 ? "Équipe mobilisable" : "Capacité ouverte",
-      score: 74 + ((index * 11) % 25),
-      services: services.slice(0, 3),
-      capacity: {
-        crew: 6 + ((index * 5) % 96),
-        fleet: 1 + ((index * 2) % 22),
-        serviceRadiusKm: 30 + ((index * 13) % 260),
-        responseTimeHours: 8 + ((index * 3) % 48)
-      },
-      documents:
-        tier >= 4
-          ? ["RCCM", "Identification nationale", "Dossier fiscal", "Références client", "Assurances"]
-          : ["RCCM", "Identification nationale", "Dossier fiscal"],
-      origin: "synthetic_seed",
-      visibility: "staging_only",
-      reviewStatus: "approved"
-    };
-  });
-}
-
-export function generateRfqs(count = 60): Rfq[] {
-  const statuses: Rfq["status"][] = [
-    "submitted",
-    "qualified",
-    "suppliers_invited",
-    "responses_received",
-    "shortlisted",
-    "closed_lost"
-  ];
-
-  return Array.from({ length: count }, (_, index) => {
-    const city = cityForIndex((index * 5) % 150);
-    const sector = sectorForIndex((index * 9) % 150);
-
-    return {
-      id: `rfq-${String(index + 1).padStart(3, "0")}`,
-      title: `${sector} pour opération ${city}`,
-      city,
-      sector,
-      status: statuses[index % statuses.length],
-      urgency: index % 7 === 0 ? "critical" : index % 3 === 0 ? "priority" : "standard",
-      deadline: new Date(Date.UTC(2026, 6, 12 + (index % 42))).toISOString().slice(0, 10),
-      lines: ["scope a cadrer", "prestataires a qualifier", "proposition OCTOPUS a structurer"],
-      origin: "synthetic_seed",
-      visibility: "staging_only",
-      reviewStatus: "approved"
-    };
-  });
-}
-
-export function generateOpportunities(count = 120): Opportunity[] {
-  const access: Opportunity["accessLevel"][] = ["mandat", "qualification", "proposition", "signature"];
-  const statuses: Opportunity["status"][] = ["en_cadrage", "matching", "negociation", "pret_signature"];
-
-  return Array.from({ length: count }, (_, index) => {
-    const city = cityForIndex((index * 4) % 150);
-    const sector = sectorForIndex((index * 11) % 150);
-
-    return {
-      id: `deal-${String(index + 1).padStart(3, "0")}`,
-      title: `${sector} - offre de service assemblée`,
-      city,
-      sector,
-      deadline: new Date(Date.UTC(2026, 6, 18 + (index % 55))).toISOString().slice(0, 10),
-      accessLevel: access[index % access.length],
-      status: statuses[(index + 1) % statuses.length],
-      origin: "synthetic_seed",
-      visibility: "staging_only",
-      reviewStatus: "approved"
-    };
-  });
-}
-
-export function generateMediaAssets(): MediaAsset[] {
-  return [
-    {
-      id: "procedural-scene-01",
-      title: "Scène procédurale OCTOPUS",
-      reviewStatus: "APPROVED",
-      licenseStatus: "VALID",
-      isAiLike: false,
-      allowedUse: ["web_public"],
-      alt: "Scène abstraite des corridors industriels"
-    },
-    {
-      id: "external-operations-sparks-01",
-      title: "Opération terrain haute intensité",
-      url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=82",
-      sourceDomain: "images.unsplash.com",
-      sourceUrl: "https://unsplash.com/license",
-      licenseUrl: "https://unsplash.com/license",
-      credit: "Unsplash",
-      reviewStatus: "APPROVED",
-      licenseStatus: "VALID",
-      isAiLike: false,
-      allowedUse: ["web_public", "editorial_hero"],
-      alt: "Intervention technique avec projection d’étincelles sur site"
-    },
-    {
-      id: "external-engineering-lab-01",
-      title: "Ingénierie et qualification",
-      url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=82",
-      sourceDomain: "images.unsplash.com",
-      sourceUrl: "https://unsplash.com/license",
-      licenseUrl: "https://unsplash.com/license",
-      credit: "Unsplash",
-      reviewStatus: "APPROVED",
-      licenseStatus: "VALID",
-      isAiLike: false,
-      allowedUse: ["web_public", "editorial_support"],
-      alt: "Poste d’ingénierie dans un atelier technique lumineux"
-    },
-    {
-      id: "external-deal-room-01",
-      title: "Salle de coordination",
-      url: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=82",
-      sourceDomain: "images.unsplash.com",
-      sourceUrl: "https://unsplash.com/license",
-      licenseUrl: "https://unsplash.com/license",
-      credit: "Unsplash",
-      reviewStatus: "APPROVED",
-      licenseStatus: "VALID",
-      isAiLike: false,
-      allowedUse: ["web_public", "editorial_support"],
-      alt: "Réunion de coordination autour d'une table de travail"
-    },
-    {
-      id: "private-asset-review-01",
-      title: "Asset interne à revoir",
-      reviewStatus: "PENDING",
-      licenseStatus: "PENDING",
-      isAiLike: true,
-      allowedUse: ["internal_review"],
-      alt: "Asset interne"
-    }
-  ];
-}
-
-export function getPublicMediaAssets(): MediaAsset[] {
-  return generateMediaAssets().filter(
-    (asset) =>
-      asset.reviewStatus === "APPROVED" &&
-      asset.licenseStatus === "VALID" &&
-      !asset.isAiLike &&
-      asset.allowedUse.includes("web_public")
-  );
+export function getSeedPartners(): Partner[] {
+  return seedPartners.map((partner) => ({
+    ...partner,
+    zoneCoverage: [...partner.zoneCoverage],
+    services: [...partner.services],
+    certifications: [...partner.certifications]
+  }));
 }
 
 export function getSeedStats(): DashboardStats {
-  const suppliers = generateSuppliers();
-  const rfqs = generateRfqs();
-  const opportunities = generateOpportunities();
+  const partners = getSeedPartners();
+  const qualified = partners.filter((partner) => partner.status === "Qualifié").length;
+  const underReview = partners.filter((partner) => partner.status === "En analyse").length;
+  const averageReadiness = Math.round(
+    partners.reduce((total, partner) => total + partner.readinessScore, 0) / partners.length
+  );
 
   return {
-    suppliers: suppliers.length,
-    rfqs: rfqs.length,
-    opportunities: opportunities.length,
-    verifiedSuppliers: suppliers.filter((supplier) => supplier.verificationTier >= 3).length,
-    cities: cities.length,
-    approvedMedia: getPublicMediaAssets().length
+    total: partners.length,
+    qualified,
+    underReview,
+    averageReadiness,
+    sectors: new Set(partners.map((partner) => partner.sector)).size,
+    cities: new Set(partners.map((partner) => partner.city)).size
   };
 }
-
-export const getDashboardStats = getSeedStats;

@@ -1,51 +1,12 @@
 import type { Role } from "./types";
 
-export type Capability =
-  | "view_console"
-  | "manage_suppliers"
-  | "manage_rfq"
-  | "review_media"
-  | "verify_supplier"
-  | "view_audit"
-  | "submit_rfq"
-  | "manage_own_supplier";
+type Permission = "view_console" | "manage_partners" | "review_partners";
 
-const roleCapabilities: Record<Role, Capability[]> = {
-  SuperAdmin: [
-    "view_console",
-    "manage_suppliers",
-    "manage_rfq",
-    "review_media",
-    "verify_supplier",
-    "view_audit",
-    "submit_rfq",
-    "manage_own_supplier"
-  ],
-  PlatformAdmin: [
-    "view_console",
-    "manage_suppliers",
-    "manage_rfq",
-    "review_media",
-    "verify_supplier",
-    "view_audit"
-  ],
-  SourcingManager: ["view_console", "manage_rfq", "submit_rfq"],
-  VerificationOfficer: ["view_console", "verify_supplier"],
-  MediaReviewer: ["view_console", "review_media"],
-  SupplierOwner: ["manage_own_supplier", "submit_rfq"],
-  SupplierMember: ["submit_rfq"],
-  BuyerAdmin: ["submit_rfq", "manage_rfq"],
-  BuyerRequester: ["submit_rfq"],
-  InvestorViewer: ["view_console"],
-  Auditor: ["view_console", "view_audit"]
+const permissions: Record<Role, Permission[]> = {
+  Admin: ["view_console", "manage_partners", "review_partners"],
+  Reviewer: ["view_console", "review_partners"]
 };
 
-export function canAccess(role: Role, capability: Capability): boolean {
-  return roleCapabilities[role].includes(capability);
-}
-
-export function requireCapability(role: Role, capability: Capability): void {
-  if (!canAccess(role, capability)) {
-    throw new Error(`Role ${role} cannot ${capability}`);
-  }
+export function canAccess(role: Role, permission: Permission): boolean {
+  return permissions[role]?.includes(permission) ?? false;
 }

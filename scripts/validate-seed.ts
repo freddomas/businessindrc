@@ -1,8 +1,4 @@
-import { cities, generateOpportunities, generateRfqs, generateSuppliers, sectors } from "../lib/seed-data";
-
-const suppliers = generateSuppliers();
-const rfqs = generateRfqs();
-const opportunities = generateOpportunities();
+import { getSeedPartners, sectors } from "../lib/seed-data";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -10,33 +6,24 @@ function assert(condition: unknown, message: string): asserts condition {
   }
 }
 
-function share(count: number, total: number): number {
-  return Number((count / total).toFixed(2));
-}
+const partners = getSeedPartners();
+const forbidden = /\b(undefined|null|NaN)\b|\[object Object\]|Ã©|Ã¨|Ãª|Ã |Â|�|&eacute;|&agrave;|&ccedil;/i;
 
-assert(suppliers.length === 150, "Expected 150 suppliers.");
-assert(rfqs.length === 60, "Expected 60 RFQs.");
-assert(opportunities.length === 120, "Expected 120 opportunities.");
-assert(rfqs.every((rfq) => rfq.status !== "closed_won"), "Seed must not create closed_won RFQs.");
-assert(
-  suppliers.every((supplier) => supplier.origin && supplier.visibility && supplier.reviewStatus),
-  "Every supplier must carry origin, visibility and reviewStatus."
-);
-
-for (const city of cities.slice(0, 5)) {
-  const count = suppliers.filter((supplier) => supplier.city === city.name).length;
-  assert(
-    Math.abs(share(count, suppliers.length) - city.targetShare) <= 0.01,
-    `Unexpected city distribution for ${city.name}.`
-  );
-}
+assert(partners.length >= 15, "Partner registry needs enough realistic records.");
+assert(new Set(partners.map((partner) => partner.id)).size === partners.length, "Partner ids must be unique.");
 
 for (const sector of sectors) {
-  const count = suppliers.filter((supplier) => supplier.sector === sector.name).length;
-  assert(
-    Math.abs(share(count, suppliers.length) - sector.targetShare) <= 0.01,
-    `Unexpected sector distribution for ${sector.name}.`
-  );
+  assert(partners.some((partner) => partner.sector === sector), `Missing sector: ${sector}`);
+}
+
+for (const partner of partners) {
+  const text = JSON.stringify(partner);
+  assert(!forbidden.test(text), `Corrupted text in partner ${partner.id}`);
+  assert(partner.companyName.length >= 3, `Invalid company name for ${partner.id}`);
+  assert(partner.email.includes("@"), `Invalid email for ${partner.id}`);
+  assert(partner.zoneCoverage.length > 0, `Missing zone coverage for ${partner.id}`);
+  assert(partner.services.length > 0, `Missing services for ${partner.id}`);
+  assert(partner.readinessScore >= 0 && partner.readinessScore <= 100, `Invalid score for ${partner.id}`);
 }
 
 console.log("Seed validation passed.");

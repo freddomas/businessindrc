@@ -10,33 +10,30 @@ export async function GET() {
   if (!databaseUrl) {
     return NextResponse.json({
       ok: true,
-      database: "not_configured",
-      message: "DATABASE_URL or POSTGRES_URL is not set yet."
+      database: "not_configured"
     });
   }
 
   try {
     const sql = getSql();
-    const result = await sql<{ now: Date }>`SELECT NOW() as now`;
+    const rows = await sql<{ now: Date }>`SELECT NOW() as now`;
 
     return NextResponse.json({
       ok: true,
       database: "connected",
-      now: result[0]?.now
+      checkedAt: rows[0]?.now
     });
   } catch (error) {
-    const message =
-      process.env.NODE_ENV === "production"
-        ? "Database health check failed."
-        : error instanceof Error
-          ? error.message
-          : "Unknown error";
+    const code =
+      error && typeof error === "object" && "code" in error && typeof error.code === "string"
+        ? error.code
+        : "unknown";
 
     return NextResponse.json(
       {
         ok: false,
         database: "error",
-        message
+        code: process.env.NODE_ENV === "production" ? "unavailable" : code
       },
       { status: 500 }
     );
