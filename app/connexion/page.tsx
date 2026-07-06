@@ -22,7 +22,7 @@ export default async function LoginPage({
     <main className="login-page">
       <section className="login-panel" aria-labelledby="login-title">
         <Link href="/" className="login-logo" aria-label="OCTOPUS Mining">
-          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={190} height={76} priority />
+          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={214} height={66} priority unoptimized />
         </Link>
         <p className="eyebrow">Accès réservé</p>
         <h1 id="login-title">Console de pilotage</h1>

@@ -1,10 +1,10 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Activity,
-  Building2,
   Check,
   Edit3,
   Filter,
@@ -238,8 +238,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
     <div className="console-shell" data-console-ready={ready ? "true" : "false"}>
       <aside className="console-sidebar">
         <Link href="/" className="console-brand" aria-label="OCTOPUS Mining">
-          <Building2 aria-hidden="true" size={22} />
-          <span>OCTOPUS</span>
+          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={188} height={58} priority unoptimized />
         </Link>
         <nav aria-label="Navigation console">
           <a className="active" href="#registre">

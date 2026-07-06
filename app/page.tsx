@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, Building2, CheckCircle2, Factory, LockKeyhole, Network, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, Factory, LockKeyhole, Network, ShieldCheck } from "lucide-react";
 import { OctopusScene } from "../components/OctopusScene";
 import { getSeedStats, sectors } from "../lib/seed-data";
 
@@ -31,7 +31,7 @@ export default function HomePage() {
     <main className="site-shell">
       <header className="site-header" aria-label="Navigation principale">
         <a className="brand-mark" href="#top" aria-label="OCTOPUS Mining">
-          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={178} height={72} priority />
+          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={230} height={72} priority unoptimized />
         </a>
         <nav className="header-links" aria-label="Sections">
           <a href="#portefeuille">Portefeuille</a>
@@ -178,9 +178,15 @@ export default function HomePage() {
       </section>
 
       <footer className="site-footer">
-        <div>
-          <Building2 aria-hidden="true" size={18} />
-          OCTOPUS Mining
+        <div className="footer-brand">
+          <Image
+            className="footer-logo"
+            src="/media/octopus-logo.png"
+            alt="Logo OCTOPUS Mining"
+            width={156}
+            height={48}
+            unoptimized
+          />
         </div>
         <span>{sectors.length} secteurs suivis dans le registre privé.</span>
       </footer>

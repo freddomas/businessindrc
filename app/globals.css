@@ -79,14 +79,73 @@ canvas {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 28px;
-  padding: 22px 42px;
+  padding: 24px clamp(30px, 3vw, 56px);
 }
 
-.brand-mark img,
+.site-header::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 8px;
+  left: clamp(18px, 2.4vw, 42px);
+  width: clamp(270px, 18vw, 350px);
+  height: 118px;
+  background:
+    radial-gradient(ellipse at 30% 36%, rgba(255, 252, 244, 0.8), rgba(232, 204, 143, 0.36) 44%, transparent 74%);
+  filter: blur(12px);
+  opacity: 0.84;
+}
+
+.brand-mark,
+.login-logo,
+.console-brand,
+.footer-brand {
+  isolation: isolate;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+}
+
+.login-logo::before,
+.console-brand::before,
+.footer-brand::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -18px -22px;
+  background:
+    radial-gradient(ellipse at 42% 50%, rgba(255, 252, 244, 0.82), rgba(226, 197, 132, 0.42) 44%, transparent 74%);
+  filter: blur(7px);
+  opacity: 0.86;
+}
+
+.brand-mark img {
+  width: clamp(204px, 12vw, 236px);
+  height: clamp(63px, 3.72vw, 73px);
+  object-fit: contain;
+  filter: drop-shadow(0 10px 28px rgba(255, 250, 234, 0.18)) drop-shadow(0 14px 36px rgba(0, 0, 0, 0.26));
+}
+
 .login-logo img {
-  width: 178px;
-  height: auto;
+  width: 206px;
+  height: 64px;
+  object-fit: contain;
   filter: drop-shadow(0 10px 34px rgba(0, 0, 0, 0.45));
+}
+
+.console-brand img {
+  width: 188px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 34px rgba(0, 0, 0, 0.45));
+}
+
+.footer-logo {
+  width: 156px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.32));
 }
 
 .header-links {
@@ -139,10 +198,10 @@ canvas {
 
 .hero-section {
   position: relative;
-  min-height: 82svh;
+  min-height: clamp(620px, 76svh, 760px);
   display: grid;
-  align-items: end;
-  padding: 156px 42px 76px;
+  align-items: center;
+  padding: 132px clamp(30px, 3vw, 56px) 54px;
   isolation: isolate;
 }
 
@@ -160,7 +219,8 @@ canvas {
 .hero-shade {
   z-index: -2;
   background:
-    linear-gradient(90deg, rgba(5, 8, 12, 0.92), rgba(5, 8, 12, 0.62) 36%, rgba(5, 8, 12, 0.1) 72%),
+    radial-gradient(ellipse 560px 240px at 8% 12%, rgba(255, 252, 244, 0.36), rgba(226, 197, 132, 0.22) 38%, rgba(34, 39, 45, 0.18) 61%, transparent 78%),
+    linear-gradient(90deg, rgba(5, 8, 12, 0.44), rgba(5, 8, 12, 0.64) 36%, rgba(5, 8, 12, 0.1) 72%),
     linear-gradient(180deg, rgba(5, 8, 12, 0.32), rgba(5, 8, 12, 0.92));
 }
 
@@ -268,10 +328,10 @@ h3 {
 .hero-scene-panel {
   position: absolute;
   z-index: 3;
-  right: 4vw;
-  bottom: 8vh;
-  width: min(500px, 42vw);
-  height: 390px;
+  right: clamp(36px, 4.5vw, 96px);
+  bottom: clamp(78px, 11vh, 126px);
+  width: clamp(430px, 32vw, 560px);
+  height: clamp(310px, 38vh, 380px);
   pointer-events: none;
 }
 
@@ -291,17 +351,19 @@ h3 {
 .scene-labels {
   position: absolute;
   inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: end;
-  gap: 8px;
-  padding: 0 6px 18px;
   color: rgba(248, 244, 236, 0.74);
   font-size: 0.72rem;
 }
 
 .scene-labels span {
+  position: absolute;
+  top: var(--label-y);
+  left: var(--label-x);
+  max-width: 120px;
+  transform: translate(-50%, -50%);
   text-align: center;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+  white-space: nowrap;
 }
 
 .metrics-band {
@@ -838,9 +900,11 @@ h3 {
   }
 
   .hero-scene-panel {
-    opacity: 0.56;
-    right: -40px;
-    width: 520px;
+    opacity: 0.64;
+    right: -18px;
+    bottom: 86px;
+    width: min(480px, 52vw);
+    height: 320px;
   }
 
   .portfolio-section,
@@ -932,7 +996,14 @@ h3 {
 @media (max-width: 520px) {
   .brand-mark img,
   .login-logo img {
-    width: 150px;
+    width: 164px;
+    height: 51px;
+  }
+
+  .console-brand img,
+  .footer-logo {
+    width: 148px;
+    height: 46px;
   }
 
   h1 {

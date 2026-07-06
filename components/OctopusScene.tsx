@@ -1,14 +1,15 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const nodes = [
-  { x: -2.8, y: 0.9, z: 0, label: "Kolwezi" },
-  { x: -1.3, y: -0.7, z: 0, label: "Fungurume" },
-  { x: 0.1, y: 0.5, z: 0, label: "Likasi" },
-  { x: 1.5, y: -0.2, z: 0, label: "Lubumbashi" },
-  { x: 2.7, y: 0.8, z: 0, label: "Kasumbalesa" }
+  { x: -2.8, y: 0.9, z: 0, label: "Kolwezi", labelX: 12, labelY: 38 },
+  { x: -1.3, y: -0.7, z: 0, label: "Fungurume", labelX: 43, labelY: 30 },
+  { x: 0.1, y: 0.5, z: 0, label: "Likasi", labelX: 82, labelY: 38 },
+  { x: 1.5, y: -0.2, z: 0, label: "Lubumbashi", labelX: 18, labelY: 78 },
+  { x: 2.7, y: 0.8, z: 0, label: "Kasumbalesa", labelX: 62, labelY: 78 }
 ];
 
 export function OctopusScene() {
@@ -119,7 +120,17 @@ export function OctopusScene() {
     <div className="octopus-scene" ref={mountRef}>
       <div className="scene-labels" aria-hidden="true">
         {nodes.map((node) => (
-          <span key={node.label}>{node.label}</span>
+          <span
+            key={node.label}
+            style={
+              {
+                "--label-x": `${node.labelX}%`,
+                "--label-y": `${node.labelY}%`
+              } as CSSProperties
+            }
+          >
+            {node.label}
+          </span>
         ))}
       </div>
     </div>
