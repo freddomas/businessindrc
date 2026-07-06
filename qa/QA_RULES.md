@@ -25,4 +25,6 @@
 - Logout must be treated as a security flow: wait for `/api/auth/logout` and do not navigate away on non-200 responses.
 - CRUD tests must be action-specific: wait for the exact POST, PATCH or DELETE response, assert its status, then assert the UI.
 - A scrollable table is acceptable on mobile only if the document itself has no horizontal overflow.
+- If a mobile table contains decision fields or row actions, expose the core fields in a no-panning layout instead of hiding them behind horizontal scroll.
 - If `/api/health` returns `EACCES` inside the sandbox while direct DB scripts pass, rerun Playwright with approved network access instead of weakening the health contract.
+- Any operational score, status or KPI must expose its method, ownership factors and freshness in the UI or in an immediately adjacent explanation; a bare score is a Gate Zero failure.

@@ -87,6 +87,16 @@ function splitList(value: string): string[] {
     .filter(Boolean);
 }
 
+function formatAssessmentDate(value: string): string {
+  const [year, month, day] = value.split("-");
+
+  if (!year || !month || !day) {
+    return value;
+  }
+
+  return `${day}/${month}/${year}`;
+}
+
 function toInput(draft: Draft): PartnerInput {
   return {
     id: draft.id,
@@ -289,6 +299,28 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
           </div>
         </section>
 
+        <section className="score-method-panel" aria-labelledby="score-method-title">
+          <div>
+            <p className="eyebrow">Méthode de lecture</p>
+            <h2 id="score-method-title">Méthode du score</h2>
+          </div>
+          <div className="score-method-copy">
+            <p>
+              Score 0-100: indice interne renseigné par l&apos;équipe après revue des documents, références, capacité
+              déclarée, couverture de zone, niveau de risque et fraîcheur de l&apos;évaluation. Il oriente la revue; la
+              décision finale reste une qualification terrain.
+            </p>
+            <div className="score-method-points" aria-label="Critères du score">
+              <span>Documents</span>
+              <span>Références</span>
+              <span>Capacité</span>
+              <span>Couverture</span>
+              <span>Risque</span>
+              <span>Fraîcheur</span>
+            </div>
+          </div>
+        </section>
+
         <section id="registre" className="registry-panel">
           <div className="registry-toolbar">
             <label className="search-field">
@@ -333,26 +365,30 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                   <th>Statut</th>
                   <th>Risque</th>
                   <th>Score</th>
+                  <th>Évaluation</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((partner) => (
                   <tr key={partner.id}>
-                    <td>
+                    <td data-label="Entreprise">
                       <strong>{partner.companyName}</strong>
                       <span>{partner.contactName}</span>
                     </td>
-                    <td>{partner.sector}</td>
-                    <td>{partner.city}</td>
-                    <td>
+                    <td data-label="Secteur">{partner.sector}</td>
+                    <td data-label="Ville">{partner.city}</td>
+                    <td data-label="Statut">
                       <span className={`status-pill status-${partner.status.replace(/\s/g, "-").toLowerCase()}`}>
                         {partner.status}
                       </span>
                     </td>
-                    <td>{partner.riskLevel}</td>
-                    <td>{partner.readinessScore}%</td>
-                    <td>
+                    <td data-label="Risque">{partner.riskLevel}</td>
+                    <td data-label="Score">{partner.readinessScore}%</td>
+                    <td data-label="Évaluation">
+                      <time dateTime={partner.lastAssessment}>{formatAssessmentDate(partner.lastAssessment)}</time>
+                    </td>
+                    <td data-label="Actions">
                       <div className="row-actions">
                         <button
                           type="button"

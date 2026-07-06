@@ -156,3 +156,47 @@ The initial rebuild mixed server-rendered controls, client handlers, database co
 ### Framework impact
 
 The QA helper set now separates public page audits, API contracts, auth-console flows, screenshot proof, runtime guards, layout checks, real visibility, media checks and secret leak checks.
+
+## 2026-07-06 Score Provenance Gate
+
+### What went wrong
+
+The private console displayed readiness scores and a score average without visible method or assessment freshness.
+
+### Root cause
+
+The previous e2e checks verified rendering, CRUD and layout, but did not apply the Gate Zero rule that every score or indicator needs a source, method, date or user action.
+
+### Rule to apply now
+
+Any operational score, status or metric shown in the console must expose enough context to defend it: what it means, who maintains it, which factors it reflects and when the underlying dossier was last assessed.
+
+### Regression guard added
+
+`tests/e2e/auth-console.spec.ts` now checks that the authenticated console explains the score method and displays an assessment date column.
+
+### Framework impact
+
+Gate Zero content checks must cover indicator provenance, not only forbidden public wording and technical text corruption.
+
+## 2026-07-06 Mobile Decision Table Ergonomics
+
+### What went wrong
+
+The mobile console used a horizontally scrollable partner table, which kept the document technically valid but hid score, assessment freshness and row actions outside the first viewport.
+
+### Root cause
+
+The prior mobile layout rule checked document overflow but did not distinguish dense reference tables from operational decision rows.
+
+### Rule to apply now
+
+When a mobile table contains row actions or decision fields, convert it into readable row cards or another no-panning structure that exposes the core fields immediately.
+
+### Regression guard added
+
+`tests/e2e/auth-console.spec.ts` now verifies that the 390px console has no horizontal table panning and still exposes score, assessment date and actions for the first partner row.
+
+### Framework impact
+
+Responsive QA must test task ergonomics, not only absence of horizontal document overflow.

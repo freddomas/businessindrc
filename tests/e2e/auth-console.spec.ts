@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { auditPage, installRuntimeGuards } from "./helpers";
+import { auditLayout, auditPage, installRuntimeGuards } from "./helpers";
 
 async function loginAsAdmin(page: import("@playwright/test").Page) {
   await page.goto("/connexion");
@@ -39,6 +39,40 @@ test("admin login opens private console and logout closes access", async ({ page
   await expect(page).toHaveURL("/");
   await page.goto("/console");
   await expect(page).toHaveURL(/\/connexion$/);
+  guards.assertClean();
+});
+
+test("console explains score method and assessment freshness", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-laptop", "Gate Zero content audit runs once.");
+  const guards = installRuntimeGuards(page);
+  await loginAsAdmin(page);
+
+  await expect(page.getByRole("heading", { name: "Méthode du score" })).toBeVisible();
+  await expect(page.getByText(/Score 0-100/)).toBeVisible();
+  await expect(page.getByText(/documents, références, capacité déclarée, couverture de zone/i)).toBeVisible();
+  await expect(page.getByText(/fraîcheur de l'évaluation/i)).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "Évaluation" })).toBeVisible();
+  await expect(page.getByRole("row", { name: /Lualaba Heavy Maintenance/ })).toContainText(/\d{2}\/\d{2}\/\d{4}/);
+
+  guards.assertClean();
+});
+
+test("mobile console exposes decision fields without horizontal table panning", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-390", "Mobile table ergonomics runs once.");
+  const guards = installRuntimeGuards(page);
+  await loginAsAdmin(page);
+
+  const tableWrap = page.locator(".partners-table-wrap");
+  await expect(tableWrap).toBeVisible();
+  const hasHorizontalScroll = await tableWrap.evaluate((element) => element.scrollWidth > element.clientWidth + 2);
+  expect(hasHorizontalScroll).toBe(false);
+
+  const firstPartner = page.getByRole("row", { name: /Lualaba Heavy Maintenance/ });
+  await expect(firstPartner.locator('td[data-label="Score"]')).toContainText(/%/);
+  await expect(firstPartner.locator('td[data-label="Évaluation"]')).toContainText(/\d{2}\/\d{2}\/\d{4}/);
+  await expect(firstPartner.locator('td[data-label="Actions"] button')).toHaveCount(2);
+  await auditLayout(page);
+
   guards.assertClean();
 });
 
