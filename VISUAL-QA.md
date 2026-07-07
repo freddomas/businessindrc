@@ -32,6 +32,7 @@
 - Playwright report generated under `playwright-report/`.
 - Last Playwright run status recorded in `test-results/.last-run.json` as `passed`.
 - Playwright attached screenshots for public, login and console checks during e2e.
+- Online public smoke against `https://businessindrc.vercel.app` passed on 390px and laptop viewports.
 
 ## Remaining Visual Risk
 The CSS source still contains historical rules. The rendered output is validated, but a future cleanup should consolidate the file into a smaller design system.
