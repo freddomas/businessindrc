@@ -54,7 +54,25 @@ test("console explains score method and assessment freshness", async ({ page }, 
   await expect(page.getByRole("columnheader", { name: "Indice" })).toBeVisible();
   await expect(page.getByRole("row", { name: /Lualaba Heavy Maintenance/ })).toContainText(/\d{2}\/\d{2}\/\d{4}/);
 
-  guards.assertClean();
+guards.assertClean();
+});
+
+test("console RFQ lanes drive partner shortlist and empty-state recovery", async ({ page }, testInfo) => {
+test.skip(testInfo.project.name !== "chromium-laptop", "RFQ workflow audit runs once.");
+const guards = installRuntimeGuards(page);
+await loginAsAdmin(page);
+
+await expect(page.getByRole("heading", { name: "Priorités de sourcing" })).toBeVisible();
+await page.getByRole("button", { name: /Arrêt convoyeur Kolwezi/ }).click();
+await expect(page.getByText("Shortlist: Arrêt convoyeur Kolwezi")).toBeVisible();
+await expect(page.getByRole("row", { name: /Lualaba Heavy Maintenance/ })).toBeVisible();
+
+await page.getByLabel("Recherche partenaires").fill("introuvable-rfq");
+await expect(page.getByText("Aucun partenaire ne correspond aux filtres actifs.")).toBeVisible();
+await page.getByRole("button", { name: "Réinitialiser les filtres" }).click();
+await expect(page.getByRole("row", { name: /Lualaba Heavy Maintenance/ })).toBeVisible();
+
+guards.assertClean();
 });
 
 test("mobile console exposes decision fields without horizontal table panning", async ({ page }, testInfo) => {
@@ -130,12 +148,14 @@ test("partner registry supports controlled create update delete", async ({ page 
   await expect(editDialog).toHaveCount(0, { timeout: 15_000 });
   await expect(page.getByRole("row", { name: new RegExp(companyName) }).getByText("82%")).toBeVisible();
 
-  const deleteResponse = page.waitForResponse(
-    (response) => response.url().includes("/api/partners/") && response.request().method() === "DELETE",
-    { timeout: 30_000 }
-  );
-  await page.getByRole("button", { name: `Supprimer ${companyName}` }).click();
-  expect((await deleteResponse).status()).toBe(200);
+await page.getByRole("button", { name: `Supprimer ${companyName}` }).click();
+await expect(page.getByText("Confirmez le retrait du dossier sélectionné.")).toBeVisible();
+const deleteResponse = page.waitForResponse(
+(response) => response.url().includes("/api/partners/") && response.request().method() === "DELETE",
+{ timeout: 30_000 }
+);
+await page.getByRole("button", { name: `Confirmer la suppression ${companyName}` }).click();
+expect((await deleteResponse).status()).toBe(200);
   await expect(page.getByText(companyName)).toHaveCount(0);
   guards.assertClean();
 });

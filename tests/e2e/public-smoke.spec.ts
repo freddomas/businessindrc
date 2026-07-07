@@ -44,7 +44,7 @@ test("reduced motion keeps public landing usable", async ({ page }, testInfo) =>
   const guards = installRuntimeGuards(page);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Coordination industrielle du Grand Katanga" })).toBeVisible();
+await expect(page.getByRole("heading", { name: "Qualifier un besoin industriel. Mobiliser le bon partenaire local." })).toBeVisible();
   await auditPage(page, testInfo, "home-reduced-motion", true);
   guards.assertClean();
 });

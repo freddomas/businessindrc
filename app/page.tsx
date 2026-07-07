@@ -1,97 +1,14 @@
 import Image from "next/image";
+import { ArrowRight, LockKeyhole } from "lucide-react";
+import { TrustMarquee } from "../components/TrustMarquee";
 import {
-  ArrowRight,
-  BriefcaseBusiness,
-  CheckCircle2,
-  Factory,
-  HeartPulse,
-  Landmark,
-  LockKeyhole,
-  Network,
-  RadioTower,
-  Scale,
-  ShieldCheck,
-  Sprout,
-  Wrench
-} from "lucide-react";
-import { TrustMarquee, type TrustedCompany } from "../components/TrustMarquee";
-
-const trustedCompanies: TrustedCompany[] = [
-  { name: "Lualaba Heavy Maintenance", sector: "Engins lourds", location: "Kolwezi" },
-  { name: "Katanga Build EPC", sector: "Construction industrielle", location: "Kolwezi" },
-  { name: "Cyber Katanga SecOps", sector: "IT & cybersécurité", location: "Lubumbashi" },
-  { name: "Copperbelt Medical Response", sector: "Support médical", location: "Likasi" },
-  { name: "Lualaba Food Industries", sector: "Agro-alimentaire", location: "Kolwezi" },
-  { name: "Tenke Structural Works", sector: "Charpente métallique", location: "Fungurume" },
-  { name: "Katanga Legal Advisory", sector: "Droit minier", location: "Lubumbashi" },
-  { name: "Tshamilemba Fiberworks", sector: "Télécommunications", location: "Lubumbashi" },
-  { name: "Haut-Katanga Agri Services", sector: "Agriculture", location: "Likasi" },
-  { name: "Lubumbashi Datacenter Services", sector: "Continuité numérique", location: "Lubumbashi" }
-];
-
-const sectorGroups = [
-  {
-    icon: Wrench,
-    title: "Mines et maintenance industrielle",
-    summary: "Capacités critiques pour les sites miniers, la disponibilité des engins, les convoyeurs et les pièces sensibles.",
-    items: ["Maintenance engins", "Hydraulique", "Arrêts programmés", "Transit pièces critiques"],
-    signal: "Priorité: continuité opérationnelle"
-  },
-  {
-    icon: Factory,
-    title: "Construction et infrastructures",
-    summary: "Equipes mobilisables pour ouvrages béton, structures métalliques, bases-vie, voiries internes et lots techniques.",
-    items: ["Génie civil", "Charpente", "Base-vie", "Drainage industriel"],
-    signal: "Priorité: chantier maîtrisé"
-  },
-  {
-    icon: Sprout,
-    title: "Agriculture et agro-alimentaire",
-    summary: "Approvisionnement local, rations industrielles, chaîne froide et contrôle qualité pour réduire la dépendance longue distance.",
-    items: ["Vivrier local", "Lots secs", "Chaîne froide", "Traçabilité"],
-    signal: "Priorité: sécurité d’approvisionnement"
-  },
-  {
-    icon: RadioTower,
-    title: "IT, cybersécurité et télécoms",
-    summary: "Continuité numérique, connectivité site, supervision réseau et réponse incident pour environnements industriels isolés.",
-    items: ["SOC managé", "Fibre optique", "Radio point à point", "Sauvegarde"],
-    signal: "Priorité: résilience numérique"
-  },
-  {
-    icon: Scale,
-    title: "Juridique, finance et affaires publiques",
-    summary: "Lecture réglementaire, fiscalité, contrats de sous-traitance, conformité documentaire et alignement institutionnel.",
-    items: ["Droit minier", "Fiscalité", "Contrats", "Veille réglementaire"],
-    signal: "Priorité: risque maîtrisé"
-  },
-  {
-    icon: HeartPulse,
-    title: "Santé, environnement et services de site",
-    summary: "Support médical, évacuation, reboisement, hygiène, restauration site et suivi communautaire autour des opérations.",
-    items: ["Infirmerie site", "Evacuation", "Reboisement", "Services vie site"],
-    signal: "Priorité: acceptabilité terrain"
-  }
-];
-
-const operatingSteps = [
-  {
-    title: "Lecture de la demande",
-    text: "OCTOPUS Mining clarifie le besoin, la zone, la criticité, les contraintes HSE, les délais et les dépendances terrain."
-  },
-  {
-    title: "Qualification des capacités",
-    text: "Les sociétés sont analysées par documents, références, disponibilité, effectifs, certifications, couverture et niveau de risque."
-  },
-  {
-    title: "Assemblage opérationnel",
-    text: "Les compétences sont regroupées par corridor, secteur et urgence afin de constituer une réponse locale cohérente."
-  },
-  {
-    title: "Pilotage et traçabilité",
-    text: "Les décisions sensibles restent contrôlées dans une console privée avec suivi des statuts, notes et responsabilités."
-  }
-];
+  assurancePoints,
+  operatingSteps,
+  profilePoints,
+  sectorGroups,
+  sourcingStages,
+  trustedCompanies
+} from "../lib/product-content";
 
 export default function HomePage() {
   return (
@@ -101,14 +18,14 @@ export default function HomePage() {
           <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={230} height={72} priority unoptimized />
         </a>
         <nav className="header-links" aria-label="Sections">
-          <a href="#octopus">Rôle</a>
-          <a href="#portefeuille">Opérations</a>
-          <a href="#secteurs">Secteurs</a>
+          <a href="#rfq">Flux RFQ</a>
+          <a href="#capacites">Capacités</a>
+          <a href="#qualification">Qualification</a>
           <a href="#gouvernance">Gouvernance</a>
         </nav>
         <a className="header-access" href="/connexion">
           <LockKeyhole aria-hidden="true" size={17} />
-          Espace privé
+          Accès privé
         </a>
       </header>
 
@@ -123,56 +40,75 @@ export default function HomePage() {
         />
         <div className="hero-shade" />
         <div className="hero-copy">
-          <p className="eyebrow">OCTOPUS Mining · Lualaba · Haut-Katanga</p>
-          <h1 id="hero-title">Coordination industrielle du Grand Katanga</h1>
+          <p className="eyebrow">Sourcing B2B industriel · Grand Katanga</p>
+          <h1 id="hero-title">Qualifier un besoin industriel. Mobiliser le bon partenaire local.</h1>
           <p className="hero-lede">
-            Qualification, assemblage et mobilisation de sociétés locales pour les demandes minières, logistiques,
-            techniques et institutionnelles qui ne tolèrent pas l’improvisation.
+            OCTOPUS Mining structure les demandes critiques en flux RFQ contrôlés: cadrage du besoin, vérification
+            partenaire, shortlist opérationnelle et pilotage privé des décisions sensibles.
           </p>
           <div className="hero-actions">
-            <a className="primary-action" href="#modele">
-              Voir le modèle opéré
+            <a className="primary-action" href="#rfq">
+              Cadrer un flux RFQ
               <ArrowRight aria-hidden="true" size={18} />
             </a>
-            <a className="secondary-action" href="#secteurs">
-              Parcourir les secteurs
+            <a className="secondary-action" href="/connexion">
+              Ouvrir la console
             </a>
           </div>
+          <div className="hero-proof-strip" aria-label="Points de contrôle V1">
+            <span>RFQ cadré</span>
+            <span>Partenaires vérifiés</span>
+            <span>Décision privée</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="rfq" className="workflow-section" aria-labelledby="workflow-title">
+        <div className="section-copy centered">
+          <p className="eyebrow">Flux RFQ opéré</p>
+          <h2 id="workflow-title">Le produit commence par le besoin, pas par une liste brute de fournisseurs.</h2>
+          <p>
+            Chaque demande industrielle est lue comme une chaîne de contraintes: métier, zone, criticité, conformité,
+            disponibilité, risque et capacité de mobilisation.
+          </p>
+        </div>
+        <div className="workflow-grid">
+          {sourcingStages.map((stage) => (
+            <article className="workflow-card" key={stage.title}>
+              <span>{stage.label}</span>
+              <h3>{stage.title}</h3>
+              <p>{stage.text}</p>
+            </article>
+          ))}
         </div>
       </section>
 
       <section id="octopus" className="octopus-profile-section">
         <div className="section-copy">
-          <p className="eyebrow">Ce que fait OCTOPUS Mining</p>
-          <h2>Un opérateur local pour structurer les capacités critiques autour des grands donneurs d’ordre.</h2>
+          <p className="eyebrow">Rôle OCTOPUS Mining</p>
+          <h2>Un opérateur local pour transformer les capacités dispersées en décisions exploitables.</h2>
           <p>
-            OCTOPUS Mining n’agit pas comme une vitrine ouverte. L’entreprise identifie, qualifie et assemble des
-            sociétés locales capables d’intervenir dans des environnements exigeants, avec une lecture claire des
-            risques, des zones, des délais et des responsabilités.
+            OCTOPUS Mining identifie, qualifie et assemble des sociétés locales capables d&apos;intervenir dans des
+            environnements exigeants, avec une lecture claire des risques, des zones, des délais et des responsabilités.
           </p>
         </div>
         <div className="profile-grid">
-          <article>
-            <BriefcaseBusiness aria-hidden="true" size={24} />
-            <h3>Qualification métier</h3>
-            <p>Capacité réelle, références, documents, effectifs et disponibilité sont examinés avant mobilisation.</p>
-          </article>
-          <article>
-            <Network aria-hidden="true" size={24} />
-            <h3>Coordination par corridor</h3>
-            <p>Kolwezi, Fungurume, Likasi, Lubumbashi et Kasumbalesa sont traités comme des bassins opérationnels reliés.</p>
-          </article>
-          <article>
-            <Landmark aria-hidden="true" size={24} />
-            <h3>Lecture institutionnelle</h3>
-            <p>Les sujets juridiques, fiscaux, administratifs et communautaires sont intégrés dès la qualification.</p>
-          </article>
+          {profilePoints.map((point) => {
+            const Icon = point.icon;
+            return (
+              <article key={point.title}>
+                <Icon aria-hidden="true" size={24} />
+                <h3>{point.title}</h3>
+                <p>{point.text}</p>
+              </article>
+            );
+          })}
         </div>
       </section>
 
       <section id="confiance" className="trust-section" aria-labelledby="trust-title">
         <div className="section-copy centered">
-          <p className="eyebrow">Réseau qualifié</p>
+          <p className="eyebrow">Registre qualifié</p>
           <h2 id="trust-title">Des sociétés lisibles par métier, ville et niveau de mobilisation.</h2>
           <p>
             Chaque entrée expose le nom complet, le domaine et la zone utile pour accélérer la lecture opérationnelle
@@ -182,14 +118,13 @@ export default function HomePage() {
         <TrustMarquee companies={trustedCompanies} />
       </section>
 
-      <section id="portefeuille" className="portfolio-section">
+      <section id="terrain" className="portfolio-section">
         <div className="section-copy">
           <p className="eyebrow">Terrain et opérations</p>
-          <h2>Le besoin client n’est jamais un secteur isolé: c’est une chaîne de contraintes.</h2>
+          <h2>Un besoin client n&apos;est jamais un secteur isolé: c&apos;est une chaîne de contraintes.</h2>
           <p>
-            Une demande minière déclenche souvent de la maintenance, du génie civil, de la logistique, du juridique, de
-            l’alimentation, du médical, de la cybersécurité et des télécommunications. OCTOPUS Mining relie ces pièces
-            dans un même cadre de décision.
+            Une demande minière déclenche souvent maintenance, génie civil, logistique, juridique, alimentation, médical,
+            cybersécurité et télécommunications. La plateforme relie ces pièces dans un même cadre de décision.
           </p>
           <div className="insight-list">
             <span>Besoin industriel</span>
@@ -210,13 +145,13 @@ export default function HomePage() {
         </figure>
       </section>
 
-      <section id="secteurs" className="sector-intelligence-section" aria-labelledby="sector-title">
+      <section id="capacites" className="sector-intelligence-section" aria-labelledby="sector-title">
         <div className="section-copy centered">
-          <p className="eyebrow">Secteurs et sous-secteurs</p>
-          <h2 id="sector-title">Une cartographie exploitable, pas une simple liste.</h2>
+          <p className="eyebrow">Capacités et sous-secteurs</p>
+          <h2 id="sector-title">Une cartographie exploitable pour arbitrer vite sans perdre le contrôle.</h2>
           <p>
-            Les familles de services sont regroupées par logique opérationnelle. La structure reste lisible même si le
-            périmètre dépasse vingt secteurs ou s’étend à de nouveaux sous-secteurs.
+            Les familles de services sont regroupées par logique opérationnelle afin de rester lisibles lorsque le
+            périmètre s&apos;étend à de nouveaux secteurs ou corridors.
           </p>
         </div>
         <div className="sector-grid">
@@ -241,13 +176,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="modele" className="model-section">
+      <section id="qualification" className="model-section">
         <div className="section-copy centered">
-          <p className="eyebrow">Modèle opéré</p>
-          <h2>La valeur vient de la qualification, de l’assemblage et du contrôle.</h2>
+          <p className="eyebrow">Qualification contrôlée</p>
+          <h2>La valeur vient de la qualification, de l&apos;assemblage et du suivi privé.</h2>
           <p>
-            La console privée sert à maintenir une donnée fiable, mais la promesse client se joue avant tout dans la
-            capacité à transformer cette donnée en décision opérationnelle.
+            La console maintient une donnée fiable, mais la promesse client se joue dans la capacité à transformer cette
+            donnée en décision opérationnelle.
           </p>
         </div>
         <div className="process-grid">
@@ -266,37 +201,27 @@ export default function HomePage() {
           <p className="eyebrow">Gouvernance et confiance</p>
           <h2>Une interface privée pour garder le contrôle sur les données sensibles.</h2>
           <p>
-            Le pilotage interne centralise les sociétés, les niveaux de risque, les secteurs, les villes couvertes et
-            les notes d’évaluation. Les accès externes, paiements et intégrations restent fermés par conception.
+            Le pilotage interne centralise les sociétés, les niveaux de risque, les secteurs, les villes couvertes et les
+            notes d&apos;évaluation. Les accès externes, paiements et intégrations restent fermés par conception.
           </p>
         </div>
         <div className="assurance-grid">
-          <div>
-            <ShieldCheck aria-hidden="true" size={24} />
-            <h3>Qualification</h3>
-            <p>Statuts, risques, indices contextualisés et pièces de contrôle réunis dans une même lecture opérationnelle.</p>
-          </div>
-          <div>
-            <Network aria-hidden="true" size={24} />
-            <h3>Couverture</h3>
-            <p>Kolwezi, Lubumbashi, Likasi, Fungurume, Kasumbalesa et zones industrielles adjacentes.</p>
-          </div>
-          <div>
-            <Factory aria-hidden="true" size={24} />
-            <h3>Capacité</h3>
-            <p>Effectifs, services, certifications et disponibilité vérifiables avant mobilisation.</p>
-          </div>
-          <div>
-            <CheckCircle2 aria-hidden="true" size={24} />
-            <h3>Contrôle</h3>
-            <p>Registre privé, actions tracées et accès limités aux équipes autorisées.</p>
-          </div>
+          {assurancePoints.map((point) => {
+            const Icon = point.icon;
+            return (
+              <div key={point.title}>
+                <Icon aria-hidden="true" size={24} />
+                <h3>{point.title}</h3>
+                <p>{point.text}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       <footer className="site-footer">
         <strong>OCTOPUS Mining</strong>
-        <span>Lualaba · Haut-Katanga · Coordination multisectorielle</span>
+        <span>Lualaba · Haut-Katanga · Sourcing industriel contrôlé</span>
       </footer>
     </main>
   );
