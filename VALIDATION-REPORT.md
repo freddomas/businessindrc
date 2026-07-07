@@ -20,6 +20,15 @@
 - Partner create, update and delete passed against the configured Postgres path.
 - `/api/health` returned healthy status outside sandbox.
 
+## Online Vercel validation
+
+- URL checked: `https://businessindrc.vercel.app/`.
+- Public home returned `200 OK`.
+- Public HTML contained the new hero promise `Qualifier un besoin industriel` and `Flux RFQ`.
+- `https://businessindrc.vercel.app/api/health` returned `200 OK` with `{"ok":true,"database":"connected"}`.
+- Online Playwright command passed against Vercel: `PLAYWRIGHT_BASE_URL=https://businessindrc.vercel.app npm run test:e2e -- --project=chromium-laptop`.
+- Online result: 12 tests passed, including public routes, health, private API contract, login/logout, RFQ shortlist, media render and controlled CRUD.
+
 ## Database validation
 
 - Verification path used: `GET /api/health`.
