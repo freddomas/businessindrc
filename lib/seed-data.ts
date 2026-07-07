@@ -27,22 +27,22 @@ export const mediaRegistry: MediaAsset[] = [
   },
   {
     id: "octopus-hero",
-    file: "/media/octopus-hero.png",
+    file: "/media/octopus-hero-v2.png",
     title: "Centre de pilotage industriel",
     source: "generated",
-    sourceDetail: "Image créée pour OCTOPUS Mining et contrôlée avant intégration",
+    sourceDetail: "Image réaliste générée pour OCTOPUS Mining et contrôlée avant intégration",
     license: "Actif généré approuvé pour cette interface",
-    alt: "Salle de pilotage industrielle surplombant un site minier au lever du jour",
+    alt: "Centre de pilotage industriel surplombant une mine de cuivre au lever du jour",
     approved: true
   },
   {
-    id: "octopus-portfolio",
-    file: "/media/octopus-industrial-real.jpg",
-    title: "Photographie industrielle réelle",
-    source: "external",
-    sourceDetail: "Wikimedia Commons, File:Twincreeksblast.jpg, auteur Geomartin, recadrage et étalonnage appliqués",
-    license: "Creative Commons Attribution-Share Alike 3.0 Unported",
-    alt: "Photographie réelle d'une mine à ciel ouvert avec gradins, pistes et engins industriels",
+    id: "octopus-field-operations",
+    file: "/media/octopus-field-operations-v2.png",
+    title: "Coordination terrain industrielle",
+    source: "generated",
+    sourceDetail: "Image réaliste générée pour représenter une scène terrain de maintenance et coordination",
+    license: "Actif généré approuvé pour cette interface",
+    alt: "Equipe industrielle examinant des documents de maintenance devant des engins miniers",
     approved: true
   }
 ];

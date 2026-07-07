@@ -22,7 +22,7 @@ test("admin login opens private console and logout closes access", async ({ page
   const guards = installRuntimeGuards(page);
   await loginAsAdmin(page);
   await expect(page.getByRole("heading", { name: "Registre partenaires" })).toBeVisible();
-  await expect(page.getByText("Administrateur OCTOPUS")).toBeVisible();
+  await expect(page.getByText("OCTOPUS Mining")).toBeVisible();
   await auditPage(page, testInfo, "console-authenticated", false);
 
   const cookies = await page.context().cookies();
@@ -47,11 +47,11 @@ test("console explains score method and assessment freshness", async ({ page }, 
   const guards = installRuntimeGuards(page);
   await loginAsAdmin(page);
 
-  await expect(page.getByRole("heading", { name: "Méthode du score" })).toBeVisible();
-  await expect(page.getByText(/Score 0-100/)).toBeVisible();
-  await expect(page.getByText(/documents, références, capacité déclarée, couverture de zone/i)).toBeVisible();
-  await expect(page.getByText(/fraîcheur de l'évaluation/i)).toBeVisible();
-  await expect(page.getByRole("columnheader", { name: "Évaluation" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Indice 0-100" })).toBeVisible();
+  await expect(page.getByText(/Le statut porte la décision métier/i)).toBeVisible();
+  await expect(page.getByText(/documents 20, références 20, capacité 20/i)).toBeVisible();
+  await expect(page.getByText(/fraîcheur de l'évaluation 10/i)).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "Indice" })).toBeVisible();
   await expect(page.getByRole("row", { name: /Lualaba Heavy Maintenance/ })).toContainText(/\d{2}\/\d{2}\/\d{4}/);
 
   guards.assertClean();
@@ -68,7 +68,7 @@ test("mobile console exposes decision fields without horizontal table panning", 
   expect(hasHorizontalScroll).toBe(false);
 
   const firstPartner = page.getByRole("row", { name: /Lualaba Heavy Maintenance/ });
-  await expect(firstPartner.locator('td[data-label="Score"]')).toContainText(/%/);
+  await expect(firstPartner.locator('td[data-label="Indice"]')).toContainText(/%/);
   await expect(firstPartner.locator('td[data-label="Évaluation"]')).toContainText(/\d{2}\/\d{2}\/\d{4}/);
   await expect(firstPartner.locator('td[data-label="Actions"] button')).toHaveCount(2);
   await auditLayout(page);
@@ -95,7 +95,7 @@ test("partner registry supports controlled create update delete", async ({ page 
   await createDialog.getByLabel("Email").fill("ops@lubudifield.cd");
   await createDialog.getByLabel("Statut").selectOption("En analyse");
   await createDialog.getByLabel("Risque").selectOption("Modéré");
-  await createDialog.getByLabel("Score").fill("74");
+  await createDialog.getByLabel("Indice").fill("74");
   await createDialog.getByLabel("Effectif").fill("28");
   await createDialog.getByLabel("Capacité annuelle").fill("12 chantiers de maintenance et ouvrages légers");
   await createDialog.getByLabel("Zones couvertes").fill("Lubudi, Kolwezi");
@@ -111,11 +111,16 @@ test("partner registry supports controlled create update delete", async ({ page 
   expect((await createResponse).status()).toBe(201);
   const createdRow = page.getByRole("row", { name: new RegExp(companyName) });
   await expect(createdRow).toBeVisible();
+  await createdRow.click();
+  const detailDialog = page.getByRole("dialog", { name: companyName });
+  await expect(detailDialog).toBeVisible();
+  await expect(detailDialog.getByText("Lubudi, Lualaba")).toBeVisible();
+  await detailDialog.getByRole("button", { name: "Fermer" }).click();
 
   await page.getByRole("button", { name: `Modifier ${companyName}` }).click();
   const editDialog = page.getByRole("dialog", { name: "Modifier le dossier" });
   await expect(editDialog).toBeVisible();
-  await editDialog.getByLabel("Score").fill("82");
+  await editDialog.getByLabel("Indice").fill("82");
   const updateResponse = page.waitForResponse(
     (response) => response.url().includes("/api/partners/") && response.request().method() === "PATCH",
     { timeout: 30_000 }

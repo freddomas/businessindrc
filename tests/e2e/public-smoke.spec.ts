@@ -14,21 +14,29 @@ for (const route of [
   });
 }
 
-test("home WebGL scene renders nonblank canvas", async ({ page }, testInfo) => {
+test("home realistic media render", async ({ page }, testInfo) => {
   const guards = installRuntimeGuards(page);
   await page.goto("/");
-  const canvas = page.locator(".octopus-scene canvas");
-  await expect(canvas).toBeVisible();
-  const box = await canvas.boundingBox();
-  expect(box?.width).toBeGreaterThan(250);
-  expect(box?.height).toBeGreaterThan(250);
-  const pixelSignal = await canvas.evaluate((element) => {
-    const canvasElement = element as HTMLCanvasElement;
-    const context = canvasElement.getContext("webgl2") ?? canvasElement.getContext("webgl");
-    return Boolean(context);
-  });
-  expect(pixelSignal).toBe(true);
-  await attachVisualProof(page, testInfo, "home-webgl");
+
+  async function expectLoadedImage(selector: string) {
+    const image = page.locator(selector).first();
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toBeVisible();
+    await expect
+      .poll(
+        () =>
+          image.evaluate((node) => {
+            const element = node as HTMLImageElement;
+            return element.complete && element.naturalWidth > 0 && element.naturalHeight > 0;
+          }),
+        { timeout: 10_000 }
+      )
+      .toBe(true);
+  }
+
+  await expectLoadedImage('img[src*="octopus-hero-v2"]');
+  await expectLoadedImage('img[src*="octopus-field-operations-v2"]');
+  await attachVisualProof(page, testInfo, "home-realistic-media");
   guards.assertClean();
 });
 
@@ -36,7 +44,7 @@ test("reduced motion keeps public landing usable", async ({ page }, testInfo) =>
   const guards = installRuntimeGuards(page);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "OCTOPUS Mining" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Coordination industrielle du Grand Katanga" })).toBeVisible();
   await auditPage(page, testInfo, "home-reduced-motion", true);
   guards.assertClean();
 });

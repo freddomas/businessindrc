@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -146,6 +146,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
   const [sector, setSector] = useState("");
   const [status, setStatus] = useState("");
   const [draft, setDraft] = useState<Draft | null>(null);
+  const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [ready, setReady] = useState(false);
@@ -157,6 +158,19 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
   const cities = useMemo(
     () => Array.from(new Set(partners.map((partner) => partner.city))).sort((a, b) => a.localeCompare(b)),
     [partners]
+  );
+
+  const statusBreakdown = useMemo(
+    () => statuses.map((item) => ({ name: item, count: partners.filter((partner) => partner.status === item).length })),
+    [partners]
+  );
+
+  const sectorBreakdown = useMemo(
+    () =>
+      sectors
+        .map((item) => ({ name: item, count: partners.filter((partner) => partner.sector === item).length }))
+        .filter((item) => item.count > 0),
+    [partners, sectors]
   );
 
   const filtered = useMemo(() => {
@@ -181,6 +195,17 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
       })
       .sort((a, b) => b.readinessScore - a.readinessScore || a.companyName.localeCompare(b.companyName));
   }, [partners, query, sector, status]);
+
+  function openPartner(partner: Partner) {
+    setSelectedPartner(partner);
+  }
+
+  function openPartnerFromKeyboard(event: KeyboardEvent<HTMLTableRowElement>, partner: Partner) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openPartner(partner);
+    }
+  }
 
   function updateDraft(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const { name, value } = event.currentTarget;
@@ -240,6 +265,9 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
     const nextPartners = partners.filter((partner) => partner.id !== id);
     setPartners(nextPartners);
     refreshStats(nextPartners);
+    if (selectedPartner?.id === id) {
+      setSelectedPartner(null);
+    }
     setSaving(false);
     setMessage("Partenaire retiré du registre.");
   }
@@ -255,11 +283,11 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
             Registre
           </a>
           <a href="#qualification">Qualification</a>
-          <a href="#secteurs">Secteurs</a>
+          <a href="#secteurs">Couverture</a>
         </nav>
         <div className="session-box">
-          <span>{user.name}</span>
-          <small>{user.role}</small>
+          <span>{user.organization}</span>
+          <small>Rôle: {user.role}</small>
           <LogoutButton />
         </div>
       </aside>
@@ -276,52 +304,84 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
           </button>
         </header>
 
-        <section id="qualification" className="console-metrics" aria-label="Indicateurs console">
-          <div>
-            <Activity aria-hidden="true" size={20} />
-            <strong>{stats.total}</strong>
-            <span>Total</span>
+        <section id="qualification" className="qualification-panel" aria-labelledby="qualification-title">
+          <div className="console-section-heading">
+            <p className="eyebrow">Qualification</p>
+            <h2 id="qualification-title">Statut d’abord, indice en appui.</h2>
           </div>
-          <div>
-            <Check aria-hidden="true" size={20} />
-            <strong>{stats.qualified}</strong>
-            <span>Qualifiés</span>
-          </div>
-          <div>
-            <ShieldCheck aria-hidden="true" size={20} />
-            <strong>{stats.averageReadiness}%</strong>
-            <span>Score moyen</span>
-          </div>
-          <div>
-            <Filter aria-hidden="true" size={20} />
-            <strong>{stats.cities}</strong>
-            <span>Villes</span>
-          </div>
-        </section>
 
-        <section className="score-method-panel" aria-labelledby="score-method-title">
-          <div>
-            <p className="eyebrow">Méthode de lecture</p>
-            <h2 id="score-method-title">Méthode du score</h2>
-          </div>
-          <div className="score-method-copy">
-            <p>
-              Score 0-100: indice interne renseigné par l&apos;équipe après revue des documents, références, capacité
-              déclarée, couverture de zone, niveau de risque et fraîcheur de l&apos;évaluation. Il oriente la revue; la
-              décision finale reste une qualification terrain.
-            </p>
-            <div className="score-method-points" aria-label="Critères du score">
-              <span>Documents</span>
-              <span>Références</span>
-              <span>Capacité</span>
-              <span>Couverture</span>
-              <span>Risque</span>
-              <span>Fraîcheur</span>
+          <div className="console-metrics" aria-label="Indicateurs console">
+            <div>
+              <Activity aria-hidden="true" size={20} />
+              <strong>{stats.total}</strong>
+              <span>Total</span>
             </div>
+            <div>
+              <Check aria-hidden="true" size={20} />
+              <strong>{stats.qualified}</strong>
+              <span>Qualifiés</span>
+            </div>
+            <div>
+              <ShieldCheck aria-hidden="true" size={20} />
+              <strong>{stats.averageReadiness}%</strong>
+              <span>Indice moyen</span>
+            </div>
+            <div>
+              <Filter aria-hidden="true" size={20} />
+              <strong>{stats.cities}</strong>
+              <span>Villes</span>
+            </div>
+          </div>
+
+          <div className="qualification-board">
+            <section className="score-method-panel" aria-labelledby="score-method-title">
+              <div>
+                <p className="eyebrow">Méthode de lecture</p>
+                <h2 id="score-method-title">Indice 0-100</h2>
+              </div>
+              <div className="score-method-copy">
+                <p>
+                  Le statut porte la décision métier. L&apos;indice sert à prioriser deux partenaires de statut comparable.
+                  Base utilisée: documents 20, références 20, capacité 20, couverture 15, risque 15, fraîcheur de
+                  l&apos;évaluation 10.
+                </p>
+                <div className="score-method-points" aria-label="Critères de l'indice">
+                  <span>Documents 20</span>
+                  <span>Références 20</span>
+                  <span>Capacité 20</span>
+                  <span>Couverture 15</span>
+                  <span>Risque 15</span>
+                  <span>Fraîcheur 10</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="status-breakdown" aria-labelledby="status-breakdown-title">
+              <div>
+                <p className="eyebrow">Décision</p>
+                <h2 id="status-breakdown-title">Répartition par statut</h2>
+              </div>
+              <div className="status-list">
+                {statusBreakdown.map((item) => (
+                  <span key={item.name}>
+                    <strong>{item.count}</strong>
+                    {item.name}
+                  </span>
+                ))}
+              </div>
+            </section>
           </div>
         </section>
 
         <section id="registre" className="registry-panel">
+          <div className="registry-heading">
+            <div>
+              <p className="eyebrow">Registre</p>
+              <h2>Partenaires contrôlés</h2>
+            </div>
+            <p>Fiches complètes, statut, risque, indice et dernière évaluation dans une seule vue de travail.</p>
+          </div>
+
           <div className="registry-toolbar">
             <label className="search-field">
               <Search aria-hidden="true" size={18} />
@@ -364,14 +424,21 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                   <th>Ville</th>
                   <th>Statut</th>
                   <th>Risque</th>
-                  <th>Score</th>
+                  <th>Indice</th>
                   <th>Évaluation</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((partner) => (
-                  <tr key={partner.id}>
+                  <tr
+                    className="partner-row"
+                    key={partner.id}
+                    tabIndex={0}
+                    aria-label={`Fiche ${partner.companyName}`}
+                    onClick={() => openPartner(partner)}
+                    onKeyDown={(event) => openPartnerFromKeyboard(event, partner)}
+                  >
                     <td data-label="Entreprise">
                       <strong>{partner.companyName}</strong>
                       <span>{partner.contactName}</span>
@@ -384,7 +451,9 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                       </span>
                     </td>
                     <td data-label="Risque">{partner.riskLevel}</td>
-                    <td data-label="Score">{partner.readinessScore}%</td>
+                    <td data-label="Indice">
+                      <span className="score-chip">{partner.readinessScore}%</span>
+                    </td>
                     <td data-label="Évaluation">
                       <time dateTime={partner.lastAssessment}>{formatAssessmentDate(partner.lastAssessment)}</time>
                     </td>
@@ -394,7 +463,12 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                           type="button"
                           aria-label={`Modifier ${partner.companyName}`}
                           disabled={!ready}
-                          onClick={() => setDraft(toDraft(partner))}
+                          onKeyDown={(event) => event.stopPropagation()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setSelectedPartner(null);
+                            setDraft(toDraft(partner));
+                          }}
                         >
                           <Edit3 aria-hidden="true" size={16} />
                         </button>
@@ -402,7 +476,11 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                           type="button"
                           aria-label={`Supprimer ${partner.companyName}`}
                           disabled={!ready}
-                          onClick={() => removePartner(partner.id)}
+                          onKeyDown={(event) => event.stopPropagation()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            removePartner(partner.id);
+                          }}
                         >
                           <Trash2 aria-hidden="true" size={16} />
                         </button>
@@ -414,13 +492,150 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
             </table>
           </div>
 
-          <div id="secteurs" className="sector-summary">
-            {cities.map((city) => (
-              <span key={city}>{city}</span>
-            ))}
-          </div>
+          <section id="secteurs" className="sector-panel" aria-labelledby="sector-panel-title">
+            <div className="console-section-heading compact">
+              <p className="eyebrow">Couverture</p>
+              <h2 id="sector-panel-title">Secteurs et villes du registre</h2>
+            </div>
+            <div className="sector-summary" aria-label="Répartition par secteur">
+              {sectorBreakdown.map((item) => (
+                <span key={item.name}>
+                  <strong>{item.count}</strong>
+                  {item.name}
+                </span>
+              ))}
+            </div>
+            <div className="city-summary" aria-label="Villes couvertes">
+              {cities.map((city) => (
+                <span key={city}>{city}</span>
+              ))}
+            </div>
+          </section>
         </section>
       </section>
+
+      {selectedPartner ? (
+        <div className="modal-backdrop" role="presentation">
+          <section className="partner-modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="partner-detail-title">
+            <div className="modal-heading">
+              <div>
+                <p className="eyebrow">Fiche partenaire</p>
+                <h2 id="partner-detail-title">{selectedPartner.companyName}</h2>
+              </div>
+              <button className="icon-button" type="button" aria-label="Fermer" onClick={() => setSelectedPartner(null)}>
+                <X aria-hidden="true" size={18} />
+              </button>
+            </div>
+
+            <div className="partner-detail-body">
+              <div className="partner-detail-grid">
+                <article>
+                  <span>Statut</span>
+                  <strong>{selectedPartner.status}</strong>
+                </article>
+                <article>
+                  <span>Risque</span>
+                  <strong>{selectedPartner.riskLevel}</strong>
+                </article>
+                <article>
+                  <span>Indice</span>
+                  <strong>{selectedPartner.readinessScore}%</strong>
+                </article>
+                <article>
+                  <span>Évaluation</span>
+                  <strong>{formatAssessmentDate(selectedPartner.lastAssessment)}</strong>
+                </article>
+              </div>
+
+              <div className="detail-columns">
+                <section>
+                  <h3>Contact</h3>
+                  <dl className="detail-list">
+                    <div>
+                      <dt>Responsable</dt>
+                      <dd>{selectedPartner.contactName}</dd>
+                    </div>
+                    <div>
+                      <dt>Fonction</dt>
+                      <dd>{selectedPartner.contactTitle}</dd>
+                    </div>
+                    <div>
+                      <dt>Téléphone</dt>
+                      <dd>{selectedPartner.phone}</dd>
+                    </div>
+                    <div>
+                      <dt>Email</dt>
+                      <dd>{selectedPartner.email}</dd>
+                    </div>
+                  </dl>
+                </section>
+
+                <section>
+                  <h3>Capacité</h3>
+                  <dl className="detail-list">
+                    <div>
+                      <dt>Secteur</dt>
+                      <dd>{selectedPartner.sector}</dd>
+                    </div>
+                    <div>
+                      <dt>Ville</dt>
+                      <dd>
+                        {selectedPartner.city}, {selectedPartner.province}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Effectif</dt>
+                      <dd>{selectedPartner.workforce}</dd>
+                    </div>
+                    <div>
+                      <dt>Capacité annuelle</dt>
+                      <dd>{selectedPartner.annualCapacity}</dd>
+                    </div>
+                  </dl>
+                </section>
+              </div>
+
+              <section className="detail-block">
+                <h3>Zones, services et certifications</h3>
+                <div className="detail-tags">
+                  {selectedPartner.zoneCoverage.map((item) => (
+                    <span key={`zone-${item}`}>{item}</span>
+                  ))}
+                  {selectedPartner.services.map((item) => (
+                    <span key={`service-${item}`}>{item}</span>
+                  ))}
+                  {selectedPartner.certifications.map((item) => (
+                    <span key={`certification-${item}`}>{item}</span>
+                  ))}
+                </div>
+              </section>
+
+              <section className="detail-block">
+                <h3>Notes d&apos;évaluation</h3>
+                <p>{selectedPartner.notes}</p>
+              </section>
+
+              <div className="detail-actions">
+                <button className="secondary-action" type="button" onClick={() => setSelectedPartner(null)}>
+                  Fermer
+                </button>
+                <button
+                  className="primary-action"
+                  type="button"
+                  disabled={!ready}
+                  onClick={() => {
+                    setDraft(toDraft(selectedPartner));
+                    setSelectedPartner(null);
+                  }}
+                >
+                  <Edit3 aria-hidden="true" size={18} />
+                  Modifier la fiche
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      ) : null}
 
       {draft ? (
         <div className="modal-backdrop" role="presentation">
@@ -497,7 +712,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                 </select>
               </label>
               <label>
-                Score
+                Indice
                 <input
                   name="readinessScore"
                   type="number"

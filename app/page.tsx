@@ -14,20 +14,19 @@ import {
   Sprout,
   Wrench
 } from "lucide-react";
-import { OctopusScene } from "../components/OctopusScene";
 import { TrustMarquee, type TrustedCompany } from "../components/TrustMarquee";
 
 const trustedCompanies: TrustedCompany[] = [
-  { mark: "LHM", name: "Lualaba Heavy Maintenance", sector: "Engins lourds" },
-  { mark: "KBE", name: "Katanga Build EPC", sector: "Construction industrielle" },
-  { mark: "CKS", name: "Cyber Katanga SecOps", sector: "IT & cybersécurité" },
-  { mark: "CMR", name: "Copperbelt Medical Response", sector: "Support médical" },
-  { mark: "LFI", name: "Lualaba Food Industries", sector: "Agro-alimentaire" },
-  { mark: "TSW", name: "Tenke Structural Works", sector: "Charpente métallique" },
-  { mark: "KLA", name: "Katanga Legal Advisory", sector: "Droit minier" },
-  { mark: "TFW", name: "Tshamilemba Fiberworks", sector: "Télécommunications" },
-  { mark: "HKA", name: "Haut-Katanga Agri Services", sector: "Agriculture" },
-  { mark: "LDS", name: "Lubumbashi Datacenter Services", sector: "Continuité numérique" }
+  { name: "Lualaba Heavy Maintenance", sector: "Engins lourds", location: "Kolwezi" },
+  { name: "Katanga Build EPC", sector: "Construction industrielle", location: "Kolwezi" },
+  { name: "Cyber Katanga SecOps", sector: "IT & cybersécurité", location: "Lubumbashi" },
+  { name: "Copperbelt Medical Response", sector: "Support médical", location: "Likasi" },
+  { name: "Lualaba Food Industries", sector: "Agro-alimentaire", location: "Kolwezi" },
+  { name: "Tenke Structural Works", sector: "Charpente métallique", location: "Fungurume" },
+  { name: "Katanga Legal Advisory", sector: "Droit minier", location: "Lubumbashi" },
+  { name: "Tshamilemba Fiberworks", sector: "Télécommunications", location: "Lubumbashi" },
+  { name: "Haut-Katanga Agri Services", sector: "Agriculture", location: "Likasi" },
+  { name: "Lubumbashi Datacenter Services", sector: "Continuité numérique", location: "Lubumbashi" }
 ];
 
 const sectorGroups = [
@@ -102,46 +101,43 @@ export default function HomePage() {
           <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={230} height={72} priority unoptimized />
         </a>
         <nav className="header-links" aria-label="Sections">
-          <a href="#octopus">OCTOPUS Mining</a>
+          <a href="#octopus">Rôle</a>
+          <a href="#portefeuille">Opérations</a>
           <a href="#secteurs">Secteurs</a>
-          <a href="#confiance">Confiance</a>
           <a href="#gouvernance">Gouvernance</a>
         </nav>
         <a className="header-access" href="/connexion">
           <LockKeyhole aria-hidden="true" size={17} />
-          Console privée
+          Espace privé
         </a>
       </header>
 
       <section id="top" className="hero-section" aria-labelledby="hero-title">
         <Image
           className="hero-image"
-          src="/media/octopus-hero.png"
-          alt="Salle de pilotage industrielle surplombant un site minier au lever du jour"
+          src="/media/octopus-hero-v2.png"
+          alt="Centre de pilotage industriel surplombant une mine de cuivre au lever du jour"
           fill
           priority
           sizes="100vw"
         />
         <div className="hero-shade" />
         <div className="hero-copy">
-          <p className="eyebrow">Lualaba · Haut-Katanga · Coordination multisectorielle</p>
-          <h1 id="hero-title">OCTOPUS Mining</h1>
+          <p className="eyebrow">OCTOPUS Mining · Lualaba · Haut-Katanga</p>
+          <h1 id="hero-title">Coordination industrielle du Grand Katanga</h1>
           <p className="hero-lede">
-            Un opérateur de coordination qui transforme une demande industrielle complexe en réseau local qualifié,
-            mobilisable et gouverné.
+            Qualification, assemblage et mobilisation de sociétés locales pour les demandes minières, logistiques,
+            techniques et institutionnelles qui ne tolèrent pas l’improvisation.
           </p>
           <div className="hero-actions">
-            <a className="primary-action" href="#octopus">
-              Comprendre le rôle
+            <a className="primary-action" href="#modele">
+              Voir le modèle opéré
               <ArrowRight aria-hidden="true" size={18} />
             </a>
-            <a className="secondary-action" href="/connexion">
-              Accès contrôlé
+            <a className="secondary-action" href="#secteurs">
+              Parcourir les secteurs
             </a>
           </div>
-        </div>
-        <div className="hero-scene-panel" aria-hidden="true">
-          <OctopusScene />
         </div>
       </section>
 
@@ -176,11 +172,11 @@ export default function HomePage() {
 
       <section id="confiance" className="trust-section" aria-labelledby="trust-title">
         <div className="section-copy centered">
-          <p className="eyebrow">Ils nous ont fait confiance</p>
-          <h2 id="trust-title">Un réseau de sociétés locales mobilisées autour des besoins industriels.</h2>
+          <p className="eyebrow">Réseau qualifié</p>
+          <h2 id="trust-title">Des sociétés lisibles par métier, ville et niveau de mobilisation.</h2>
           <p>
-            La valeur du réseau vient de la diversité des compétences: maintenance, construction, conformité, santé,
-            numérique, logistique et approvisionnement de site.
+            Chaque entrée expose le nom complet, le domaine et la zone utile pour accélérer la lecture opérationnelle
+            avant qualification détaillée.
           </p>
         </div>
         <TrustMarquee companies={trustedCompanies} />
@@ -204,13 +200,13 @@ export default function HomePage() {
         </div>
         <figure className="portfolio-image-wrap real-asset">
           <Image
-            src="/media/octopus-industrial-real.jpg"
-            alt="Photographie réelle d’une mine à ciel ouvert avec gradins, pistes et engins industriels"
+            src="/media/octopus-field-operations-v2.png"
+            alt="Equipe industrielle examinant des documents de maintenance devant des engins miniers"
             width={1440}
             height={810}
             sizes="(max-width: 900px) 100vw, 54vw"
           />
-          <figcaption>Photo: Geomartin, Wikimedia Commons, CC BY-SA 3.0. Recadrage et étalonnage appliqués.</figcaption>
+          <figcaption>Image générée et contrôlée pour représenter une scène terrain de maintenance et coordination.</figcaption>
         </figure>
       </section>
 
@@ -278,7 +274,7 @@ export default function HomePage() {
           <div>
             <ShieldCheck aria-hidden="true" size={24} />
             <h3>Qualification</h3>
-            <p>Statuts, risques, scores et pièces de contrôle réunis dans une même lecture opérationnelle.</p>
+            <p>Statuts, risques, indices contextualisés et pièces de contrôle réunis dans une même lecture opérationnelle.</p>
           </div>
           <div>
             <Network aria-hidden="true" size={24} />
@@ -299,16 +295,7 @@ export default function HomePage() {
       </section>
 
       <footer className="site-footer">
-        <div className="footer-brand">
-          <Image
-            className="footer-logo"
-            src="/media/octopus-logo.png"
-            alt="Logo OCTOPUS Mining"
-            width={156}
-            height={48}
-            unoptimized
-          />
-        </div>
+        <strong>OCTOPUS Mining</strong>
         <span>Lualaba · Haut-Katanga · Coordination multisectorielle</span>
       </footer>
     </main>
