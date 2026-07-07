@@ -1,105 +1,52 @@
 # Implementation Plan
 
-## Batch 1: Product and IA
+## Batch 1 - Reconnaissance
+Goal: confirmer contraintes projet, skill PM/UX/UI, fichiers et tests.
 
-Goal: Reframe the public route around industrial sourcing and controlled RFQ flow.
+Affected files: no edits.
 
-Affected files/screens:
+Validation method: lecture `PMSkill.md`, `AGENTS.md`, `qa/QA_RULES.md`, source app.
 
-- `app/page.tsx`
-- `lib/product-content.ts`
-- `app/globals.css`
+Status: completed.
 
-Expected user impact:
+## Batch 2 - Public IA And Hero
+Goal: supprimer impression de page vide et clarifier promesse RFQ.
 
-- Clearer first-viewport promise.
-- Stronger path from public page to controlled private workflow.
+Affected files: `app/page.tsx`, `app/globals.css`.
 
-Validation method:
+Expected user impact: compréhension immédiate, images visibles, CTA clair.
 
-- Public copy check.
-- Playwright public smoke tests.
-- Visual QA at mobile/tablet/desktop widths.
+Validation method: public smoke Playwright.
 
-## Batch 2: Console sourcing workflow
+Status: completed.
 
-Goal: Add RFQ/opportunity lanes and connect them to partner shortlist filtering.
+## Batch 3 - Media Enrichment
+Goal: enrichir le parcours public sans média externe non déclaré.
 
-Affected files/screens:
+Affected files: `public/media/octopus-rfq-operations-v1.png`, `lib/seed-data.ts`, `app/page.tsx`.
 
-- `components/AdminConsole.tsx`
-- `lib/console-model.ts`
-- `app/globals.css`
-- `tests/e2e/auth-console.spec.ts`
+Expected user impact: meilleur signal opérationnel RFQ.
 
-Expected user impact:
+Validation method: `npm run test:media`, Playwright media render.
 
-- Operators can see active sourcing priorities before browsing raw records.
-- Partner registry becomes a decision tool, not only a data table.
+Status: completed.
 
-Validation method:
+## Batch 4 - Console Visual Stabilization
+Goal: corriger sidebar, cartes RFQ, recherche, table mobile, états.
 
-- E2E login and console tests.
-- New RFQ lane interaction assertion.
+Affected files: `app/globals.css`.
 
-## Batch 3: UI states and destructive action safety
+Expected user impact: console plus lisible, moins cassée, meilleure interaction mobile.
 
-Goal: Add empty state, robust error handling and delete confirmation.
+Validation method: auth-console Playwright.
 
-Affected files/screens:
+Status: completed.
 
-- `components/AdminConsole.tsx`
-- `app/globals.css`
-- `tests/e2e/auth-console.spec.ts`
+## Batch 5 - Documentation And Validation
+Goal: enregistrer audit, décisions, critères, preuves.
 
-Expected user impact:
+Affected files: product artifacts and validation report.
 
-- Fewer dead ends and accidental destructive actions.
+Validation method: final command matrix.
 
-Validation method:
-
-- Playwright CRUD flow.
-- Keyboard and layout audits.
-
-## Batch 4: Cleanup
-
-Goal: Remove dead 3D code and unused dependency; reduce component bloat by extracting content/model.
-
-Affected files/screens:
-
-- `components/OctopusScene.tsx`
-- `package.json`
-- `package-lock.json`
-- `app/globals.css`
-
-Expected user impact:
-
-- No visible feature loss.
-- Cleaner production surface.
-
-Validation method:
-
-- `rg` reference check.
-- `npm run lint`
-- `npm run typecheck`
-- `npm run build`
-
-## Batch 5: Deployment validation
-
-Goal: Push validated code and verify live Vercel app.
-
-Affected systems:
-
-- Git remote.
-- `https://businessindrc.vercel.app/`
-- `https://businessindrc.vercel.app/api/health`
-
-Expected user impact:
-
-- Confirmed public deployment state after push.
-
-Validation method:
-
-- Git push result.
-- HTTP checks on live routes.
-- Playwright against `PLAYWRIGHT_BASE_URL` if deployment responds.
+Status: completed.

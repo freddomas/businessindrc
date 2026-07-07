@@ -1,204 +1,77 @@
 # Flow Map
 
-## Flow 1: Public comprehension to controlled access
-
+## Flow 1 - Public RFQ Comprehension
 Entry point: `/`
 
-User goal: understand whether OCTOPUS Mining can structure industrial sourcing and know the next controlled step.
+User goal: comprendre rapidement ce qu'OCTOPUS Mining fait.
 
-Current steps:
-
-1. Read hero.
-2. Scroll role, network, operations, sectors, model and governance.
-3. Click private access.
-
-Friction points:
-
-- RFQ/sourcing job is not named early enough.
-- CTAs lead to reading sections rather than the controlled operating flow.
-
-Dead ends:
-
-- Public page does not explain what happens after a need is framed.
-
-Missing feedback:
-
-- No visible bridge between public promise and private console workflow.
+Previous friction: hero trop massif, image invisible, faux cadres, CTA noyé.
 
 Target flow:
+1. Lire promesse RFQ dans le hero.
+2. Voir une image industrielle réelle.
+3. Accéder au flux RFQ ou à la console.
+4. Lire les étapes de cadrage, shortlist, vérification, mobilisation.
 
-1. First viewport states the operated sourcing promise.
-2. Primary CTA jumps to RFQ workflow explanation.
-3. Secondary CTA opens private console login.
-4. Public user understands that V1 is controlled and private.
+Completion criteria: le job principal est visible dans la première vue et les ancres fonctionnent.
 
-Affected screens/components:
+## Flow 2 - Capability And Trust Scan
+Entry point: navigation publique vers `#capacites`, `#qualification`, `#gouvernance`.
 
-- `app/page.tsx`
-- `app/globals.css`
-- `lib/product-content.ts`
+User goal: vérifier que la plateforme couvre secteurs, corridors, qualification et contrôle privé.
 
-Completion criteria:
+Previous friction: sections répétitives, faible image, faible différenciation.
 
-- Primary job and main CTA visible in first viewport.
-- Public copy still passes forbidden-word checks.
+Target flow:
+1. Parcourir registre qualifié.
+2. Voir terrain et opérations avec image.
+3. Voir intelligence RFQ avec image dédiée.
+4. Lire capacités par secteur.
+5. Comprendre gouvernance privée.
 
-## Flow 2: Login to console
+Completion criteria: pas de section vide, pas de lien inutile, chaque bloc a une fonction.
 
+## Flow 3 - Private Login
 Entry point: `/connexion`
 
-User goal: authenticate and reach the private operating console.
+User goal: accéder à la console contrôlée.
 
-Current steps:
-
-1. Enter identifier and password.
-2. Submit.
-3. Redirect to `/console`.
-
-Friction points:
-
-- Login is functional; minimal issue.
-
-Dead ends:
-
-- Failed login shows an error.
-
-Missing feedback:
-
-- Submit state exists but can be visually stronger.
+Previous friction: page correcte mais visuellement isolée du reste.
 
 Target flow:
+1. Reconnaitre l'espace OCTOPUS.
+2. Comprendre que l'accès est privé.
+3. Utiliser le formulaire sans confusion.
 
-1. Controlled access framing remains clear.
-2. Submit disabled during verification.
-3. Error remains visible and accessible.
+Completion criteria: login rendu, état submit désactivé, erreurs visibles.
 
-Affected screens/components:
+## Flow 4 - RFQ Console Shortlist
+Entry point: `/console#flux-rfq`
 
-- `app/connexion/page.tsx`
-- `components/LoginForm.tsx`
+User goal: choisir une priorité RFQ et voir la shortlist pertinente.
 
-Completion criteria:
-
-- Existing auth e2e still passes.
-
-## Flow 3: Console RFQ lane to partner shortlist
-
-Entry point: `/console`
-
-User goal: identify which active industrial need should be handled and which partner pool can support it.
-
-Current steps:
-
-1. Console opens on metrics and registry.
-2. Operator filters/searches partners manually.
-
-Friction points:
-
-- No active need/RFQ lane.
-- No matched partner count or next action.
-
-Dead ends:
-
-- Operator must infer sourcing relevance from raw table.
-
-Missing feedback:
-
-- No visible "ready", "needs review" or "risk" state per opportunity.
+Previous friction: cartes RFQ visibles mais hiérarchie et feedback faibles.
 
 Target flow:
+1. Lire les cartes par urgence, corridor, besoin, nombre mobilisable.
+2. Cliquer une carte.
+3. Voir le registre filtré.
+4. Réinitialiser si le résultat est vide ou trop restreint.
 
-1. Console opens with a sourcing board before registry.
-2. Each lane shows sector need, corridor, urgency, matched partner count and next action.
-3. Clicking a lane applies registry filters.
+Completion criteria: RFQ lanes pilotent bien le registre et l'état vide permet la récupération.
 
-Affected screens/components:
-
-- `components/AdminConsole.tsx`
-- `lib/console-model.ts`
-- `app/globals.css`
-- `tests/e2e/auth-console.spec.ts`
-
-Completion criteria:
-
-- RFQ board visible after login.
-- Clicking a lane updates the registry toward a relevant shortlist.
-
-## Flow 4: Registry filtering
-
+## Flow 5 - Registry Qualification
 Entry point: `/console#registre`
 
-User goal: find partner records by sector, status or text.
+User goal: chercher, filtrer, ouvrir, modifier ou retirer un partenaire.
 
-Current steps:
-
-1. Search or select filters.
-2. Review table.
-
-Friction points:
-
-- Empty results do not explain what happened or how to recover.
-
-Dead ends:
-
-- User can stare at an empty table without next action.
-
-Missing feedback:
-
-- No clear "no result" state.
+Previous friction: recherche mal cadrée, table mobile trop large.
 
 Target flow:
+1. Rechercher par partenaire, ville, secteur, contact ou services.
+2. Filtrer par secteur/statut.
+3. Lire statut, risque, indice, évaluation et actions sans scroll horizontal mobile.
+4. Ouvrir une fiche ou modifier.
+5. Confirmer explicitement le retrait.
 
-1. Filters show result count.
-2. Empty result explains no match and offers a clear reset action.
-
-Affected screens/components:
-
-- `components/AdminConsole.tsx`
-- `app/globals.css`
-- `tests/e2e/auth-console.spec.ts`
-
-Completion criteria:
-
-- Empty state appears and reset button restores rows.
-
-## Flow 5: Partner mutation
-
-Entry point: registry row actions.
-
-User goal: create, edit or remove a partner record without accidental destructive action.
-
-Current steps:
-
-1. Add/edit modal.
-2. Save.
-3. Delete directly from row.
-
-Friction points:
-
-- Delete is immediate.
-- Network failures need more robust handling.
-
-Dead ends:
-
-- Failed save/delete can leave ambiguous state.
-
-Missing feedback:
-
-- Explicit delete confirmation.
-- Error message with recovery path.
-
-Target flow:
-
-1. Save/delete actions expose saving state.
-2. Delete requires confirmation.
-3. API/network failure returns operator to a usable state.
-
-Affected screens/components:
-
-- `components/AdminConsole.tsx`
-- `tests/e2e/auth-console.spec.ts`
-
-Completion criteria:
-
-- Create/edit/delete e2e still passes with updated confirmation.
+Completion criteria: Playwright mobile confirme absence de scroll horizontal dans `.partners-table-wrap`.

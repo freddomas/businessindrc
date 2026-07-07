@@ -1,43 +1,34 @@
 # Acceptance Criteria
 
-## Product and flow
+## Public UX
+- [x] Hero RFQ lisible dans la première vue.
+- [x] Image hero visible, cadrée et non masquée par des faux panneaux.
+- [x] Les liens `Flux RFQ`, `Capacités`, `Qualification`, `Gouvernance` ciblent des sections existantes.
+- [x] Au moins trois actifs médias locaux approuvés sont disponibles.
+- [x] Aucun mot public interdit par `AGENTS.md` dans la copie visible.
 
-- Public first viewport states the operated industrial sourcing promise.
-- Public primary CTA leads to RFQ/sourcing workflow explanation.
-- Private console shows a sourcing/RFQ board before or adjacent to the registry.
-- Each RFQ/opportunity lane shows target need, corridor, urgency, matched partners and next action.
-- Clicking a lane filters the registry to a relevant shortlist.
-- Registry filtering has an explicit empty state and reset action.
-- Partner delete requires explicit confirmation.
+## Console UX
+- [x] Sidebar privée stabilisée.
+- [x] Cartes RFQ avec urgence, corridor, besoin, nombre de partenaires et prochaine action.
+- [x] Recherche sans chevauchement label/icône/champ.
+- [x] Etat vide du registre avec action de récupération.
+- [x] Table partenaire lisible sans scroll horizontal mobile.
 
-## UI states
-
-- Login submit has disabled/submitting state.
-- Create/edit partner save has disabled/saving state.
-- Save/delete failures show an actionable error and leave the UI usable.
-- Empty registry filter state is keyboard-accessible.
-- Delete confirmation can be cancelled.
-
-## Responsive and accessibility
-
-- No obvious overlap, clipping or document-level horizontal overflow at 360, 390, 768, 1366 and 1440 widths.
-- Primary actions have stable dimensions and readable labels.
-- Keyboard focus remains visible on interactive controls.
-- Axe checks pass on critical routes.
+## Responsive And Accessibility
+- [x] Playwright public smoke sur 360, 390, tablette, laptop, desktop, wide.
+- [x] Axe checks passés via `auditPage`.
+- [x] Focus/hover visibles sur liens et boutons critiques.
+- [x] Réduction de mouvement validée.
 
 ## Governance
+- [x] Pas de changement auth.
+- [x] Pas de changement DB/API.
+- [x] Pas de secret exposé.
+- [x] Nouvel actif média déclaré et approuvé.
 
-- Public UI does not display forbidden internal words from `AGENTS.md`.
-- No secrets, database URLs or local passwords are exposed in public UI or reports.
-- V1 flags remain closed unless explicitly changed.
-- Local shared credentials remain available for controlled tests only.
-
-## Technical
-
-- `npm run lint` passes.
-- `npm run typecheck` passes.
-- `npm run test` passes.
-- `npm run build` passes.
-- `npm run test:e2e` passes locally.
-- `/api/health` is used for database/runtime verification.
-- Public deployment validates after push at `https://businessindrc.vercel.app/`.
+## Technical Validation
+- [x] `npm run lint`
+- [x] `npm run typecheck`
+- [x] `npm run test`
+- [x] `npm run build`
+- [x] `npm run test:e2e` hors sandbox, sortie 0

@@ -1,109 +1,67 @@
 # Design Decisions
 
-## Decision 1: Position the product as an operated sourcing command center
+## Decision 1 - Replace Empty Hero Frames With Real Operational Image
+Rationale: les faux cadres faisaient croire à des images manquantes.
 
-Rationale: The repository scope is sourcing B2B industrial, suppliers, RFQ, opportunities, verification and console. A corporate brochure alone does not satisfy that scope.
+User impact: compréhension plus rapide, page perçue comme complète.
 
-User impact: Public users understand the controlled process; operators see the work surface as sourcing-oriented.
+Affected files: `app/page.tsx`, `app/globals.css`.
 
-Business impact: Better alignment between the platform promise and the console workflow.
+Rejected alternative: conserver les cadres et seulement modifier les bordures.
 
-Affected screens/files: `/`, `/console`, `app/page.tsx`, `components/AdminConsole.tsx`.
+Confidence: high. Reversibility: easy.
 
-Rejected alternative: Keep the home page as mostly brand/profile content and only polish visuals.
+## Decision 2 - Keep Public IA Anchored On RFQ
+Rationale: le produit V1 est sourcing B2B industriel, pas une vitrine générique.
 
-Confidence: High.
+User impact: le premier parcours explique le travail réel: cadrer, vérifier, mobiliser.
 
-Assumption: The V1 process is operated by OCTOPUS Mining, not self-serve.
+Affected files: `app/page.tsx`.
 
-Reversibility: Moderate.
+Rejected alternative: multiplier les sections marketing.
 
-## Decision 2: Add RFQ/opportunity lanes without opening public submissions
+Confidence: high. Reversibility: easy.
 
-Rationale: RFQ/opportunities are in scope, but V1 flags and instructions keep public APIs and external flows closed.
+## Decision 3 - Add One Local Approved Visual Asset
+Rationale: les actifs existants étaient bons mais insuffisants pour une page riche.
 
-User impact: Operators can connect partner data to active needs without exposing public mutation.
+User impact: la section RFQ gagne une preuve visuelle claire.
 
-Business impact: Makes the console more valuable while respecting current governance.
+Affected files: `public/media/octopus-rfq-operations-v1.png`, `lib/seed-data.ts`, `app/page.tsx`.
 
-Affected screens/files: `components/AdminConsole.tsx`, `lib/console-model.ts`, tests.
+Rejected alternative: utiliser une image externe non déclarée.
 
-Rejected alternative: Add a public RFQ form. That would overstep V1 controls and require data model/security decisions.
+Confidence: high. Reversibility: easy.
 
-Confidence: High.
+## Decision 4 - Use Final CSS Remediation Layer
+Rationale: le CSS historique contient plusieurs directions empilées; un refactor total aurait augmenté le risque.
 
-Assumption: Static operational briefs are acceptable for V1 training data and UI validation.
+User impact: défauts visibles corrigés rapidement et testés.
 
-Reversibility: Easy.
+Affected files: `app/globals.css`.
 
-## Decision 3: Require confirmation before deleting a partner
+Rejected alternative: refactor CSS complet dans ce cycle.
 
-Rationale: A partner registry is operational data; immediate delete is a production-risk behavior.
+Confidence: medium. Reversibility: moderate.
 
-User impact: Prevents accidental destructive action.
+## Decision 5 - Restore Mobile Table As No-Panning Layout
+Rationale: les champs de décision ne doivent pas être cachés derrière un scroll horizontal sur mobile.
 
-Business impact: Reduces operational risk.
+User impact: statut, risque, indice, évaluation et actions restent accessibles.
 
-Affected screens/files: `components/AdminConsole.tsx`, e2e tests.
+Affected files: `app/globals.css`.
 
-Rejected alternative: Keep single-click delete for speed.
+Rejected alternative: accepter le scroll horizontal comme compromis.
 
-Confidence: High.
+Confidence: high. Reversibility: easy.
 
-Assumption: Slight extra click is acceptable for destructive action.
+## Decision 6 - Keep Auth And API Semantics Unchanged
+Rationale: la demande est UX/UI uniquement.
 
-Reversibility: Easy.
+User impact: aucun risque de régression sécurité ou données.
 
-## Decision 4: Extract product content and console model out of large components
+Affected files: no backend files.
 
-Rationale: Large page/component files make product changes harder to review and validate.
+Rejected alternative: modifier healthcheck ou API pour faire passer des tests.
 
-User impact: Indirect; safer iteration and fewer regressions.
-
-Business impact: Better maintainability before production hardening.
-
-Affected screens/files: `app/page.tsx`, `lib/product-content.ts`, `lib/console-model.ts`.
-
-Rejected alternative: Keep all arrays and logic inline.
-
-Confidence: High.
-
-Assumption: No runtime performance penalty matters here.
-
-Reversibility: Easy.
-
-## Decision 5: Remove unused 3D scene and dependency
-
-Rationale: Dead code and unused dependencies increase bundle, audit and maintenance burden.
-
-User impact: No visible loss because the component is not rendered.
-
-Business impact: Cleaner production surface.
-
-Affected screens/files: `components/OctopusScene.tsx`, `package.json`, `package-lock.json`, CSS.
-
-Rejected alternative: Keep unused code for possible future use.
-
-Confidence: Medium until validation confirms no references remain.
-
-Assumption: No planned route imports `OctopusScene`.
-
-Reversibility: Easy through git history.
-
-## Decision 6: Move the visual system away from dark-heavy presentation
-
-Rationale: The prior redesign direction requested a platform out of a dark-heavy look, and the current public page is still dominated by dark surfaces.
-
-User impact: More professional, inspectable, operational feel.
-
-Business impact: Better trust for B2B procurement and industrial stakeholders.
-
-Affected screens/files: `app/globals.css`, `/`, `/connexion`, `/console`.
-
-Rejected alternative: Keep the dark cinematic style and only adjust spacing.
-
-Confidence: Medium.
-
-Assumption: Premium industrial does not need a dark-dominant palette.
-
-Reversibility: Moderate.
+Confidence: high. Reversibility: not applicable.

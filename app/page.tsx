@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowRight, LockKeyhole } from "lucide-react";
+import { ArrowRight, CheckCircle2, LockKeyhole, MapPinned, ShieldCheck } from "lucide-react";
 import { TrustMarquee } from "../components/TrustMarquee";
 import {
   assurancePoints,
@@ -9,6 +9,8 @@ import {
   sourcingStages,
   trustedCompanies
 } from "../lib/product-content";
+
+const corridorSignals = ["Kolwezi", "Fungurume", "Likasi", "Lubumbashi", "Kasumbalesa"];
 
 export default function HomePage() {
   return (
@@ -39,37 +41,49 @@ export default function HomePage() {
           sizes="100vw"
         />
         <div className="hero-shade" />
-        <div className="hero-copy">
-          <p className="eyebrow">Sourcing B2B industriel · Grand Katanga</p>
-          <h1 id="hero-title">Qualifier un besoin industriel. Mobiliser le bon partenaire local.</h1>
-          <p className="hero-lede">
-            OCTOPUS Mining structure les demandes critiques en flux RFQ contrôlés: cadrage du besoin, vérification
-            partenaire, shortlist opérationnelle et pilotage privé des décisions sensibles.
-          </p>
-          <div className="hero-actions">
-            <a className="primary-action" href="#rfq">
-              Cadrer un flux RFQ
-              <ArrowRight aria-hidden="true" size={18} />
-            </a>
-            <a className="secondary-action" href="/connexion">
-              Ouvrir la console
-            </a>
+        <div className="hero-layout">
+          <div className="hero-copy">
+            <p className="eyebrow">Sourcing B2B industriel - Grand Katanga</p>
+            <h1 id="hero-title">Qualifier un besoin industriel. Mobiliser le bon partenaire local.</h1>
+            <p className="hero-lede">
+              OCTOPUS Mining transforme une demande critique en flux RFQ contrôlé: cadrage du besoin, lecture
+              des risques, vérification partenaire, shortlist opérationnelle et suivi privé des décisions sensibles.
+            </p>
+            <div className="hero-actions">
+              <a className="primary-action" href="#rfq">
+                Cadrer un flux RFQ
+                <ArrowRight aria-hidden="true" size={18} />
+              </a>
+              <a className="secondary-action" href="/connexion">
+                Ouvrir la console
+              </a>
+            </div>
           </div>
-          <div className="hero-proof-strip" aria-label="Points de contrôle V1">
-            <span>RFQ cadré</span>
-            <span>Partenaires vérifiés</span>
-            <span>Décision privée</span>
-          </div>
+
+          <aside className="hero-ops" aria-label="Synthèse opérationnelle">
+            <div>
+              <span>Lecture terrain</span>
+              <strong>5 corridors actifs</strong>
+            </div>
+            <div>
+              <span>Qualification</span>
+              <strong>Statut, risque, capacité</strong>
+            </div>
+            <div>
+              <span>Decision</span>
+              <strong>Shortlist suivie en console</strong>
+            </div>
+          </aside>
         </div>
       </section>
 
-      <section id="rfq" className="workflow-section" aria-labelledby="workflow-title">
+      <section id="rfq" className="workflow-section" aria-labelledby="rfq-title">
         <div className="section-copy centered">
-          <p className="eyebrow">Flux RFQ opéré</p>
-          <h2 id="workflow-title">Le produit commence par le besoin, pas par une liste brute de fournisseurs.</h2>
+          <p className="eyebrow">Flux RFQ contrôlé</p>
+          <h2 id="rfq-title">Du besoin industriel au partenaire mobilisable, sans lecture dispersée.</h2>
           <p>
-            Chaque demande industrielle est lue comme une chaîne de contraintes: métier, zone, criticité, conformité,
-            disponibilité, risque et capacité de mobilisation.
+            Le flux garde chaque demande dans une séquence simple: cadrer, comparer, vérifier, puis suivre la
+            mobilisation dans la console privée.
           </p>
         </div>
         <div className="workflow-grid">
@@ -89,7 +103,8 @@ export default function HomePage() {
           <h2>Un opérateur local pour transformer les capacités dispersées en décisions exploitables.</h2>
           <p>
             OCTOPUS Mining identifie, qualifie et assemble des sociétés locales capables d&apos;intervenir dans des
-            environnements exigeants, avec une lecture claire des risques, des zones, des délais et des responsabilités.
+            environnements exigeants, avec une lecture claire des risques, des zones, des délais et des
+            responsabilités.
           </p>
         </div>
         <div className="profile-grid">
@@ -111,8 +126,8 @@ export default function HomePage() {
           <p className="eyebrow">Registre qualifié</p>
           <h2 id="trust-title">Des sociétés lisibles par métier, ville et niveau de mobilisation.</h2>
           <p>
-            Chaque entrée expose le nom complet, le domaine et la zone utile pour accélérer la lecture opérationnelle
-            avant qualification détaillée.
+            Chaque entrée expose le nom complet, le domaine et la zone utile pour accélérer la lecture
+            opérationnelle avant qualification détaillée.
           </p>
         </div>
         <TrustMarquee companies={trustedCompanies} />
@@ -123,8 +138,9 @@ export default function HomePage() {
           <p className="eyebrow">Terrain et opérations</p>
           <h2>Un besoin client n&apos;est jamais un secteur isolé: c&apos;est une chaîne de contraintes.</h2>
           <p>
-            Une demande minière déclenche souvent maintenance, génie civil, logistique, juridique, alimentation, médical,
-            cybersécurité et télécommunications. La plateforme relie ces pièces dans un même cadre de décision.
+            Une demande minière déclenche souvent maintenance, génie civil, logistique, juridique, alimentation,
+            médical, cybersécurité et télécommunications. La plateforme relie ces pièces dans un même cadre de
+            décision.
           </p>
           <div className="insight-list">
             <span>Besoin industriel</span>
@@ -141,17 +157,44 @@ export default function HomePage() {
             height={810}
             sizes="(max-width: 900px) 100vw, 54vw"
           />
-          <figcaption>Image générée et contrôlée pour représenter une scène terrain de maintenance et coordination.</figcaption>
+          <figcaption>Contrôle terrain, pièces critiques, équipes mobiles et décision de mobilisation.</figcaption>
         </figure>
+      </section>
+
+      <section className="rfq-intelligence-section" aria-labelledby="rfq-intelligence-title">
+        <figure className="rfq-image-wrap real-asset">
+          <Image
+            src="/media/octopus-rfq-operations-v1.png"
+            alt="Salle opérations industrielles avec cartes de corridor et dossiers RFQ"
+            width={1536}
+            height={864}
+            sizes="(max-width: 980px) 100vw, 50vw"
+          />
+        </figure>
+        <div className="section-copy">
+          <p className="eyebrow">Shortlist opérationnelle</p>
+          <h2 id="rfq-intelligence-title">Chaque recommandation doit expliquer son corridor, son risque et sa capacité.</h2>
+          <p>
+            La lecture ne s&apos;arrête pas au nom d&apos;un fournisseur: elle relie documents, couverture, fraîcheur
+            d&apos;évaluation, ressources et prochaine action de terrain.
+          </p>
+          <div className="corridor-row" aria-label="Corridors couverts">
+            {corridorSignals.map((signal) => (
+              <span key={signal}>
+                <MapPinned aria-hidden="true" size={15} />
+                {signal}
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section id="capacites" className="sector-intelligence-section" aria-labelledby="sector-title">
         <div className="section-copy centered">
-          <p className="eyebrow">Capacités et sous-secteurs</p>
-          <h2 id="sector-title">Une cartographie exploitable pour arbitrer vite sans perdre le contrôle.</h2>
+          <p className="eyebrow">Capacités industrielles</p>
+          <h2 id="sector-title">Une lecture par secteur, contrainte et signal de mobilisation.</h2>
           <p>
-            Les familles de services sont regroupées par logique opérationnelle afin de rester lisibles lorsque le
-            périmètre s&apos;étend à de nouveaux secteurs ou corridors.
+            Les familles de services restent lisibles pour relier vite un besoin à une capacité locale contrôlable.
           </p>
         </div>
         <div className="sector-grid">
@@ -181,8 +224,8 @@ export default function HomePage() {
           <p className="eyebrow">Qualification contrôlée</p>
           <h2>La valeur vient de la qualification, de l&apos;assemblage et du suivi privé.</h2>
           <p>
-            La console maintient une donnée fiable, mais la promesse client se joue dans la capacité à transformer cette
-            donnée en décision opérationnelle.
+            La console maintient une donnée fiable, mais la promesse client se joue dans la capacité à transformer
+            cette donnée en décision opérationnelle.
           </p>
         </div>
         <div className="process-grid">
@@ -201,8 +244,8 @@ export default function HomePage() {
           <p className="eyebrow">Gouvernance et confiance</p>
           <h2>Une interface privée pour garder le contrôle sur les données sensibles.</h2>
           <p>
-            Le pilotage interne centralise les sociétés, les niveaux de risque, les secteurs, les villes couvertes et les
-            notes d&apos;évaluation. Les accès externes, paiements et intégrations restent fermés par conception.
+            Le pilotage interne centralise les sociétés, les niveaux de risque, les secteurs, les villes couvertes
+            et les notes d&apos;évaluation. Les accès externes, paiements et intégrations restent fermés par conception.
           </p>
         </div>
         <div className="assurance-grid">
@@ -217,11 +260,25 @@ export default function HomePage() {
             );
           })}
         </div>
+        <div className="governance-proof" aria-label="Garde-fous V1">
+          <span>
+            <ShieldCheck aria-hidden="true" size={16} />
+            Accès privé
+          </span>
+          <span>
+            <CheckCircle2 aria-hidden="true" size={16} />
+            Décisions tracées
+          </span>
+          <span>
+            <CheckCircle2 aria-hidden="true" size={16} />
+            Intégrations fermées
+          </span>
+        </div>
       </section>
 
       <footer className="site-footer">
         <strong>OCTOPUS Mining</strong>
-        <span>Lualaba · Haut-Katanga · Sourcing industriel contrôlé</span>
+        <span>Lualaba - Haut-Katanga - Sourcing industriel contrôlé</span>
       </footer>
     </main>
   );

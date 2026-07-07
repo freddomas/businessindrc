@@ -1,66 +1,37 @@
 # Validation Report
 
-## Local static checks
+## Date
+2026-07-07
 
-- `npm run lint`: passed.
-- `npm run typecheck`: passed when run alone.
-- `npm run test`: passed.
-- `npm run build`: passed.
-- `npm audit --audit-level=high`: passed outside sandbox, found 0 vulnerabilities.
+## Commands Run
+- `npm run lint` - passed
+- `npm run typecheck` - passed
+- `npm run test` - passed
+- `npm run build` - passed
+- `npm run test:e2e` - passed hors sandbox with exit code 0
 
-## Browser and flow checks
+## Notes On E2E
+The first sandboxed e2e run failed on `/api/health` and partner mutation with 500 responses. This matched the project QA warning that sandboxed network/DB access can invalidate health checks. The suite was rerun with approved execution outside sandbox and passed.
 
-- `npm run test:e2e`: passed outside sandbox.
-- Result: 41 passed, 30 skipped by project conditions, 0 failed.
-- Browser matrix covered 360, 390, 768, 1366, 1440 and 1920 width projects.
-- Public routes `/` and `/connexion` passed strict public QA.
-- Authenticated console login/logout passed.
-- RFQ lane to shortlist interaction passed.
-- Registry empty state and reset passed.
-- Partner create, update and delete passed against the configured Postgres path.
-- `/api/health` returned healthy status outside sandbox.
-
-## Online Vercel validation
-
-- URL checked: `https://businessindrc.vercel.app/`.
-- Public home returned `200 OK`.
-- Public HTML contained the new hero promise `Qualifier un besoin industriel` and `Flux RFQ`.
-- `https://businessindrc.vercel.app/api/health` returned `200 OK` with `{"ok":true,"database":"connected"}`.
-- Online Playwright command passed against Vercel: `PLAYWRIGHT_BASE_URL=https://businessindrc.vercel.app npm run test:e2e -- --project=chromium-laptop`.
-- Online result: 12 tests passed, including public routes, health, private API contract, login/logout, RFQ shortlist, media render and controlled CRUD.
-
-## Database validation
-
-- Verification path used: `GET /api/health`.
-- Mutating path validated through Playwright: `POST /api/partners`, `PATCH /api/partners/[id]`, `DELETE /api/partners/[id]`.
-- Local test credentials were preserved for controlled validation.
-- No secrets were printed in reports.
-
-## Security and governance checks
-
-- V1 feature flags were not opened.
-- Public copy forbidden-word check passed.
+## Public QA
+- Public copy validation passed.
 - Media registry validation passed.
-- RBAC validation passed.
-- Local shared credentials remain internal validation support, not a commercial auth mechanism.
-- Unused `three` dependency and dead `OctopusScene` component were removed.
+- Hero, login, realistic media render and reduced motion checks passed.
+- No forbidden public wording detected by `scripts/check-copy.ts`.
 
-## Notes on failed intermediate checks
+## Console QA
+- Anonymous console redirect passed.
+- Admin console login/logout flow passed.
+- Score method and assessment freshness checks passed.
+- RFQ lane shortlist and empty-state recovery passed.
+- Mobile table no-panning check passed.
+- Partner create/update/delete passed in approved e2e run.
 
-- A sandboxed e2e run returned DB-related failures. This was resolved by rerunning outside sandbox because the project requires real Postgres verification.
-- A parallel `npm run typecheck` plus `npm run build` run produced `.next/types` missing-file errors. This matches the repo QA warning about not running those two commands in parallel; `typecheck` passed when rerun alone.
+## Build
+Next.js production build compiled successfully and generated all routes.
 
-## Definition Done status
+## Unresolved Issues
+No blocking validation issue remains.
 
-Met for the scoped product transformation:
-
-- Product goal, target user, primary job and decisions documented.
-- P0 product issues fixed or addressed in scoped V1 form.
-- Console now includes RFQ/opportunity workflow.
-- Registry empty/error/confirmation states improved.
-- Responsive and accessibility checks passed through Playwright.
-- Technical validation passed.
-
-Not equivalent to final commercial launch approval:
-
-- Production secrets, monitoring, incident process, backup/restore, role policy and business operating sign-off still require owner approval outside this code change.
+## Human QA Recommendation
+After deployment, inspect the live Vercel URL visually on desktop and mobile because Vercel deployment health is separate from local build health.

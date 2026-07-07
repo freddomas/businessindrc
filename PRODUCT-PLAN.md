@@ -1,70 +1,58 @@
-# Product Plan
+# Product Plan - UX/UI Remediation
 
-## Product goal
+## Product Goal
+Corriger l'expérience visuelle et interactive de Grand Katanga Industrial Services Hub en restant strictement centré sur la V1: sourcing B2B industriel, flux RFQ, fournisseurs, opportunités, qualification, vérification et console privée.
 
-Improve Grand Katanga Industrial Services Hub from a presentation-heavy site into a clearer industrial sourcing workspace: public users must understand the operated sourcing model quickly, and internal users must be able to qualify partners against RFQ-style needs inside the private console.
+## Target User Assumption
+Utilisateur principal: responsable opérations/procurement OCTOPUS Mining qui doit transformer un besoin industriel critique en shortlist de partenaires locaux qualifiés.
 
-## Target user assumption
+Utilisateur secondaire: décideur industriel qui évalue rapidement si OCTOPUS Mining sait cadrer, vérifier et mobiliser des capacités locales dans le Grand Katanga.
 
-Primary user: OCTOPUS Mining operations or procurement lead coordinating industrial sourcing requests for mining, construction, logistics, IT, medical, legal, agriculture and site services in Lualaba and Haut-Katanga.
+## Primary Job-To-Be-Done
+Comprendre le modèle opéré RFQ, identifier les corridors/capacités utiles, puis utiliser la console pour filtrer, comparer, qualifier et suivre des partenaires.
 
-Secondary user: a senior buyer or industrial executive evaluating whether OCTOPUS Mining can structure local supplier capacity before being invited into a controlled private process.
+## Product Promise
+OCTOPUS Mining structure un besoin industriel en flux RFQ contrôlé: cadrage, lecture terrain, vérification, shortlist, décision privée et traçabilité.
 
-## Primary job-to-be-done
+## Chosen Direction
+Direction retenue: poste de pilotage industriel premium, plus visuel, plus clair, plus opérationnel.
 
-Turn an industrial need into a controlled shortlist of qualified local partners, with visible status, risk, readiness, coverage and next operating action.
-
-## Product promise
-
-OCTOPUS Mining gives a disciplined path from RFQ framing to partner qualification and controlled mobilisation, without opening public APIs, payments, webhooks or self-serve commercial flows in V1.
-
-## Chosen product direction
-
-Operational command center. The public route should explain the sourcing and verification model, while the private console should act as the work surface for partner registry, RFQ lanes, qualification and coverage.
+Le choix rejeté: conserver les faux panneaux décoratifs sombres et les grilles plates. Ils créaient une impression d'images vides, de répétition et de produit incomplet.
 
 ## Scope
+- Recomposer la page publique autour du flux RFQ et de visuels industriels réels/approuvés.
+- Rendre les images déjà approuvées visibles et utiles.
+- Ajouter un actif local approuvé pour enrichir la section RFQ.
+- Corriger les faux alignements, les cadres vides, la hiérarchie hero, les liens d'ancrage et les grilles.
+- Corriger les points console visibles: sidebar, cartes RFQ, recherche, table mobile, états vides et interactivité.
+- Préserver l'auth, les API, la base, les flags V1 et les règles de secret.
 
-- Clarify the public first viewport around sourcing, RFQ framing and private console access.
-- Add a private console RFQ/opportunity lane using existing partner data as the matching surface.
-- Improve empty, error, disabled, saving and confirmation states for critical console actions.
-- Improve responsive readability and navigation clarity.
-- Extract product copy/data from large page components.
-- Remove unused front-end code and unused 3D dependency if validation confirms it is dead.
+## Non-Goals
+- Pas de changement backend ou modèle de données.
+- Pas d'activation paiements, webhooks, API publique ou intégrations externes.
+- Pas d'exposition de secrets, identifiants ou valeurs `.env`.
+- Pas de médias externes non déclarés.
 
-## Non-goals
-
-- No public self-serve RFQ submission.
-- No payment, webhook, external integration or public API enablement.
-- No auth model change beyond preserving controlled local credentials for validation.
-- No production migration unless needed for a validated product fix.
-- No secret exposure in reports, logs or UI.
-
-## Success criteria
-
-- Primary public promise visible in the first viewport.
-- Console exposes registry plus RFQ/opportunity prioritisation without needing horizontal panning on mobile.
-- Partner filtering has a clear empty state and recovery action.
-- Partner deletion requires explicit confirmation.
-- Mutating console actions handle network/API failure without leaving the UI stuck.
-- Public copy still passes forbidden-word checks.
-- `lint`, `typecheck`, `test`, `build`, and Playwright e2e pass locally.
-- Public deployment is validated after push through `https://businessindrc.vercel.app/` and `/api/health`.
+## Success Criteria
+- La première vue explique clairement le flux RFQ opéré.
+- Les images publiques sont visibles, chargées et cadrées.
+- Les ancres de navigation pointent vers des sections existantes.
+- Les cartes ne se chevauchent pas et gardent des dimensions stables.
+- La recherche console ne superpose plus label, icône et champ.
+- La console mobile n'impose pas de panoramique horizontal pour lire les champs de décision.
+- Les tests copy, media, RBAC, build et e2e passent.
 
 ## Assumptions
-
-- RFQ/opportunity lanes can be represented as front-end operational briefs derived from existing partner data for V1.
-- Public visitors should not be able to submit or mutate data in V1.
-- Seeded/training partner data is acceptable for controlled validation but should not be presented as market traction.
+- Les partenaires et flux visibles en console restent des données de validation contrôlée.
+- Le nouvel actif généré est acceptable car local, déclaré, licencié et approuvé dans le registre média.
+- Les corrections CSS finales peuvent neutraliser l'ancien thème sans refactor complet du fichier CSS dans ce cycle.
 
 ## Risks
+- Le fichier CSS contient encore des couches historiques. Risque maintenabilité moyen, atténué par une couche finale documentée et testée.
+- La console dépend du healthcheck DB pour la validation complète; en sandbox, la QA peut échouer sans représenter un défaut UI.
 
-- Adding RFQ language without a persisted RFQ model could overpromise if framed as a public feature. Mitigation: present it as controlled private operational workflow.
-- Broad visual overhaul can break strict public copy and layout QA. Mitigation: keep QA scripts authoritative and run e2e across the configured viewport matrix.
-- Local shared credentials are useful for tests but are not commercial auth. Mitigation: keep them private to validation wording and do not surface them publicly.
-
-## Decision boundaries
-
-- V1 flags remain closed: public API, webhooks, external integrations and payments stay disabled.
-- Postgres is verified only through `/api/health`.
-- `vercel pull` is not allowed.
-- Local temporary credentials are preserved for tests.
+## Decision Boundaries
+- V1 flags restent fermés.
+- `vercel pull` interdit.
+- Vérification Postgres via `/api/health`.
+- Aucun secret dans les rapports, logs publics ou UI.

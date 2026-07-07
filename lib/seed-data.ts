@@ -44,6 +44,16 @@ export const mediaRegistry: MediaAsset[] = [
     license: "Actif généré approuvé pour cette interface",
     alt: "Equipe industrielle examinant des documents de maintenance devant des engins miniers",
     approved: true
+  },
+  {
+    id: "octopus-rfq-operations",
+    file: "/media/octopus-rfq-operations-v1.png",
+    title: "Salle de coordination RFQ industrielle",
+    source: "generated",
+    sourceDetail: "Image réaliste générée pour représenter la qualification RFQ et la coordination des corridors industriels",
+    license: "Actif généré approuvé pour cette interface",
+    alt: "Salle opérations industrielles avec cartes de corridor et dossiers RFQ",
+    approved: true
   }
 ];
 

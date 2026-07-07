@@ -1,133 +1,61 @@
-# Product UX Audit
+# Product UX/UI Audit
 
-## Inferred product purpose
+## Purpose Inferred
+Plateforme Next.js/Vercel pour OCTOPUS Mining: cadrer des besoins industriels, qualifier des fournisseurs locaux et piloter des décisions RFQ dans une console privée.
 
-Grand Katanga Industrial Services Hub is a controlled B2B industrial sourcing and partner qualification platform for OCTOPUS Mining. It should make industrial needs, supplier capacity, verification status and console operations legible.
+## Inputs Audited
+- Captures utilisateur du 2026-07-07.
+- `app/page.tsx`, `app/globals.css`, `components/AdminConsole.tsx`, `components/LoginForm.tsx`.
+- Règles projet dans `AGENTS.md` et `qa/QA_RULES.md`.
+- Tests Playwright, scripts copy/media/RBAC/build.
 
-## Current user journey
+## Critical Findings
 
-1. Public user lands on `/`.
-2. User reads a premium OCTOPUS Mining presentation and sector descriptions.
-3. User can open `/connexion`.
-4. Authenticated operator enters `/console`.
-5. Operator searches, filters, views, creates, edits or deletes partner records.
+### P0 - Hero visuellement trompeur
+Le hero affichait des cadres sombres vides au lieu d'exploiter l'image industrielle disponible. Impact: perception de page cassée, pauvreté média, mauvais cadrage.
 
-## Critical flows
+Correction: suppression des faux cadres, image hero visible en arrière-plan, hiérarchie texte resserrée, preuve opérationnelle latérale.
 
-- Public comprehension: understand what OCTOPUS Mining does and why the platform exists.
-- Private activation: log in and reach the console without confusion.
-- Partner qualification: filter partner registry, inspect a record, edit status/risk/readiness.
-- Controlled sourcing: connect a need/RFQ to relevant qualified partners.
-- Governance: keep closed V1 features closed and avoid presenting local credentials as commercial auth.
+### P0 - Navigation vers sections faibles ou peu lisibles
+Les liens existaient mais menaient à des sections qui ne répondaient pas clairement au job utilisateur. Impact: navigation fonctionnelle en code mais faible en UX.
 
-## Flow-by-flow diagnosis
+Correction: sections publiques réordonnées et nommées autour de RFQ, capacités, qualification, gouvernance.
 
-### Public comprehension
+### P0 - Console mobile dépendante d'une table large
+La table partenaire reprenait une largeur fixe qui forçait le scroll horizontal. Impact: champs Indice, Evaluation, Actions difficiles à lire sur mobile.
 
-- Severity: P1.
-- The home page has strong visuals but reads more like a corporate profile than a sourcing workflow.
-- The first viewport does not make the RFQ-to-shortlist job explicit enough.
-- CTA hierarchy points to model/sector reading rather than the primary business workflow.
+Correction: override mobile pour table en vue sans largeur minimale; test dédié passé.
 
-### Private activation
+### P1 - Recherche console mal cadrée
+Le label, l'icône et le champ recherche se superposaient visuellement. Impact: interface perçue comme non finie.
 
-- Severity: P1.
-- Login page is adequate, but it does not reinforce controlled access and operational purpose as strongly as it could.
-- Error state exists.
+Correction: label vertical, icône ancrée au champ, hauteur et padding stabilisés.
 
-### Partner qualification
+### P1 - Cartes RFQ et workflow trop plates
+Les cartes avaient une logique métier mais peu de hiérarchie, feedback ou rythme. Impact: faible fluidité interactive et peu de signal de priorité.
 
-- Severity: P0.
-- Core CRUD exists and tests cover it.
-- Missing empty state when filters return no records.
-- Delete is immediate, which is weak for production-oriented registry management.
-- Fetch failure paths can leave weak feedback if the network or API fails.
+Correction: hover/focus, badges d'urgence, hauteur stable, contrastes et actions plus lisibles.
 
-### Controlled sourcing
+### P1 - Pauvreté média
+Deux bons actifs existaient mais étaient sous-exploités. Impact: la plateforme semblait abstraite et vide.
 
-- Severity: P0.
-- There is no visible RFQ/opportunity lane in the console despite project scope naming RFQ and opportunities.
-- Operators can inspect partners, but the interface does not show how partner data supports a sourcing decision.
+Correction: actifs existants rendus visibles + nouvel actif `octopus-rfq-operations-v1.png` déclaré dans le registre média.
 
-### Governance and trust
+### P1 - Sidebar privée mal finie
+La session et les liens console paraissaient désalignés et trop pauvres. Impact: faible confiance dans l'espace privé.
 
-- Severity: P1.
-- Closed V1 flags are mentioned publicly in governance language, which is directionally good.
-- More explicit private-console framing is needed so the app does not look like an open marketplace.
+Correction: session box compacte, navigation stable, largeur sidebar et état hover/focus clarifiés.
 
-## Friction points
+### P2 - Cohérence visuelle
+Le CSS mélangeait ancien thème clair et thème sombre final. Impact: maintenance plus risquée.
 
-- Public CTA flow is not focused on the main sourcing job.
-- Console sidebar navigation starts at registry and underplays operational prioritisation.
-- Filter results have no recovery state.
-- Deletion lacks confirmation.
-- Admin console component is too large, making future product changes riskier.
+Correction immédiate: couche UX/UI finale ciblée. Refactor complet CSS reporté car risqué hors périmètre UI immédiat.
 
-## Trust gaps
+## Flow Diagnosis
+- Public comprehension: amélioré par hero RFQ + sections structurées.
+- Private activation: login visuellement renforcé avec média RFQ.
+- Console qualification: cartes RFQ, filtres, table et états vides stabilisés.
+- Responsive: validé par Playwright sur 360, 390, tablette, laptop, desktop, wide.
 
-- RFQ/opportunity process is implied but not operationalised.
-- Readiness score has a method, but the connection between score and active needs is missing.
-- Public seed-style company names can be misread as traction unless framed as internal registry/workflow.
-
-## Clarity gaps
-
-- "Why this exists" is clearer than "what the user does next".
-- The private console needs a stronger overview of current sourcing lanes before the raw table.
-
-## Hierarchy problems
-
-- Public page: large narrative sections compete with primary flow.
-- Console: metrics and table are useful, but no "next operating action" is surfaced before the registry.
-
-## Navigation problems
-
-- Public navigation does not name RFQ/opportunities directly.
-- Console navigation should include a sourcing/RFQ lane.
-
-## Accessibility issues
-
-- Existing tests include axe and layout checks.
-- Delete confirmation and empty states need keyboard-accessible controls.
-
-## Visual consistency issues
-
-- Public interface is heavily dark; this conflicts with the prior redesign direction to move away from a dark-heavy platform.
-- Console uses light workspace with dark sidebar; public and private experiences feel related but not fully coherent.
-
-## Conversion or activation blockers
-
-- Main CTA does not lead users toward the controlled sourcing workflow.
-- Private console value is not obvious before login.
-
-## Missing states
-
-- Empty filter result.
-- Delete confirmation.
-- Network failure on save/delete.
-- RFQ lane readiness/matching state.
-
-## Mobile/responsive risks
-
-- Existing tests protect against table panning on mobile.
-- Adding RFQ lanes must keep card dimensions stable and avoid cramped button text.
-
-## Severity list
-
-### P0
-
-- Console lacks RFQ/opportunity workflow despite V1 scope.
-- Deletion lacks confirmation in a controlled registry.
-- Filtered registry lacks an empty state and recovery.
-
-### P1
-
-- Public first viewport underplays the sourcing/RFQ job.
-- CTA hierarchy is not centered on the primary product job.
-- Console component has too much logic and copy in one file.
-- Public UI remains too dark-heavy for the requested visual direction.
-
-### P2
-
-- Minor copy tightening.
-- More consistent microcopy between public route and console.
-- Remove dead visual/3D code.
+## Remaining Risk
+Le CSS reste volumineux et répétitif. Le rendu est validé, mais un refactor CSS modulaire serait utile dans un cycle séparé.
