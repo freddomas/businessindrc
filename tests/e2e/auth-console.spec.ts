@@ -2,9 +2,12 @@ import { expect, test } from "@playwright/test";
 import { auditLayout, auditPage, installRuntimeGuards } from "./helpers";
 
 async function loginAsAdmin(page: import("@playwright/test").Page) {
+  const username = process.env.PLAYWRIGHT_ADMIN_USERNAME;
+  const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD;
+  if (!username || !password) throw new Error("Controlled Playwright admin credentials are required.");
   await page.goto("/connexion");
-  await page.getByLabel("Identifiant").fill("admin");
-  await page.getByLabel("Mot de passe").fill("demo2026!");
+  await page.getByLabel("Identifiant").fill(username);
+  await page.getByLabel("Mot de passe").fill(password);
   await page.getByRole("button", { name: "Entrer dans la console" }).click();
   await page.waitForURL(/\/console$/, { timeout: 20_000 });
   await expect(page.locator("[data-console-ready='true']")).toBeVisible({ timeout: 20_000 });
@@ -22,11 +25,11 @@ test("admin login opens private console and logout closes access", async ({ page
   const guards = installRuntimeGuards(page);
   await loginAsAdmin(page);
   await expect(page.getByRole("heading", { name: "Registre partenaires" })).toBeVisible();
-  await expect(page.getByText("OCTOPUS Mining")).toBeVisible();
+  await expect(page.getByText("EXPERTISE").first()).toBeVisible();
   await auditPage(page, testInfo, "console-authenticated", false);
 
   const cookies = await page.context().cookies();
-  const session = cookies.find((cookie) => cookie.name === "gkih_session");
+  const session = cookies.find((cookie) => cookie.name === "octopus_expertise_session");
   expect(session?.httpOnly).toBe(true);
   expect(session?.sameSite).toBe("Lax");
 
@@ -55,6 +58,50 @@ test("console explains score method and assessment freshness", async ({ page }, 
   await expect(page.getByRole("row", { name: /Lualaba Heavy Maintenance/ })).toContainText(/\d{2}\/\d{2}\/\d{4}/);
 
 guards.assertClean();
+});
+
+test("console dialogs manage keyboard focus and restore their trigger", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-laptop", "Keyboard dialog contract runs once.");
+  const guards = installRuntimeGuards(page);
+  await loginAsAdmin(page);
+
+  const partnerRow = page.getByRole("row", { name: /Lualaba Heavy Maintenance/ });
+  const detailTrigger = partnerRow.getByRole("button", { name: "Ouvrir la fiche Lualaba Heavy Maintenance" });
+  await detailTrigger.focus();
+  await detailTrigger.press("Enter");
+
+  const detailDialog = page.getByRole("dialog", { name: "Lualaba Heavy Maintenance" });
+  const detailClose = detailDialog.getByRole("button", { name: "Clore la fiche partenaire" });
+  const detailEdit = detailDialog.getByRole("button", { name: "Modifier" });
+  await expect(detailClose).toBeFocused();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
+
+  await detailClose.press("Shift+Tab");
+  await expect(detailEdit).toBeFocused();
+  await detailEdit.press("Tab");
+  await expect(detailClose).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(detailDialog).toHaveCount(0);
+  await expect(detailTrigger).toBeFocused();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe("");
+
+  const createTrigger = page.getByRole("button", { name: "Ajouter partenaire" });
+  await createTrigger.focus();
+  await createTrigger.press("Enter");
+  const formDialog = page.getByRole("dialog", { name: "Ajouter un dossier" });
+  const companyInput = formDialog.getByLabel("Entreprise");
+  const formClose = formDialog.getByRole("button", { name: "Clore le formulaire partenaire" });
+  const saveButton = formDialog.getByRole("button", { name: "Enregistrer" });
+  await expect(companyInput).toBeFocused();
+  await formClose.focus();
+  await formClose.press("Shift+Tab");
+  await expect(saveButton).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(formDialog).toHaveCount(0);
+  await expect(createTrigger).toBeFocused();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe("");
+
+  guards.assertClean();
 });
 
 test("console RFQ lanes drive partner shortlist and empty-state recovery", async ({ page }, testInfo) => {
@@ -129,7 +176,7 @@ test("partner registry supports controlled create update delete", async ({ page 
   expect((await createResponse).status()).toBe(201);
   const createdRow = page.getByRole("row", { name: new RegExp(companyName) });
   await expect(createdRow).toBeVisible();
-  await createdRow.click();
+  await createdRow.getByRole("button", { name: new RegExp(`Ouvrir la fiche ${companyName}`) }).click();
   const detailDialog = page.getByRole("dialog", { name: companyName });
   await expect(detailDialog).toBeVisible();
   await expect(detailDialog.getByText("Lubudi, Lualaba")).toBeVisible();

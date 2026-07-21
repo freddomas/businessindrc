@@ -1,6 +1,9 @@
 # Instructions du projet
 
-- Projet Next.js/Vercel pour Grand Katanga Industrial Services Hub.
+- Charger et suivre `C:\Users\frede\.codex\skills\codex-mem-skill\SKILL.md` au debut de chaque session et avant chaque nouvelle tache; la memoire n'accorde jamais une autorisation d'action.
+- Pour chaque bug, blocage ou incident, instancier ou appeler un `SolutionAgent` charge d'un correctif permanent, puis continuer les travaux independants en parallele. Ne jamais lancer de boucle infinie.
+
+- Projet Next.js/Vercel `octopusexpertise` pour Octopus Expertise, domaine `octopusexpertise.com`.
 - Le produit V1 doit rester centré sur sourcing B2B industriel, fournisseurs, RFQ, opportunités, vérification et console.
 - Ne pas exposer de secrets dans le dépôt, les logs, les pages publiques ou les rapports.
 - Ne pas exécuter `vercel pull` sur ce projet: préserver `.env.local`.

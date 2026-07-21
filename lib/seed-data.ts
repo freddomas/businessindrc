@@ -16,13 +16,13 @@ export const sectors = [
 
 export const mediaRegistry: MediaAsset[] = [
   {
-    id: "octopus-logo",
-    file: "/media/octopus-logo.png",
-    title: "Identité OCTOPUS Mining",
+    id: "octopus-expertise-mark",
+    file: "/media/octopus-expertise-mark.png",
+    title: "Identité Octopus Expertise",
     source: "provided",
-    sourceDetail: "Logo transmis par le propriétaire du projet",
+    sourceDetail: "Emblème isolé à partir du logo transmis par le propriétaire du projet; sous-titre rendu en texte natif",
     license: "Actif propriétaire approuvé pour cette interface",
-    alt: "Logo OCTOPUS Mining",
+    alt: "Emblème Octopus Expertise",
     approved: true
   },
   {
@@ -30,7 +30,7 @@ export const mediaRegistry: MediaAsset[] = [
     file: "/media/octopus-hero-v2.png",
     title: "Centre de pilotage industriel",
     source: "generated",
-    sourceDetail: "Image réaliste générée pour OCTOPUS Mining et contrôlée avant intégration",
+    sourceDetail: "Image réaliste générée pour Octopus Expertise et contrôlée avant intégration",
     license: "Actif généré approuvé pour cette interface",
     alt: "Centre de pilotage industriel surplombant une mine de cuivre au lever du jour",
     approved: true

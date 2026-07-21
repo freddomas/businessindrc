@@ -1,5 +1,5 @@
 {
-  "name": "businessindrc",
+  "name": "octopusexpertise",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,9 +11,10 @@
     "db:seed": "tsx scripts/seed-db.ts",
     "db:reset": "tsx scripts/reset-db.ts",
     "seed:validate": "tsx scripts/validate-seed.ts",
-    "test": "npm run test:copy && npm run seed:validate && npm run test:rbac && npm run test:media",
+    "test": "npm run test:copy && npm run seed:validate && npm run test:rbac && npm run test:auth && npm run test:media",
     "test:copy": "tsx scripts/check-copy.ts",
     "test:rbac": "tsx scripts/check-rbac.ts",
+    "test:auth": "tsx scripts/check-auth.ts",
     "test:media": "tsx scripts/check-media.ts",
     "test:e2e": "node scripts/run-e2e.mjs",
     "qa:full": "npm run lint && npm run typecheck && npm run test && npm run build && npm run test:e2e"

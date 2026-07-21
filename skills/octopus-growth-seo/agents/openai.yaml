@@ -1,0 +1,4 @@
+interface:
+  display_name: "Octopus Growth SEO"
+  short_description: "Grow industrial B2B discoverability safely"
+  default_prompt: "Use $octopus-growth-seo to improve Octopus Expertise discoverability."

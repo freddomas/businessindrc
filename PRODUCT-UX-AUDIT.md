@@ -1,7 +1,7 @@
 # Product UX/UI Audit
 
 ## Purpose Inferred
-Plateforme Next.js/Vercel pour OCTOPUS Mining: cadrer des besoins industriels, qualifier des fournisseurs locaux et piloter des décisions RFQ dans une console privée.
+Plateforme Next.js/Vercel pour Octopus Expertise: cadrer des besoins industriels, qualifier des fournisseurs locaux et piloter des décisions RFQ dans une console privée.
 
 ## Inputs Audited
 - Captures utilisateur du 2026-07-07.

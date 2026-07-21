@@ -1,18 +1,18 @@
 # Product Plan - UX/UI Remediation
 
 ## Product Goal
-Corriger l'expérience visuelle et interactive de Grand Katanga Industrial Services Hub en restant strictement centré sur la V1: sourcing B2B industriel, flux RFQ, fournisseurs, opportunités, qualification, vérification et console privée.
+Refondre l'expérience visuelle et interactive d'Octopus Expertise en restant strictement centré sur la V1: sourcing B2B industriel, flux RFQ, fournisseurs, opportunités, qualification, vérification et console privée.
 
 ## Target User Assumption
-Utilisateur principal: responsable opérations/procurement OCTOPUS Mining qui doit transformer un besoin industriel critique en shortlist de partenaires locaux qualifiés.
+Utilisateur principal: responsable opérations/procurement Octopus Expertise qui doit transformer un besoin industriel critique en shortlist de partenaires locaux qualifiés.
 
-Utilisateur secondaire: décideur industriel qui évalue rapidement si OCTOPUS Mining sait cadrer, vérifier et mobiliser des capacités locales dans le Grand Katanga.
+Utilisateur secondaire: décideur industriel qui évalue rapidement si Octopus Expertise sait cadrer, vérifier et mobiliser des capacités locales dans le Grand Katanga.
 
 ## Primary Job-To-Be-Done
 Comprendre le modèle opéré RFQ, identifier les corridors/capacités utiles, puis utiliser la console pour filtrer, comparer, qualifier et suivre des partenaires.
 
 ## Product Promise
-OCTOPUS Mining structure un besoin industriel en flux RFQ contrôlé: cadrage, lecture terrain, vérification, shortlist, décision privée et traçabilité.
+Octopus Expertise structure un besoin industriel en flux RFQ contrôlé: cadrage, lecture terrain, vérification, shortlist, décision privée et traçabilité.
 
 ## Chosen Direction
 Direction retenue: poste de pilotage industriel premium, plus visuel, plus clair, plus opérationnel.

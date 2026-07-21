@@ -42,7 +42,15 @@ export function LoginForm({ initialError = false }: { initialError?: boolean }) 
       </label>
       <label>
         Mot de passe
-        <input name="password" type="password" autoComplete="current-password" required minLength={8} />
+        <input
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          minLength={12}
+          pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{12,}"
+          title="12 caractères minimum, avec au moins une majuscule et un caractère spécial"
+        />
       </label>
       <button type="submit" className="primary-action wide-action" disabled={submitting}>
         {submitting ? "Vérification" : "Entrer dans la console"}

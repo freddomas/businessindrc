@@ -51,7 +51,7 @@ export function installRuntimeGuards(page: Page, allowedStatuses: number[] = [])
 
 export async function assertNoSecretLeak(value: unknown) {
   const text = typeof value === "string" ? value : JSON.stringify(value);
-  expect(text).not.toMatch(/postgres:\/\/|postgresql:\/\/|DATABASE_URL|POSTGRES_URL|AUTH_SECRET|demo2026!/i);
+  expect(text).not.toMatch(/postgres:\/\/|postgresql:\/\/|DATABASE_URL|POSTGRES_URL|AUTH_SECRET/i);
 }
 
 export async function auditVisibleText(page: Page, options: { publicPage?: boolean } = {}) {
@@ -184,7 +184,8 @@ export async function auditPublicMedia(page: Page) {
       const url = new URL(image.currentSrc || image.src, window.location.href);
       const isInternal = url.origin === window.location.origin || url.protocol === "data:" || url.protocol === "blob:";
       const hasAlt = Boolean(image.getAttribute("alt")?.trim());
-      return isInternal && hasAlt ? [] : [image.outerHTML.slice(0, 180)];
+      const hasRegistryLink = Boolean(image.dataset.mediaId?.trim());
+      return isInternal && hasAlt && hasRegistryLink ? [] : [image.outerHTML.slice(0, 180)];
     });
   });
 

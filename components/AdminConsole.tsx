@@ -1,8 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   AlertTriangle,
@@ -22,6 +20,7 @@ import {
 import { getBriefMatchCount, getBriefMatches, sourcingBriefs } from "../lib/console-model";
 import type { DashboardStats, Partner, PartnerInput, PartnerStatus, RiskLevel, SessionUser } from "../lib/types";
 import { LogoutButton } from "./LogoutButton";
+import { BrandLockup } from "./BrandLockup";
 
 type Props = {
   initialPartners: Partner[];
@@ -54,6 +53,14 @@ type Draft = {
 
 const statuses: PartnerStatus[] = ["Qualifié", "En analyse", "Sous réserve", "Suspendu"];
 const riskLevels: RiskLevel[] = ["Bas", "Modéré", "Élevé"];
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])'
+].join(",");
 
 function createBlankDraft(sector = "Mines"): Draft {
   return {
@@ -174,10 +181,101 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
   const [message, setMessage] = useState("");
   const [messageTone, setMessageTone] = useState<"success" | "danger">("success");
   const [ready, setReady] = useState(false);
+  const dialogRef = useRef<HTMLElement | null>(null);
+  const focusBeforeModalRef = useRef<HTMLElement | null>(null);
+  const savingRef = useRef(saving);
+  const modalOpen = Boolean(selectedPartner || draft);
+  const modalKey = selectedPartner ? `detail:${selectedPartner.id}` : draft ? `form:${draft.id ?? "new"}` : "";
 
   useEffect(() => {
     setReady(true);
   }, []);
+
+  useEffect(() => {
+    savingRef.current = saving;
+  }, [saving]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+
+    focusBeforeModalRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      const previousFocus = focusBeforeModalRef.current;
+      focusBeforeModalRef.current = null;
+      if (previousFocus?.isConnected) {
+        requestAnimationFrame(() => previousFocus.focus({ preventScroll: true }));
+      }
+    };
+  }, [modalOpen]);
+
+  useEffect(() => {
+    if (!modalKey) return;
+
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    function getFocusableElements() {
+      return Array.from(dialog!.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+        (element) => element.getClientRects().length > 0
+      );
+    }
+
+    function focusFirstElement() {
+      const preferred = dialog!.querySelector<HTMLElement>("[data-modal-initial-focus]");
+      (preferred ?? getFocusableElements()[0] ?? dialog!).focus({ preventScroll: true });
+    }
+
+    function closeActiveModal() {
+      if (savingRef.current) return;
+      setDraft(null);
+      setSelectedPartner(null);
+    }
+
+    function handleKeyDown(event: globalThis.KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeActiveModal();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+      const focusable = getFocusableElements();
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialog!.focus({ preventScroll: true });
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    function keepFocusInside(event: FocusEvent) {
+      if (event.target instanceof Node && !dialog!.contains(event.target)) {
+        focusFirstElement();
+      }
+    }
+
+    const frame = requestAnimationFrame(focusFirstElement);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("focusin", keepFocusInside);
+    return () => {
+      cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", keepFocusInside);
+    };
+  }, [modalKey]);
 
   const activeBrief = useMemo(
     () => sourcingBriefs.find((brief) => brief.id === activeBriefId) ?? null,
@@ -257,13 +355,6 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
 
   function openPartner(partner: Partner) {
     setSelectedPartner(partner);
-  }
-
-  function openPartnerFromKeyboard(event: KeyboardEvent<HTMLTableRowElement>, partner: Partner) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openPartner(partner);
-    }
   }
 
   function updateDraft(event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
@@ -376,9 +467,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
   return (
     <div className="console-shell" data-console-ready={ready ? "true" : "false"}>
       <aside className="console-sidebar" aria-label="Navigation console">
-        <Link href="/" className="console-brand" aria-label="OCTOPUS Mining">
-          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={198} height={62} priority unoptimized />
-        </Link>
+        <BrandLockup className="console-brand" priority />
 
         <div className="session-box">
           <span>Session privée</span>
@@ -587,14 +676,18 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                     <tr
                       className="partner-row"
                       key={partner.id}
-                      tabIndex={0}
-                      aria-label={`Fiche ${partner.companyName}`}
-                      onClick={() => openPartner(partner)}
-                      onKeyDown={(event) => openPartnerFromKeyboard(event, partner)}
+                      role="row"
                     >
                       <td data-label="Entreprise">
-                        <strong>{partner.companyName}</strong>
-                        <span>{partner.contactName}</span>
+                        <button
+                          className="partner-row-open"
+                          type="button"
+                          aria-label={`Ouvrir la fiche ${partner.companyName}`}
+                          onClick={() => openPartner(partner)}
+                        >
+                          <strong>{partner.companyName}</strong>
+                          <span>{partner.contactName}</span>
+                        </button>
                       </td>
                       <td data-label="Secteur">{partner.sector}</td>
                       <td data-label="Ville">{partner.city}</td>
@@ -697,7 +790,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
 
       {selectedPartner ? (
         <div className="modal-backdrop" role="presentation">
-          <section className="partner-modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="partner-detail-title">
+          <section ref={dialogRef} className="partner-modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="partner-detail-title" tabIndex={-1}>
             <div className="modal-heading">
               <div>
                 <p className="eyebrow">Fiche partenaire</p>
@@ -707,6 +800,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
                 className="icon-button"
                 type="button"
                 aria-label="Clore la fiche partenaire"
+                data-modal-initial-focus
                 onClick={() => setSelectedPartner(null)}
               >
                 <X aria-hidden="true" size={18} />
@@ -825,13 +919,13 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
 
       {draft ? (
         <div className="modal-backdrop" role="presentation">
-          <section className="partner-modal" role="dialog" aria-modal="true" aria-labelledby="partner-form-title">
+          <section ref={dialogRef} className="partner-modal" role="dialog" aria-modal="true" aria-labelledby="partner-form-title" tabIndex={-1}>
             <div className="modal-heading">
               <div>
                 <p className="eyebrow">Fiche partenaire</p>
                 <h2 id="partner-form-title">{draft.id ? "Modifier le dossier" : "Ajouter un dossier"}</h2>
               </div>
-              <button className="icon-button" type="button" aria-label="Clore le formulaire partenaire" onClick={() => setDraft(null)}>
+              <button className="icon-button" type="button" aria-label="Clore le formulaire partenaire" onClick={() => setDraft(null)} disabled={saving}>
                 <X aria-hidden="true" size={18} />
               </button>
             </div>
@@ -839,7 +933,7 @@ export function AdminConsole({ initialPartners, initialStats, sectors, user }: P
             <form className="partner-form" onSubmit={savePartner}>
               <label>
                 Entreprise
-                <input name="companyName" value={draft.companyName} onChange={updateDraft} required minLength={3} />
+                <input name="companyName" value={draft.companyName} onChange={updateDraft} required minLength={3} data-modal-initial-focus />
               </label>
               <label>
                 Secteur

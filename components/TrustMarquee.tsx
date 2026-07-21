@@ -44,7 +44,7 @@ export function TrustMarquee({ companies }: { companies: TrustedCompany[] }) {
       onPointerCancel={stopDrag}
       data-allow-horizontal-scroll="true"
       tabIndex={0}
-      aria-label="Sociétés du réseau OCTOPUS Mining"
+      aria-label="Sociétés du réseau Octopus Expertise"
     >
       {companies.map((company) => (
         <article className="trust-card" key={company.name}>

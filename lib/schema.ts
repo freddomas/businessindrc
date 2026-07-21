@@ -1,4 +1,3 @@
-import { hash } from "bcryptjs";
 import { getSql, hasDatabaseUrl } from "./db";
 import { getSeedPartners } from "./seed-data";
 
@@ -99,7 +98,6 @@ async function bootstrap(forceSeed: boolean): Promise<void> {
     await seedPartners();
   }
 
-  await seedUsers();
 }
 
 export async function seedPartners(): Promise<void> {
@@ -145,27 +143,4 @@ export async function seedPartners(): Promise<void> {
         updated_at = NOW()
     `;
   }
-}
-
-async function seedUsers(): Promise<void> {
-  const sql = getSql();
-  const passwordHash = await hash("demo2026!", 10);
-
-  await sql`
-    INSERT INTO app_users (email, username, name, role, organization, password_hash)
-    VALUES (
-      'admin@octopus.local',
-      'admin',
-      'Administrateur OCTOPUS',
-      'Admin',
-      'OCTOPUS Mining',
-      ${passwordHash}
-    )
-    ON CONFLICT (email) DO UPDATE SET
-      username = EXCLUDED.username,
-      name = EXCLUDED.name,
-      role = EXCLUDED.role,
-      organization = EXCLUDED.organization,
-      password_hash = EXCLUDED.password_hash
-  `;
 }

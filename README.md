@@ -1,7 +1,9 @@
-# Grand Katanga Industrial Services Hub
+# Octopus Expertise
 
-Plateforme B2B industrielle pour le Grand Katanga: annuaire fournisseurs,
-RFQ, sourcing managé, vérification, opportunités et console opérationnelle.
+Plateforme B2B industrielle pour le Grand Katanga: sourcing fournisseurs,
+RFQ, qualification, vérification, opportunités et console opérationnelle.
+
+Production: `https://octopusexpertise.com`
 
 ## Démarrage local
 

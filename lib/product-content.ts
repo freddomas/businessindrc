@@ -123,7 +123,7 @@ export const sectorGroups: SectorGroup[] = [
 export const operatingSteps: OperatingStep[] = [
   {
     title: "Lecture de la demande",
-    text: "OCTOPUS Mining clarifie besoin, zone, criticité, contraintes HSE, délais et dépendances terrain."
+    text: "Octopus Expertise clarifie besoin, zone, criticité, contraintes HSE, délais et dépendances terrain."
   },
   {
     title: "Qualification des capacités",

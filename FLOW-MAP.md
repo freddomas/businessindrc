@@ -3,7 +3,7 @@
 ## Flow 1 - Public RFQ Comprehension
 Entry point: `/`
 
-User goal: comprendre rapidement ce qu'OCTOPUS Mining fait.
+User goal: comprendre rapidement ce qu'Octopus Expertise fait.
 
 Previous friction: hero trop massif, image invisible, faux cadres, CTA noyé.
 

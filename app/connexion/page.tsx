@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LoginForm } from "../../components/LoginForm";
+import { BrandLockup } from "../../components/BrandLockup";
 import { getSessionUser } from "../../lib/auth";
 
 export default async function LoginPage({
@@ -21,13 +21,11 @@ export default async function LoginPage({
   return (
     <main className="login-page">
       <section className="login-panel" aria-labelledby="login-title">
-        <Link href="/" className="login-logo" aria-label="OCTOPUS Mining">
-          <Image src="/media/octopus-logo.png" alt="Logo OCTOPUS Mining" width={214} height={66} priority unoptimized />
-        </Link>
-        <p className="eyebrow">Accès réservé</p>
-        <h1 id="login-title">Console de pilotage</h1>
+        <BrandLockup className="login-logo" priority />
+        <p className="signal-label"><span /> Espace sécurisé</p>
+        <h1 id="login-title">Reprendre le fil d&apos;une décision.</h1>
         <p className="login-intro">
-          Authentification requise pour consulter et mettre à jour le registre des partenaires qualifiés.
+          Connectez-vous pour consulter les flux RFQ, qualifier les partenaires et suivre les décisions en cours.
         </p>
         <LoginForm initialError={hasError} />
       </section>

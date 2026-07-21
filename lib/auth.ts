@@ -1,29 +1,53 @@
 import { compare } from "bcryptjs";
+import { randomBytes } from "node:crypto";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import type { Role, SessionUser } from "./types";
+import { meetsPasswordPolicy } from "./password-policy";
 
-export const SESSION_COOKIE = "gkih_session";
+export const SESSION_COOKIE = "octopus_expertise_session";
 
-const localUsers: Array<SessionUser & { password: string }> = [
-  {
-    username: "admin",
-    email: "admin@octopus.local",
-    name: "Administrateur OCTOPUS",
-    role: "Admin",
-    organization: "OCTOPUS Mining",
-    password: "demo2026!"
+let developmentSecret: Uint8Array | null = null;
+
+function getControlledLocalUser(): (SessionUser & { passwordHash: string }) | null {
+  if (process.env.LOCAL_ADMIN_ENABLED?.toLowerCase() !== "true") {
+    return null;
   }
-];
+
+  const username = process.env.LOCAL_ADMIN_USERNAME?.trim();
+  const email = process.env.LOCAL_ADMIN_EMAIL?.trim();
+  const passwordHash = process.env.LOCAL_ADMIN_PASSWORD_HASH?.trim();
+
+  if (!username || !email || !passwordHash || !/^\$2[aby]\$\d{2}\$/.test(passwordHash)) {
+    return null;
+  }
+
+  return {
+    username,
+    email,
+    name: process.env.LOCAL_ADMIN_NAME?.trim() || "Administrateur OCTOPUS",
+    role: "Admin",
+    organization: process.env.LOCAL_ADMIN_ORGANIZATION?.trim() || "Octopus Expertise",
+    passwordHash
+  };
+}
 
 function getSecret(): Uint8Array {
-  const value =
-    process.env.AUTH_SECRET ??
-    process.env.DATABASE_URL ??
-    process.env.POSTGRES_URL ??
-    "local-session-secret-change-before-commercial-use";
+  const value = process.env.AUTH_SECRET?.trim();
 
-  return new TextEncoder().encode(value);
+  if (value) {
+    if (value.length < 32) {
+      throw new Error("AUTH_SECRET must contain at least 32 characters.");
+    }
+    return new TextEncoder().encode(value);
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("AUTH_SECRET is required in production.");
+  }
+
+  developmentSecret ??= randomBytes(32);
+  return developmentSecret;
 }
 
 export async function createSessionToken(user: SessionUser): Promise<string> {
@@ -86,6 +110,10 @@ export async function resolveUser(
       })
     | null
 ): Promise<SessionUser | null> {
+  if (!meetsPasswordPolicy(password)) {
+    return null;
+  }
+
   if (databaseUser && (await compare(password, databaseUser.passwordHash))) {
     return {
       username: databaseUser.username,
@@ -96,16 +124,14 @@ export async function resolveUser(
     };
   }
 
-  if (process.env.LOCAL_ADMIN_ENABLED?.toLowerCase() === "false") {
-    return null;
-  }
-
   const normalized = identifier.trim().toLowerCase();
-  const localUser = localUsers.find(
-    (user) => user.username === normalized || user.email.toLowerCase() === normalized
-  );
+  const localUser = getControlledLocalUser();
 
-  if (!localUser || localUser.password !== password) {
+  if (
+    !localUser ||
+    (localUser.username.toLowerCase() !== normalized && localUser.email.toLowerCase() !== normalized) ||
+    !(await compare(password, localUser.passwordHash))
+  ) {
     return null;
   }
 

@@ -21,15 +21,24 @@ test("health endpoint has a safe database contract", async ({ request }) => {
 });
 
 test("partners API is private and works after admin login", async ({ request }) => {
+  const username = process.env.PLAYWRIGHT_ADMIN_USERNAME;
+  const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD;
+  if (!username || !password) throw new Error("Controlled Playwright admin credentials are required.");
   const anonymous = await request.get("/api/partners");
   expect(anonymous.status()).toBe(401);
 
+  const weakLogin = await request.post("/api/auth/login", {
+    form: { identifier: username, password: "Weak1!" },
+    headers: { "x-login-mode": "fetch" }
+  });
+  expect(weakLogin.status()).toBe(422);
+
   const login = await request.post("/api/auth/login", {
-    form: { identifier: "admin", password: "demo2026!" },
+    form: { identifier: username, password },
     maxRedirects: 0
   });
   expect(login.status()).toBe(303);
-  expect(login.headers()["set-cookie"]).toContain("gkih_session");
+  expect(login.headers()["set-cookie"]).toContain("octopus_expertise_session");
 
   const response = await request.get("/api/partners");
   expect(response.status()).toBe(200);

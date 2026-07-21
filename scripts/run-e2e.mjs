@@ -1,10 +1,25 @@
 import { spawn, spawnSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
+import { hashSync } from "bcryptjs";
 
 const root = process.cwd();
 const port = process.env.PLAYWRIGHT_PORT ?? "3000";
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${port}`;
 const serverCommand = process.env.PLAYWRIGHT_SERVER_COMMAND;
 let server;
+
+if (!process.env.PLAYWRIGHT_BASE_URL) {
+  const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD ?? `Qa!${randomBytes(18).toString("base64url")}`;
+  const username = process.env.PLAYWRIGHT_ADMIN_USERNAME ?? "qa-admin";
+
+  process.env.PLAYWRIGHT_ADMIN_USERNAME = username;
+  process.env.PLAYWRIGHT_ADMIN_PASSWORD = password;
+  process.env.LOCAL_ADMIN_ENABLED = "true";
+  process.env.LOCAL_ADMIN_USERNAME = username;
+  process.env.LOCAL_ADMIN_EMAIL = process.env.LOCAL_ADMIN_EMAIL ?? "qa-admin@octopus.local";
+  process.env.LOCAL_ADMIN_PASSWORD_HASH = hashSync(password, 10);
+  process.env.AUTH_SECRET = process.env.AUTH_SECRET ?? randomBytes(32).toString("base64url");
+}
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

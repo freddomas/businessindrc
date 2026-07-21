@@ -1,0 +1,4 @@
+interface:
+  display_name: "Octopus Code Review"
+  short_description: "Review Octopus code against V1 contracts"
+  default_prompt: "Use $octopus-code-review to review this Octopus Expertise change."

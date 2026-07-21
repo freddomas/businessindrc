@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createSessionToken, resolveUser, SESSION_COOKIE } from "../../../../lib/auth";
 import { findUserByIdentifier } from "../../../../lib/repository";
+import { meetsPasswordPolicy, PASSWORD_MIN_LENGTH } from "../../../../lib/password-policy";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,7 +11,11 @@ const attempts = new Map<string, { count: number; resetAt: number }>();
 
 const loginSchema = z.object({
   identifier: z.string().trim().min(3).max(160),
-  password: z.string().min(8).max(120)
+  password: z
+    .string()
+    .min(PASSWORD_MIN_LENGTH)
+    .max(120)
+    .refine(meetsPasswordPolicy)
 });
 
 function getClientKey(request: Request): string {
