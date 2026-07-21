@@ -1,5 +1,27 @@
 # Design Decisions
 
+## Decision 0 - Rebuild Around An Industrial Trust Network
+Rationale: l'ancien thème empilait plusieurs couches CSS sombres et des grilles de cartes génériques.
+
+User impact: la page explique désormais le chemin signal, qualification, shortlist et mobilisation; la console reste plus calme et dense.
+
+Affected files: `app/page.tsx`, `app/globals.css`, `components/BrandLockup.tsx`, `app/connexion/page.tsx`, `components/AdminConsole.tsx`.
+
+Rejected alternative: ajouter une quatrième couche de remédiation CSS ou copier les layouts Evervault/Chaos Labs.
+
+Confidence: high. Reversibility: moderate.
+
+## Decision 0.1 - Use A Native Expertise Subtitle
+Rationale: le générateur d'image n'a pas préservé de façon fiable le mot EXPERTISE lors du détourage.
+
+User impact: l'emblème reste fidèle et le sous-titre est net, accessible et responsive sur tous les fonds.
+
+Affected files: `public/media/octopus-expertise-mark.png`, `components/BrandLockup.tsx`.
+
+Rejected alternative: publier une image portant le mauvais sous-titre ou conserver le halo violet comme fond permanent.
+
+Confidence: high. Reversibility: easy.
+
 ## Decision 1 - Replace Empty Hero Frames With Real Operational Image
 Rationale: les faux cadres faisaient croire à des images manquantes.
 

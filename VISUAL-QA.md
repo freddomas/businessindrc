@@ -1,38 +1,39 @@
-# Visual QA
+# Visual QA — Octopus Expertise
 
-## Screens Inspected
-- Public home `/`
-- Login `/connexion`
-- Private console `/console`
-- RFQ cards
-- Partner registry table
-- Empty registry state
-- Mobile table layout
+Date: 2026-07-21
 
-## Viewports Tested
-- 360px
-- 390px
-- 768px tablet
-- 1366px laptop
-- 1440px desktop
-- 1920px wide
+## Direction validée
 
-## Defects Found And Fixed
-- Empty-looking hero frames: removed.
-- Hero image too hidden: restored full visual role.
-- Hero title too massive on mobile: reduced responsive clamp.
-- Access button label hidden on mobile: restored.
-- Header links hit-test issue on mobile: z-index stabilized.
-- Search label/icon overlap: fixed.
-- RFQ cards flat and cramped: fixed with stable layout and hover/focus.
-- Mobile partner table horizontal panning: fixed.
-- Public media poverty: added local approved RFQ operations image.
+Lecture: réseau de confiance industriel pour décideurs achats et opérations. La façade publique utilise une composition asymétrique, une transition clair/graphite et des signaux de corridor. La console reste dense, familière et orientée décision.
 
-## Visual Evidence
-- Playwright report generated under `playwright-report/`.
-- Last Playwright run status recorded in `test-results/.last-run.json` as `passed`.
-- Playwright attached screenshots for public, login and console checks during e2e.
-- Online public smoke against `https://businessindrc.vercel.app` passed on 390px and laptop viewports.
+- Variation: 8/10 public, 3/10 console.
+- Motion: 7/10 public, 2/10 console.
+- Densité: 6/10 public, 8/10 console.
 
-## Remaining Visual Risk
-The CSS source still contains historical rules. The rendered output is validated, but a future cleanup should consolidate the file into a smaller design system.
+## Matrice rendue
+
+- Accueil: 390 px et laptop, page complète.
+- Connexion: 390 px et laptop.
+- Console authentifiée: 360, 390, laptop, desktop et wide selon les scénarios.
+- Mouvement réduit: accueil 390 et laptop.
+- Modales console: clavier, Escape, boucle de focus, restauration et verrouillage du scroll.
+
+## Contrôles
+
+- absence de débordement document;
+- absence de chevauchement des cibles interactives;
+- contraste axe sans violation après correction ciblée;
+- médias chargés, décodés, avec alt et identifiant de registre;
+- aucun message console ou échec réseau inattendu;
+- navigation console 360 px sans lien rogné;
+- table mobile lisible sans panoramique du document;
+- contenu utilisable avec `prefers-reduced-motion`.
+
+## Preuves versionnées
+
+- `qa/evidence/home-desktop-full.png`
+- `qa/evidence/home-mobile-full.png`
+- `qa/evidence/login-desktop-full.png`
+- `qa/evidence/console-mobile-full.png`
+
+Les captures sont des sorties Playwright du code final de cette couche. Le statut exact du DRY_RUN global reste documenté dans `VALIDATION-REPORT.md`.

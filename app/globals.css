@@ -307,8 +307,9 @@ p { text-wrap: pretty; }
 .console-page { min-height: 100vh; background: var(--paper); color: var(--ink); }
 .console-shell { min-height: 100vh; display: grid; grid-template-columns: 250px minmax(0, 1fr); }
 .console-sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 24px; padding: 24px 20px; background: var(--ink); color: var(--white); }
-.console-brand { width: 178px; filter: brightness(0) invert(1); }
-.console-brand .brand-word { color: var(--white); }
+.console-brand { width: 178px; }
+.console-brand .brand-symbol { filter: brightness(0) invert(1); }
+.console-brand .brand-word { color: oklch(0.86 0.025 250); }
 .session-box { display: grid; gap: 4px; padding: 16px; border-radius: var(--radius); background: oklch(0.26 0.045 252); }
 .session-box span { color: oklch(0.78 0.13 252); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
 .session-box strong { font-size: 0.9rem; }
@@ -490,7 +491,8 @@ p { text-wrap: pretty; }
   .assurance-section { padding-inline: 22px; }
   .login-panel { width: calc(100% - 28px); padding: 28px 22px; }
   .console-sidebar { grid-template-columns: 1fr auto; padding: 16px; }
-  .console-sidebar nav { grid-column: 1 / -1; }
+  .console-sidebar nav { grid-column: 1 / -1; width: 100%; justify-content: space-between; gap: 8px; }
+  .console-sidebar nav a { flex: 0 0 auto; padding-inline: 0; }
   .console-main { padding: 18px 14px 32px; }
   .console-topbar { align-items: stretch; flex-direction: column; }
   .console-topbar .primary-action { width: 100%; }
